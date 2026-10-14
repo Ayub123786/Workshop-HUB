@@ -14,6 +14,7 @@ import sectionRoutes from './routes/sections.js';
 import formRoutes from './routes/forms.js';
 import settingsRoutes from './routes/settings.js';
 import imageRoutes from './routes/images.js';
+import subscriberRoutes from './routes/subscribers.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -58,6 +59,8 @@ app.use('/api/sections', sectionRoutes);
 app.use('/api/forms', formRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/images', imageRoutes);
+app.use('/api/subscribers', subscriberRoutes);
+app.get('/api/calendar.ics', (req, res) => res.redirect('/api/workshops/calendar.ics'));
 
 /* ─── Sitemap (generated from DB) ─── */
 app.get('/sitemap.xml', async (req, res) => {
