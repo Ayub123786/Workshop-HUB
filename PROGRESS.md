@@ -61,6 +61,17 @@
   - **Universal Add to Calendar**: Google Calendar link, Outlook link, and RFC 5545 `.ics` file download available on calendar cards, list rows, and quick view drawers.
   - **Public iCal Feed**: Dedicated `/api/calendar.ics` server endpoint exposing all upcoming published master classes with a one-click subscription modal.
 
-- [ ] **Part 4: Event Detail & Registration** (Quick View right-side drawer, full workshop page additions, multi-step registration modal with waitlist & confirmation)
+- [x] **Part 4: Event Detail & Registration** (COMPLETED)
+  - **Quick View Drawer**: Right-side slide-over drawer triggered by any workshop card without navigating away. Displays workshop banner, category, title, live status badge, converted timezone time, visual seats-left progress bar, Ayub speaker profile with bio, 3 key takeaways, universal calendar export (Google/Outlook/ICS), social share buttons, and primary Reserve CTA.
+  - **Sticky Subnav with Scroll-Spy**: In-page floating subnav bar on workshop details page with active section indicators highlighting `#overview`, `#agenda`, `#speaker`, `#reviews`, and `#faq` on scroll.
+  - **Desktop Floating Registration Card**: Sticky right-side executive enrollment card featuring converted date/time with interactive timezone switcher, live capacity progress bar ("X spots left"), price badge ("Executive Access - Free"), primary Reserve/Waitlist button, "Add to Calendar" dropdown, and share triggers.
+  - **Mobile Sticky Bottom CTA Bar**: Sleek mobile bottom bar with quick title, seat countdown, and instant "Reserve Spot" button.
+  - **Multi-Step Registration Modal**: Two-step modal (Attendee Details -> Executive Review & Confirmation) with real-time inline validation, waitlist mode for sold-out cohorts, honeypot spam protection, and a calm success state with gold checkmark, calendar addition links, and deal-team share tools.
+  - **Prerequisites & Deal Team Share Bar**: Prerequisites callout block and share bar supporting 1-click clipboard copy, LinkedIn, X, WhatsApp, and mailto.
+  - **Related Workshops Series**: Bottom 3-column curated grid of upcoming masterclasses in the same topic or category with quick registration access.
+  - **Completed Workshops Experience**: Dedicated rerun banner, recording request, and inline email capture notification form for past sessions.
+  - **JSON-LD Schema**: Full Schema.org `EducationEvent` structured data in `<head>` for rich Google search result indexing and calendar integration.
+
 - [ ] **Part 5: Platform Enhancements** (Bookmarks/saved filter, automated email reminders, dismissible announcement bar, Cmd+K global search palette, empty/skeleton states)
 - [ ] **Part 6: Admin Additions & Data Seeding** (Admin drag-calendar, expanded workshop schema fields, waitlist/subscriber CSV export, analytics dashboard, test data seeding)
+
