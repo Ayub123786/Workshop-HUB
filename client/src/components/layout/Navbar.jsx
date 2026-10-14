@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, Calendar as CalendarIcon, Sparkles } from 'lucide-react';
+import { Menu, X, Calendar as CalendarIcon, Sparkles, Search } from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 import { useSettings } from '../../contexts/SettingsContext';
 import api from '../../lib/api';
 
-export default function Navbar({ onReserveSpot }) {
+export default function Navbar({ onReserveSpot, onOpenSearch }) {
   const { settings } = useSettings();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -127,8 +127,20 @@ export default function Navbar({ onReserveSpot }) {
             })}
           </div>
 
-          {/* Desktop Reserve Button */}
-          <div className="hidden md:flex items-center gap-3">
+          {/* Desktop Actions */}
+          <div className="hidden md:flex items-center gap-2.5">
+            <button
+              onClick={onOpenSearch}
+              className="flex items-center gap-2 py-2 px-3 rounded-xl border border-[#E8E8E8] bg-[#FAFAFA] text-muted hover:text-navy hover:border-[#D0D0D0] transition-colors text-xs"
+              title="Search masterclasses (⌘K)"
+            >
+              <Search size={13} className="text-navy/60" />
+              <span className="hidden lg:inline text-xs font-medium">Search...</span>
+              <kbd className="hidden lg:inline-block text-[10px] font-mono text-muted bg-white border border-[#E8E8E8] px-1 py-0.2 rounded">
+                ⌘K
+              </kbd>
+            </button>
+
             <button
               onClick={handleReserveClick}
               className="btn-primary text-xs lg:text-sm py-2 px-4 shadow-2xs hover:shadow-xs transition-all"
@@ -137,15 +149,25 @@ export default function Navbar({ onReserveSpot }) {
             </button>
           </div>
 
-          {/* Mobile hamburger */}
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2 rounded-lg border border-border text-navy hover:bg-cream transition-colors"
-            aria-label="Toggle navigation menu"
-            aria-expanded={mobileOpen}
-          >
-            {mobileOpen ? <X size={18} /> : <Menu size={18} />}
-          </button>
+          {/* Mobile Right Controls: Search + Hamburger */}
+          <div className="flex md:hidden items-center gap-2">
+            <button
+              onClick={onOpenSearch}
+              className="p-2 rounded-lg border border-[#E8E8E8] text-navy hover:bg-cream transition-colors"
+              aria-label="Search"
+            >
+              <Search size={17} />
+            </button>
+
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="p-2 rounded-lg border border-border text-navy hover:bg-cream transition-colors"
+              aria-label="Toggle navigation menu"
+              aria-expanded={mobileOpen}
+            >
+              {mobileOpen ? <X size={18} /> : <Menu size={18} />}
+            </button>
+          </div>
         </div>
       </nav>
 

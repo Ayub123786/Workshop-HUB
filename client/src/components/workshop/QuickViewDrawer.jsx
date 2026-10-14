@@ -13,14 +13,17 @@ import {
   ArrowRight,
   ShieldCheck,
   Check,
+  Bookmark,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AddToCalendarMenu from '../calendar/AddToCalendarMenu';
 import { formatInTimezone, getSavedTimezone } from '../../lib/calendarExport';
 import { getWorkshopStatus, getStatusBadgeConfig } from '../../lib/workshopStatus';
+import { useBookmarks } from '../../lib/bookmarks';
 
 export default function QuickViewDrawer({ workshop, isOpen, onClose, onReserve }) {
   const [copied, setCopied] = useState(false);
+  const { isBookmarked, toggle } = useBookmarks();
   const timezone = getSavedTimezone();
 
   useEffect(() => {
@@ -100,13 +103,27 @@ export default function QuickViewDrawer({ workshop, isOpen, onClose, onReserve }
                     </span>
                   )}
                 </div>
-                <button
-                  onClick={onClose}
-                  className="p-1.5 rounded-lg text-muted hover:text-navy hover:bg-white transition-colors"
-                  aria-label="Close drawer"
-                >
-                  <X size={18} />
-                </button>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => toggle(workshop.slug)}
+                    className={`p-1.5 rounded-lg border transition-colors ${
+                      isBookmarked(workshop.slug)
+                        ? 'bg-gold text-white border-gold'
+                        : 'border-[#E8E8E8] text-muted hover:text-gold hover:bg-white bg-white'
+                    }`}
+                    title={isBookmarked(workshop.slug) ? 'Remove bookmark' : 'Save to bookmarks'}
+                    aria-label="Bookmark workshop"
+                  >
+                    <Bookmark size={15} className={isBookmarked(workshop.slug) ? 'fill-current' : ''} />
+                  </button>
+                  <button
+                    onClick={onClose}
+                    className="p-1.5 rounded-lg text-muted hover:text-navy hover:bg-white transition-colors"
+                    aria-label="Close drawer"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
               </div>
 
               {/* Drawer Body (Scrollable) */}

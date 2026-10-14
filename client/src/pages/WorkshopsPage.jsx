@@ -4,6 +4,8 @@ import { Helmet } from 'react-helmet-async';
 import { Search, Filter, Sparkles, X, Loader2 } from 'lucide-react';
 import api from '../lib/api';
 import WorkshopCard from '../components/workshop/WorkshopCard';
+import { WorkshopCardSkeleton } from '../components/workshop/WorkshopCardSkeleton';
+import EmptyState from '../components/workshop/EmptyState';
 import { FadeUp, StaggerContainer, StaggerItem } from '../components/motion/index.jsx';
 import { getWorkshopStatus } from '../lib/workshopStatus';
 
@@ -229,26 +231,18 @@ export default function WorkshopsPage() {
 
         {/* Loading State */}
         {loading && (
-          <div className="py-20 flex flex-col items-center justify-center">
-            <Loader2 className="w-8 h-8 text-gold animate-spin mb-3" />
-            <p className="text-xs text-muted">Finding master classes...</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <WorkshopCardSkeleton count={6} />
           </div>
         )}
 
         {/* Empty State */}
         {!loading && filteredWorkshops.length === 0 && (
-          <div className="bg-white rounded-2xl border border-border p-12 text-center max-w-md mx-auto my-12">
-            <div className="w-12 h-12 rounded-full bg-cream-dark flex items-center justify-center mx-auto mb-3 text-muted">
-              <Filter className="w-5 h-5" />
-            </div>
-            <h3 className="text-lg font-bold text-navy mb-1">No Workshops Found</h3>
-            <p className="text-xs text-muted leading-relaxed mb-6">
-              We couldn't find any workshops matching your current filters. Try adjusting your search or category.
-            </p>
-            <button onClick={clearFilters} className="btn-primary text-xs py-2 px-4">
-              Clear All Filters
-            </button>
-          </div>
+          <EmptyState
+            onReset={clearFilters}
+            categories={categories.filter((c) => c !== 'all')}
+            onCategorySelect={(cat) => setSelectedCategory(cat)}
+          />
         )}
 
         {/* Workshop Cards Grid */}

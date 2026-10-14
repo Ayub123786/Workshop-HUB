@@ -72,6 +72,14 @@
   - **Completed Workshops Experience**: Dedicated rerun banner, recording request, and inline email capture notification form for past sessions.
   - **JSON-LD Schema**: Full Schema.org `EducationEvent` structured data in `<head>` for rich Google search result indexing and calendar integration.
 
-- [ ] **Part 5: Platform Enhancements** (Bookmarks/saved filter, automated email reminders, dismissible announcement bar, Cmd+K global search palette, empty/skeleton states)
+- [x] **Part 5: Platform Enhancements** (COMPLETED)
+  - **Save & Bookmark Masterclasses**: LocalStorage bookmarking manager (`bookmarks.js`) with custom React event sync. Interactive bookmark toggle buttons integrated into `WorkshopCard`, `WorkshopListCard`, `QuickViewDrawer`, and `WorkshopDetailPage`. Dedicated "Saved (N)" filter toggle chip in Explore filters and active filters pill row.
+  - **Automated Email Reminders**: Backend scheduler (`reminderScheduler.js`) running on `node-cron` every 10 minutes. Evaluates upcoming published workshops and dispatches 24-hour and 1-hour email reminders with executive session join links. Tracks `reminder24hSent` and `reminder1hSent` flags in DB to prevent duplicates.
+  - **Enhanced Form Submissions & Waitlists**: Extended `routes/forms.js` to support waitlist submissions for sold-out cohorts without blocking or consuming capacity. Tailored waitlist confirmation emails dispatched via `email.js`. Broadcast email sender utility for admin updates.
+  - **Dismissible Announcement Bar**: Top alert banner (`AnnouncementBar.jsx`) with gold badge, live next-cohort announcement, direct spot reservation link, and dismiss memory via session storage.
+  - **Recently Viewed Master Classes**: Automatic session history tracker (`recentlyViewed.js`) capturing viewed cohorts on detail pages. Displays a clean 4-column "Recently Viewed by You" row on the Hub page when 2 or more classes are browsed.
+  - **Instant Global Search (Cmd+K / Ctrl+K)**: Institutional Command Palette (`CommandPalette.jsx`) supporting keyboard navigation (↑/↓/↵/esc), instant fuzzy matching across titles, topics, descriptions, and speaker info, quick view jump shortcuts, and persistent search trigger buttons in Navbar on desktop and mobile.
+  - **Skeletons & Polished Empty States**: Minimal Light shimmer loaders (`WorkshopCardSkeleton.jsx` and `WorkshopListSkeleton.jsx`) matching exact dimensions of cards during loading. Polished `EmptyState.jsx` with search reset action and core track suggestions when filters return 0 results.
+
 - [ ] **Part 6: Admin Additions & Data Seeding** (Admin drag-calendar, expanded workshop schema fields, waitlist/subscriber CSV export, analytics dashboard, test data seeding)
 

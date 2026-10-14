@@ -22,11 +22,32 @@ const submitLimiter = rateLimit({
 // POST /api/forms/:id/submit
 router.post('/:id/submit', submitLimiter, async (req, res, next) => {
   try {
-    const form = await Form.findById(req.params.id);
-    if (!form || !form.isActive) throw createError('Form not found or inactive', 404);
+    let form = await Form.findById(req.params.id);
+    if (!form) {
+      form = await Form.findOne({ workshopId: req.params.id });
+    }
+
+    // Workshop lookup
+    const targetWorkshopId = form?.workshopId || req.body.workshopId || req.params.id;
+    const workshop = await Workshop.findById(targetWorkshopId);
+    if (!workshop) throw createError('Workshop not found', 404);
+
+    if (!form) {
+      form = {
+        _id: workshop.id,
+        id: workshop.id,
+        workshopId: workshop.id,
+        isActive: true,
+        fields: [],
+        capacity: workshop.seatsTotal || 100,
+        successMessage: 'Thank you for registering! We have reserved your seat.',
+      };
+    }
+
+    if (!form.isActive) throw createError('Registration is currently closed', 400);
 
     // Honeypot check
-    if (req.body._honey) {
+    if (req.body._honey || req.body.honeypot) {
       return res.json({ success: true, message: 'Thank you!' }); // silently discard
     }
 
@@ -35,25 +56,34 @@ router.post('/:id/submit', submitLimiter, async (req, res, next) => {
       throw createError('Registration deadline has passed', 400);
     }
 
-    // Capacity check
-    const workshop = await Workshop.findById(form.workshopId);
-    if (!workshop) throw createError('Workshop not found', 404);
-    if (form.capacity && workshop.seatsBooked >= form.capacity) {
-      throw createError('This workshop is sold out', 400);
+    const isWaitlist = Boolean(req.body.isWaitlist || req.body.data?.isWaitlist);
+
+    // Capacity check (only for regular registrations, not waitlist)
+    const effectiveCapacity = form.capacity || workshop.seatsTotal || 100;
+    if (!isWaitlist && workshop.seatsBooked >= effectiveCapacity) {
+      throw createError('This workshop is sold out. Please join the waitlist.', 400);
     }
 
-    // Extract email from data for duplicate check
-    const emailField = form.fields.find(f => f.type === 'email');
-    const email = emailField ? req.body.data?.[emailField.id] : null;
+    // Extract email
+    const emailField = form.fields?.find(f => f.type === 'email');
+    const rawEmail = (emailField ? req.body.data?.[emailField.id] : null) || req.body.data?.email || req.body.email;
+    const email = rawEmail ? String(rawEmail).trim().toLowerCase() : null;
 
     // Duplicate registration check
     if (email) {
-      const existing = await Submission.findOne({ workshopId: form.workshopId, email: email.toLowerCase() });
-      if (existing) throw createError('You have already registered for this workshop', 409);
+      const existing = await Submission.findOne({ workshopId: workshop.id, email });
+      if (existing) {
+        throw createError(
+          existing.data?.isWaitlist
+            ? 'You are already on the waitlist for this workshop'
+            : 'You have already registered for this workshop',
+          409
+        );
+      }
     }
 
-    // Server-side validation: required fields
-    const requiredFields = form.fields.filter(f => f.required);
+    // Server-side validation for configured form fields
+    const requiredFields = (form.fields || []).filter(f => f.required);
     for (const field of requiredFields) {
       const val = req.body.data?.[field.id];
       if (!val || (typeof val === 'string' && !val.trim())) {
@@ -64,19 +94,30 @@ router.post('/:id/submit', submitLimiter, async (req, res, next) => {
     // Create submission
     const submission = await Submission.create({
       formId: form._id,
-      workshopId: form.workshopId,
-      data: req.body.data,
-      email: email?.toLowerCase(),
+      workshopId: workshop.id,
+      data: {
+        ...(req.body.data || {}),
+        isWaitlist,
+      },
+      email,
       ip: req.ip || req.headers['x-forwarded-for'],
       userAgent: req.headers['user-agent'],
     });
 
-    // Increment seats
-    await Workshop.findByIdAndUpdate(form.workshopId, { $inc: { seatsBooked: 1 } });
+    // Increment seats only if NOT waitlist
+    if (!isWaitlist) {
+      await Workshop.findByIdAndUpdate(workshop.id, { $inc: { seatsBooked: 1 } });
+    }
 
     // Send confirmation email (non-blocking)
     if (email) {
-      sendConfirmationEmail({ email, name: req.body.data?.name, workshop, form }).catch(console.error);
+      sendConfirmationEmail({
+        email,
+        name: req.body.data?.name,
+        workshop,
+        form,
+        isWaitlist,
+      }).catch(console.error);
     }
 
     res.status(201).json({

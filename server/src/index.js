@@ -15,6 +15,7 @@ import formRoutes from './routes/forms.js';
 import settingsRoutes from './routes/settings.js';
 import imageRoutes from './routes/images.js';
 import subscriberRoutes from './routes/subscribers.js';
+import { startReminderScheduler } from './services/reminderScheduler.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -96,6 +97,7 @@ app.listen(PORT, () => {
   } else {
     console.log(`ℹ️  Running with Supabase database adapter (ready for SUPABASE_URL in .env)`);
   }
+  startReminderScheduler();
 });
 
 export default app;

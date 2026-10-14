@@ -1,9 +1,13 @@
-import { Calendar, Clock, Users, User, ArrowRight } from 'lucide-react';
+import { Calendar, Clock, Users, User, ArrowRight, Bookmark } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { getWorkshopStatus, getStatusBadgeConfig } from '../../lib/workshopStatus';
+import { useBookmarks } from '../../lib/bookmarks';
 
 export default function WorkshopListCard({ workshop, onQuickView }) {
   if (!workshop) return null;
+
+  const { isBookmarked, toggle } = useBookmarks();
+  const saved = isBookmarked(workshop.slug);
 
   const status = getWorkshopStatus(workshop);
   const badgeConfig = getStatusBadgeConfig(status);
@@ -112,6 +116,23 @@ export default function WorkshopListCard({ workshop, onQuickView }) {
 
         {/* Right: CTA Actions */}
         <div className="flex items-center gap-2 shrink-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-[#E8E8E8]">
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              toggle(workshop.slug);
+            }}
+            aria-label={saved ? 'Remove bookmark' : 'Bookmark workshop'}
+            className={`p-2 rounded-lg border transition-colors ${
+              saved
+                ? 'bg-gold text-white border-gold'
+                : 'border-[#E8E8E8] text-navy/70 hover:text-gold hover:border-gold bg-white'
+            }`}
+            title={saved ? 'Saved to bookmarks' : 'Save workshop'}
+          >
+            <Bookmark size={13} className={saved ? 'fill-current' : ''} />
+          </button>
+
           {onQuickView && (
             <button
               onClick={() => onQuickView(workshop)}

@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import {
   Search,
@@ -15,6 +15,8 @@ import {
   Loader2,
   Sparkles,
   ArrowRight,
+  Bookmark,
+  History,
 } from 'lucide-react';
 import CountUp from 'react-countup';
 import api from '../lib/api';
@@ -31,23 +33,12 @@ import QuickViewDrawer from '../components/workshop/QuickViewDrawer';
 import FirmsTrustSection from '../components/sections/FirmsTrustSection';
 import PlatformFaqSection from '../components/sections/PlatformFaqSection';
 import NewsletterSection from '../components/sections/NewsletterSection';
+import { WorkshopCardSkeleton, WorkshopListSkeleton } from '../components/workshop/WorkshopCardSkeleton';
+import EmptyState from '../components/workshop/EmptyState';
 import { FadeUp, StaggerContainer, StaggerItem } from '../components/motion/index.jsx';
 import { getWorkshopStatus } from '../lib/workshopStatus';
-
-// Skeleton card
-function CardSkeleton() {
-  return (
-    <div className="bg-white border border-[#E8E8E8] rounded-2xl overflow-hidden h-full flex flex-col">
-      <div className="skeleton aspect-[16/10]" />
-      <div className="p-5 space-y-3 flex-1 flex flex-col">
-        <div className="skeleton h-4 rounded w-3/4" />
-        <div className="skeleton h-3 rounded w-full" />
-        <div className="skeleton h-3 rounded w-2/3" />
-        <div className="skeleton h-8 rounded w-1/3 mt-auto pt-4" />
-      </div>
-    </div>
-  );
-}
+import { useBookmarks } from '../lib/bookmarks';
+import { getRecentlyViewed } from '../lib/recentlyViewed';
 
 const CATEGORIES = [
   'All',
@@ -70,6 +61,16 @@ export default function HubPage() {
   // Quick View Drawer state
   const [quickViewWorkshop, setQuickViewWorkshop] = useState(null);
 
+  // Bookmarks & Recently Viewed
+  const { bookmarkedSlugs, count: bookmarkedCount } = useBookmarks();
+  const [recentItems, setRecentItems] = useState(getRecentlyViewed());
+
+  useEffect(() => {
+    const handleRecentUpdate = (e) => setRecentItems(e.detail?.items || getRecentlyViewed());
+    window.addEventListener('recently_viewed_updated', handleRecentUpdate);
+    return () => window.removeEventListener('recently_viewed_updated', handleRecentUpdate);
+  }, []);
+
   // Past session email notify state
   const [pastNotifyEmail, setPastNotifyEmail] = useState('');
   const [pastNotifySuccess, setPastNotifySuccess] = useState(false);
@@ -83,6 +84,7 @@ export default function HubPage() {
   const dateRange = searchParams.get('range') || 'all'; // 'all' | 'this-month' | 'next-month'
   const priceFilter = searchParams.get('price') || 'all'; // 'all' | 'free' | 'paid'
   const sortBy = searchParams.get('sort') || 'soonest'; // 'soonest' | 'newest' | 'popular'
+  const onlySaved = searchParams.get('saved') === 'true';
 
   // Helper to update specific search params while preserving others
   const updateFilter = (key, val) => {
@@ -182,6 +184,9 @@ export default function HubPage() {
         if (priceFilter === 'free' && w.price && w.price > 0) return false;
         if (priceFilter === 'paid' && (!w.price || w.price === 0)) return false;
 
+        // Saved Bookmarks filter
+        if (onlySaved && !bookmarkedSlugs.includes(w.slug)) return false;
+
         return true;
       })
       .sort((a, b) => {
@@ -196,7 +201,7 @@ export default function HubPage() {
         }
         return 0;
       });
-  }, [workshops, search, category, statusFilter, dateRange, priceFilter, sortBy]);
+  }, [workshops, search, category, statusFilter, dateRange, priceFilter, sortBy, onlySaved, bookmarkedSlugs]);
 
   // Past completed workshops for Section 5
   const pastWorkshops = useMemo(() => {
@@ -210,7 +215,8 @@ export default function HubPage() {
     statusFilter !== 'all' ||
     dateRange !== 'all' ||
     priceFilter !== 'all' ||
-    sortBy !== 'soonest';
+    sortBy !== 'soonest' ||
+    onlySaved;
 
   const handlePastNotifySubmit = async (e) => {
     e.preventDefault();
@@ -476,6 +482,21 @@ export default function HubPage() {
                   </button>
                 );
               })}
+
+              <div className="h-4 w-[1px] bg-[#E8E8E8] shrink-0 mx-1" />
+
+              <button
+                onClick={() => updateFilter('saved', onlySaved ? null : 'true')}
+                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border transition-all shrink-0 ${
+                  onlySaved
+                    ? 'bg-gold text-white border-gold shadow-2xs'
+                    : 'bg-white border-[#E8E8E8] text-navy hover:border-gold hover:text-gold'
+                }`}
+                title="Filter bookmarked master classes"
+              >
+                <Bookmark size={11} className={onlySaved ? 'fill-current' : ''} />
+                <span>Saved ({bookmarkedCount})</span>
+              </button>
             </div>
 
             {/* Active Filter Chips & Results Count */}
@@ -502,6 +523,14 @@ export default function HubPage() {
                     <span className="inline-flex items-center gap-1 bg-[#FAF9F6] border border-[#E8E8E8] px-2.5 py-0.5 rounded-full text-navy capitalize">
                       <span>{statusFilter}</span>
                       <X size={11} className="cursor-pointer hover:text-gold" onClick={() => updateFilter('status', 'all')} />
+                    </span>
+                  )}
+
+                  {onlySaved && (
+                    <span className="inline-flex items-center gap-1 bg-[#FAF9F6] border border-gold/40 px-2.5 py-0.5 rounded-full text-navy font-semibold">
+                      <Bookmark size={10} className="text-gold fill-current" />
+                      <span>Saved only</span>
+                      <X size={11} className="cursor-pointer hover:text-gold" onClick={() => updateFilter('saved', null)} />
                     </span>
                   )}
 
@@ -532,25 +561,19 @@ export default function HubPage() {
 
           {/* ─── Render View Mode ─── */}
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[1, 2, 3, 4, 5, 6].map((i) => (
-                <CardSkeleton key={i} />
-              ))}
-            </div>
+            view === 'list' ? (
+              <WorkshopListSkeleton count={4} />
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+                <WorkshopCardSkeleton count={6} />
+              </div>
+            )
           ) : filteredWorkshops.length === 0 ? (
-            <div className="bg-white border border-[#E8E8E8] rounded-2xl p-12 text-center max-w-md mx-auto shadow-2xs">
-              <span className="text-4xl block mb-3">🔍</span>
-              <h3 className="font-bold text-navy text-base mb-1">No master classes found</h3>
-              <p className="text-xs text-muted mb-4">
-                Try adjusting your search query, status, or category filters.
-              </p>
-              <button
-                onClick={clearAllFilters}
-                className="px-4 py-2 rounded-lg border border-[#E8E8E8] text-xs font-semibold text-navy hover:bg-cream hover:border-gold transition-colors"
-              >
-                Clear all filters
-              </button>
-            </div>
+            <EmptyState
+              onReset={clearAllFilters}
+              categories={CATEGORIES.slice(1)}
+              onCategorySelect={(c) => updateFilter('category', c)}
+            />
           ) : view === 'grid' ? (
             /* GRID VIEW */
             <StaggerContainer
@@ -589,6 +612,59 @@ export default function HubPage() {
           )}
         </div>
       </section>
+
+      {/* ─── RECENTLY VIEWED BY YOU ─── */}
+      {recentItems.length >= 2 && (
+        <section className="bg-white py-12 border-b border-[#E8E8E8]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-2">
+                <History size={16} className="text-gold" />
+                <h3 className="text-base sm:text-lg font-bold text-navy tracking-tight">
+                  Recently Viewed by You
+                </h3>
+              </div>
+              <span className="text-[11px] font-mono text-muted">
+                From your recent session
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {recentItems.slice(0, 4).map((item) => (
+                <Link
+                  key={item.slug}
+                  to={`/w/${item.slug}`}
+                  className="group bg-[#FAF9F6] border border-[#E8E8E8] rounded-xl p-3.5 hover:border-gold transition-colors flex items-center gap-3 shadow-2xs"
+                >
+                  {item.bannerImage ? (
+                    <img
+                      src={item.bannerImage}
+                      alt={item.title}
+                      className="w-12 h-12 rounded-lg object-cover border border-[#E8E8E8] shrink-0"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 rounded-lg bg-white border border-[#E8E8E8] flex items-center justify-center text-gold shrink-0 font-bold text-xs">
+                      DD
+                    </div>
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <span className="text-[10px] font-bold text-gold uppercase tracking-wider block truncate">
+                      {item.category || 'Masterclass'}
+                    </span>
+                    <p className="text-xs font-semibold text-navy truncate group-hover:text-gold transition-colors">
+                      {item.title}
+                    </p>
+                    <span className="text-[10px] text-muted flex items-center gap-1 mt-0.5">
+                      <span>Resume</span>
+                      <ArrowRight size={10} className="group-hover:translate-x-0.5 transition-transform" />
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ─── 5. PAST SESSIONS SECTION (Resources & Notify Me Capture) ─── */}
       {pastWorkshops.length > 0 && (

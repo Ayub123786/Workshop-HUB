@@ -20,9 +20,12 @@ import {
   Check,
   Copy,
   MessageCircle,
+  Bookmark,
 } from 'lucide-react';
 import api from '../lib/api';
 import { useSettings } from '../contexts/SettingsContext';
+import { useBookmarks } from '../lib/bookmarks';
+import { recordRecentlyViewed } from '../lib/recentlyViewed';
 
 // Section components
 import HeroSection from '../components/sections/HeroSection';
@@ -135,6 +138,8 @@ export default function WorkshopDetailPage() {
   const [notifySuccess, setNotifySuccess] = useState(false);
   const [notifySubmitting, setNotifySubmitting] = useState(false);
 
+  const { isBookmarked, toggle: toggleBookmark } = useBookmarks();
+
   useEffect(() => {
     let isMounted = true;
     setLoading(true);
@@ -146,7 +151,9 @@ export default function WorkshopDetailPage() {
     ])
       .then(([res, relatedRes]) => {
         if (!isMounted) return;
-        setWorkshop(res.data.workshop);
+        const wData = res.data.workshop;
+        setWorkshop(wData);
+        if (wData) recordRecentlyViewed(wData);
         setSections(res.data.sections || []);
         setForm(res.data.form || null);
         const related = (relatedRes.data?.workshops || []).filter(
@@ -521,9 +528,23 @@ export default function WorkshopDetailPage() {
             <div className="bg-white border border-[#E8E8E8] rounded-2xl p-6 shadow-card space-y-5">
               {/* Badge & Category */}
               <div className="flex items-center justify-between">
-                <span className={`text-[10px] px-2.5 py-0.5 rounded-full ${badge.className}`}>
-                  {badge.label}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className={`text-[10px] px-2.5 py-0.5 rounded-full ${badge.className}`}>
+                    {badge.label}
+                  </span>
+                  <button
+                    onClick={() => toggleBookmark(workshop.slug)}
+                    className={`w-6 h-6 rounded-full border flex items-center justify-center transition-colors shadow-2xs ${
+                      isBookmarked(workshop.slug)
+                        ? 'bg-gold text-white border-gold'
+                        : 'border-[#E8E8E8] text-muted hover:text-gold bg-[#FAFAFA]'
+                    }`}
+                    title={isBookmarked(workshop.slug) ? 'Remove bookmark' : 'Save to bookmarks'}
+                    aria-label="Save workshop"
+                  >
+                    <Bookmark size={11} className={isBookmarked(workshop.slug) ? 'fill-current' : ''} />
+                  </button>
+                </div>
                 <span className="text-xs font-semibold text-gold font-mono">
                   {workshop.price && workshop.price > 0 ? `$${workshop.price}` : 'Executive Access (Free)'}
                 </span>

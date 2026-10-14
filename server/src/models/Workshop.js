@@ -48,6 +48,16 @@ function normalize(w) {
     seatsBooked,
     seatsLeft: Math.max(0, seatsTotal - seatsBooked),
     statusLabel,
+    price: w.price !== undefined ? Number(w.price) : 0,
+    speakers: w.speakers || [],
+    agenda: w.agenda || [],
+    faqs: w.faqs || [],
+    learningOutcomes: w.learning_outcomes ?? w.learningOutcomes ?? [],
+    requirements: w.requirements || [],
+    recordingUrl: w.recording_url ?? w.recordingUrl ?? '',
+    resources: w.resources || [],
+    reminder24hSent: w.reminder_24h_sent ?? w.reminder24hSent ?? false,
+    reminder1hSent: w.reminder_1h_sent ?? w.reminder1hSent ?? false,
     theme: w.theme || { gold: '#C8A24F', cream: '#FAFAFA', navy: '#0A0A0A' },
     animationPreset: w.animation_preset ?? w.animationPreset ?? 'smooth',
     seo: w.seo || {},
@@ -92,6 +102,24 @@ function denormalize(data) {
   }
   if (data.seatsBooked !== undefined || data.seats_booked !== undefined) {
     record.seats_booked = data.seatsBooked ?? data.seats_booked;
+  }
+  if (data.price !== undefined) record.price = Number(data.price);
+  if (data.speakers !== undefined) record.speakers = data.speakers;
+  if (data.agenda !== undefined) record.agenda = data.agenda;
+  if (data.faqs !== undefined) record.faqs = data.faqs;
+  if (data.learningOutcomes !== undefined || data.learning_outcomes !== undefined) {
+    record.learning_outcomes = data.learningOutcomes ?? data.learning_outcomes;
+  }
+  if (data.requirements !== undefined) record.requirements = data.requirements;
+  if (data.recordingUrl !== undefined || data.recording_url !== undefined) {
+    record.recording_url = data.recordingUrl ?? data.recording_url;
+  }
+  if (data.resources !== undefined) record.resources = data.resources;
+  if (data.reminder24hSent !== undefined || data.reminder_24h_sent !== undefined) {
+    record.reminder_24h_sent = data.reminder24hSent ?? data.reminder_24h_sent;
+  }
+  if (data.reminder1hSent !== undefined || data.reminder_1h_sent !== undefined) {
+    record.reminder_1h_sent = data.reminder1hSent ?? data.reminder_1h_sent;
   }
   if (data.theme !== undefined) record.theme = data.theme;
   if (data.animationPreset !== undefined || data.animation_preset !== undefined) {

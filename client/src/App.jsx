@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { motion, useScroll, useSpring } from 'framer-motion';
@@ -12,6 +12,8 @@ import { SettingsProvider } from './contexts/SettingsContext';
 // Shared Layouts & Components
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
+import AnnouncementBar from './components/layout/AnnouncementBar';
+import CommandPalette from './components/search/CommandPalette';
 import AdminLayout from './components/admin/AdminLayout';
 
 // Public Pages
@@ -95,14 +97,33 @@ function ProtectedRoute({ children }) {
 
 // Public site layout wrapper (Navbar + Content + Footer)
 function PublicLayout() {
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  // Global Cmd+K / Ctrl+K listener
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setIsSearchOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   return (
     <SmoothScrollManager>
       <div className="flex flex-col min-h-screen bg-white">
-        <Navbar />
+        <AnnouncementBar />
+        <Navbar onOpenSearch={() => setIsSearchOpen(true)} />
         <main className="flex-1">
           <Outlet />
         </main>
         <Footer />
+        <CommandPalette
+          isOpen={isSearchOpen}
+          onClose={() => setIsSearchOpen(false)}
+        />
       </div>
     </SmoothScrollManager>
   );

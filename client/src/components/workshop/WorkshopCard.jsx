@@ -1,10 +1,14 @@
-import { Calendar, Clock, Users } from 'lucide-react';
+import { Calendar, Clock, Users, Bookmark } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { getWorkshopStatus, getStatusBadgeConfig } from '../../lib/workshopStatus';
+import { useBookmarks } from '../../lib/bookmarks';
 
 export default function WorkshopCard({ workshop, onQuickView }) {
   if (!workshop) return null;
+
+  const { isBookmarked, toggle } = useBookmarks();
+  const saved = isBookmarked(workshop.slug);
 
   const status = getWorkshopStatus(workshop);
   const badgeConfig = getStatusBadgeConfig(status);
@@ -58,8 +62,8 @@ export default function WorkshopCard({ workshop, onQuickView }) {
             </div>
           )}
 
-          {/* Status Badge (Top-Right): Solid pill background, readable text */}
-          <div className="absolute top-3 right-3 z-10">
+          {/* Status Badge & Bookmark (Top-Right) */}
+          <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5">
             <span
               className={`inline-flex items-center text-[11px] px-2.5 py-0.5 rounded-full ${badgeConfig.className}`}
             >
@@ -68,6 +72,23 @@ export default function WorkshopCard({ workshop, onQuickView }) {
               )}
               {badgeConfig.label}
             </span>
+
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toggle(workshop.slug);
+              }}
+              aria-label={saved ? 'Remove bookmark' : 'Bookmark workshop'}
+              className={`w-6 h-6 rounded-full border flex items-center justify-center transition-colors shadow-2xs ${
+                saved
+                  ? 'bg-gold text-white border-gold'
+                  : 'bg-white/95 backdrop-blur-xs text-navy/70 border-[#E8E8E8] hover:text-gold hover:border-gold'
+              }`}
+              title={saved ? 'Saved to bookmarks' : 'Save workshop'}
+            >
+              <Bookmark size={11} className={saved ? 'fill-current' : ''} />
+            </button>
           </div>
         </div>
 
