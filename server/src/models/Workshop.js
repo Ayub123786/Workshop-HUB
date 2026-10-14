@@ -9,11 +9,23 @@ function normalize(w) {
   const startDate = w.start_date ?? w.startDate;
   const endDate = w.end_date ?? w.endDate;
 
+  const start = startDate ? new Date(startDate) : null;
+  const end = endDate ? new Date(endDate) : (start ? new Date(start.getTime() + 4 * 60 * 60 * 1000) : null);
+
   let statusLabel = w.status || 'draft';
-  if (seatsBooked >= seatsTotal) statusLabel = 'sold-out';
-  else if (startDate && now < new Date(startDate)) statusLabel = 'upcoming';
-  else if (startDate && endDate && now >= new Date(startDate) && now <= new Date(endDate)) statusLabel = 'live';
-  else if (endDate && now > new Date(endDate)) statusLabel = 'completed';
+  if (w.status === 'published') {
+    if (end && now > end) {
+      statusLabel = 'completed';
+    } else if (start && end && now >= start && now <= end) {
+      statusLabel = 'live';
+    } else if (seatsBooked >= seatsTotal) {
+      statusLabel = 'sold-out';
+    } else if (seatsTotal > 0 && (seatsTotal - seatsBooked) / seatsTotal <= 0.2) {
+      statusLabel = 'few-spots';
+    } else {
+      statusLabel = 'upcoming';
+    }
+  }
 
   const normalized = {
     ...w,

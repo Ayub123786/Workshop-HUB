@@ -15,27 +15,32 @@ const router = express.Router();
 // GET /api/workshops  – list with filters
 router.get('/', async (req, res, next) => {
   try {
-    const { status, category, search, upcoming, past, page = 1, limit = 20 } = req.query;
+    const { status, category, search, upcoming, past, page = 1, limit = 50 } = req.query;
+    // Public routes must strictly only show published workshops with showOnHub=true
     const query = { status: 'published', showOnHub: true };
 
-    if (status && status !== 'all') query.status = status;
     if (category && category !== 'all') query.category = category;
     if (search) {
       query.$or = [
         { title: { $regex: search, $options: 'i' } },
         { shortDescription: { $regex: search, $options: 'i' } },
-        { tags: { $in: [new RegExp(search, 'i')] } },
       ];
     }
-    const now = new Date();
-    if (upcoming === 'true') query.startDate = { $gt: now };
-    if (past === 'true') query.endDate = { $lt: now };
 
+    let all = await Workshop.find(query);
+
+    // Apply computed status filters (never show completed under upcoming)
+    if (upcoming === 'true') {
+      all = all.filter((w) => w.statusLabel !== 'completed');
+    } else if (past === 'true') {
+      all = all.filter((w) => w.statusLabel === 'completed');
+    } else if (status && status !== 'all') {
+      all = all.filter((w) => w.statusLabel === status);
+    }
+
+    const total = all.length;
     const skip = (parseInt(page) - 1) * parseInt(limit);
-    const [workshops, total] = await Promise.all([
-      Workshop.find(query).sort({ displayOrder: 1, startDate: 1 }).skip(skip).limit(parseInt(limit)),
-      Workshop.countDocuments(query),
-    ]);
+    const workshops = all.slice(skip, skip + parseInt(limit));
 
     res.json({ success: true, workshops, total, page: parseInt(page), pages: Math.ceil(total / parseInt(limit)) });
   } catch (err) {

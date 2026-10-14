@@ -34,7 +34,14 @@
 
 ## Roadmap & Status
 
-- [ ] **Part 1: Fix Visual Bugs** (Navbar, status badges & logic, equal height cards, split featured banner, firms & testimonials)
+- [x] **Part 1: Fix Visual Bugs** (COMPLETED)
+  - **Sticky Navbar**: Solid white background (`rgba(255,255,255,0.85)` + `backdrop-blur-md`), 1px bottom border (`#E8E8E8`), subtle scroll shadow. Added 80px hero padding offset (`pt-20 sm:pt-24`) so content never sits under navbar. Active link gold underline with Framer Motion spring layout. Clean links (`Workshops`, `Calendar`, `Upcoming`, `Past`, `About`). Smart "Reserve a Spot" button without external link icon. Mobile hamburger menu with slide-down drawer. 2px gold progress bar pinned to navbar bottom edge.
+  - **Solid Status Badges**: Unified solid pills with high-contrast text positioned top-right on card images: `Upcoming` (gold bg, dark text), `Live Now` (red dot pulsing, white bg), `Sold Out` (black bg, white text), `Completed` (gray bg, white text), `Few Spots Left` (amber bg, white text, when under 20% seats). Category chip placed top-left in white pill with 1px border. Never displays admin/draft statuses publicly.
+  - **Status Logic**: Server and client unified via `workshopStatus.js` and `Workshop.js`. Completed workshops never appear under Upcoming and cannot show waitlist. Waitlists restricted to upcoming sold-out workshops. Public routes strictly filter `status: 'published'` and `showOnHub: true`.
+  - **Equal Height Cards**: Grid with flex column and bottom-pinned CTA buttons. Fixed 16:10 image ratio with `object-cover`. Thin visual progress bar showing capacity fill and "X spots left".
+  - **Split Featured Banner**: Replaced text-over-image with clean Minimal Light split layout: Left has category chip, gold Featured badge, title, description, date/timezones, live countdown strip, and dual CTAs ("Reserve Your Spot" and "View Full Curriculum"). Right has 16:10 rounded image filling the full card edge. Multi-workshop carousel support with arrows and dot indicators.
+  - **Firms We've Trained & Testimonials**: Animated CountUp AUM counter card, slow infinite marquee of trained institutional firms, and 2-column verified attendee testimonials with "Verified attendee" badges and "Read more testimonials" toggle.
+
 - [ ] **Part 2: Hub Page Upgrade** (Live database stats, countdown strip, View Switcher: Grid/List/Calendar/Timeline with URL query sync, past sessions, FAQ accordion, newsletter subscribers)
 - [ ] **Part 3: Calendar System** (date-fns month view, event dots, side panel/bottom sheet, agenda mode, time zone converter, .ics generation & subscribe feed)
 - [ ] **Part 4: Event Detail & Registration** (Quick View right-side drawer, full workshop page additions, multi-step registration modal with waitlist & confirmation)

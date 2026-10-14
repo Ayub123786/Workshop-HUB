@@ -5,6 +5,7 @@ import { Search, Filter, Sparkles, X, Loader2 } from 'lucide-react';
 import api from '../lib/api';
 import WorkshopCard from '../components/workshop/WorkshopCard';
 import { FadeUp, StaggerContainer, StaggerItem } from '../components/motion/index.jsx';
+import { getWorkshopStatus } from '../lib/workshopStatus';
 
 export default function WorkshopsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -12,11 +13,11 @@ export default function WorkshopsPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || 'all');
-  const [statusFilter, setStatusFilter] = useState(searchParams.get('filter') || 'all');
+  const [statusFilter, setStatusFilter] = useState(searchParams.get('status') || searchParams.get('filter') || 'all');
   const [sortBy, setSortBy] = useState('date-asc');
 
   useEffect(() => {
-    const filterFromUrl = searchParams.get('filter');
+    const filterFromUrl = searchParams.get('status') || searchParams.get('filter');
     if (filterFromUrl) setStatusFilter(filterFromUrl);
     const catFromUrl = searchParams.get('category');
     if (catFromUrl) setSelectedCategory(catFromUrl);
@@ -63,12 +64,11 @@ export default function WorkshopsPage() {
           return false;
         }
 
-        // Status filter
-        if (statusFilter === 'upcoming') {
-          if (w.endDate && new Date(w.endDate) < now) return false;
-        } else if (statusFilter === 'past') {
-          if (!w.endDate || new Date(w.endDate) >= now) return false;
-        }
+        // Status filter using unified getWorkshopStatus
+        const st = getWorkshopStatus(w);
+        if (statusFilter === 'upcoming' && st === 'completed') return false;
+        if (statusFilter === 'past' && st !== 'completed') return false;
+        if (statusFilter !== 'all' && statusFilter !== 'upcoming' && statusFilter !== 'past' && st !== statusFilter) return false;
 
         return true;
       })
@@ -94,7 +94,7 @@ export default function WorkshopsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-cream py-12 md:py-16">
+    <div className="min-h-screen bg-[#FAF9F6] pt-20 pb-16 md:pt-24 md:pb-20">
       <Helmet>
         <title>All Master Classes & Workshops | Workshop Hub</title>
         <meta

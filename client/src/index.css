@@ -209,12 +209,12 @@
     animation: shimmer 1.5s infinite;
   }
 
-  /* Workshop status badges */
-  .status-upcoming { @apply bg-blue-50 text-blue-600 border border-blue-100 text-xs font-semibold px-2.5 py-1 rounded-full; }
-  .status-live { @apply bg-green-50 text-green-600 border border-green-100 text-xs font-semibold px-2.5 py-1 rounded-full; }
-  .status-completed { @apply bg-gray-100 text-gray-500 border border-gray-200 text-xs font-semibold px-2.5 py-1 rounded-full; }
-  .status-sold-out { @apply bg-red-50 text-red-600 border border-red-100 text-xs font-semibold px-2.5 py-1 rounded-full; }
-  .status-draft { @apply bg-yellow-50 text-yellow-600 border border-yellow-100 text-xs font-semibold px-2.5 py-1 rounded-full; }
+  /* Workshop status badges (Minimal Light solid pills) */
+  .status-upcoming { @apply bg-gold text-navy text-[11px] font-semibold px-2.5 py-0.5 rounded-full shadow-2xs; }
+  .status-live { @apply bg-white text-navy border border-red-200 text-[11px] font-semibold px-2.5 py-0.5 rounded-full shadow-2xs; }
+  .status-few-spots { @apply bg-amber-500 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded-full shadow-2xs; }
+  .status-sold-out { @apply bg-navy text-white text-[11px] font-semibold px-2.5 py-0.5 rounded-full shadow-2xs; }
+  .status-completed { @apply bg-[#737373] text-white text-[11px] font-medium px-2.5 py-0.5 rounded-full shadow-2xs; }
 }
 
 /* ─── Utilities ─── */

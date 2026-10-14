@@ -30,22 +30,7 @@ import AdminSubmissionsPage from './pages/admin/AdminSubmissionsPage';
 import AdminImagesPage from './pages/admin/AdminImagesPage';
 import AdminSettingsPage from './pages/admin/AdminSettingsPage';
 
-// Scroll progress bar
-function ScrollProgressBar() {
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
 
-  return (
-    <motion.div
-      style={{ scaleX }}
-      className="fixed top-0 left-0 right-0 h-[3px] bg-gold origin-left z-50 pointer-events-none"
-    />
-  );
-}
 
 // Lenis smooth scroll provider
 function SmoothScrollManager({ children }) {
@@ -112,7 +97,6 @@ function ProtectedRoute({ children }) {
 function PublicLayout() {
   return (
     <SmoothScrollManager>
-      <ScrollProgressBar />
       <div className="flex flex-col min-h-screen bg-white">
         <Navbar />
         <main className="flex-1">
