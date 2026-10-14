@@ -19,6 +19,12 @@ import {
   Settings,
   Sliders,
   Copy,
+  BookOpen,
+  Video,
+  HelpCircle,
+  FileText,
+  CheckCircle2,
+  User,
 } from 'lucide-react';
 import api from '../../lib/api';
 
@@ -246,6 +252,16 @@ export default function AdminWorkshopEditPage() {
               }`}
             >
               <Layers className="w-3.5 h-3.5" /> Sections ({sections.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('curriculum')}
+              className={`pb-2 px-3 border-b-2 transition-all flex items-center gap-1.5 shrink-0 ${
+                activeTab === 'curriculum'
+                  ? 'border-navy text-navy font-bold'
+                  : 'border-transparent text-muted hover:text-navy'
+              }`}
+            >
+              <BookOpen className="w-3.5 h-3.5" /> Curriculum & Extended
             </button>
             <button
               onClick={() => setActiveTab('details')}
@@ -923,6 +939,567 @@ export default function AdminWorkshopEditPage() {
                     onChange={(e) => setWorkshop({ ...workshop, seo: { ...workshop.seo, description: e.target.value } })}
                     className="w-full px-3 py-2 rounded-lg border border-border bg-white text-xs resize-none"
                   />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB: CURRICULUM & EXTENDED SCHEMA */}
+          {activeTab === 'curriculum' && (
+            <div className="p-4 space-y-6 pb-28">
+              {/* Header Info */}
+              <div className="p-3 bg-cream rounded-xl border border-border">
+                <div className="flex items-center gap-2 mb-1">
+                  <BookOpen className="w-4 h-4 text-gold" />
+                  <p className="text-xs font-bold text-navy">Curriculum, Speakers, Agenda & Deliverables</p>
+                </div>
+                <p className="text-[11px] text-muted leading-relaxed">
+                  These extended fields power the public Event Detail page tabs, agenda schedule, instructor cards, FAQs, and executive prerequisites.
+                </p>
+              </div>
+
+              {/* Price & Recording Link */}
+              <div className="p-4 bg-white rounded-xl border border-border space-y-3">
+                <p className="text-xs font-bold text-navy uppercase tracking-wider">Tuition & Recording</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-navy mb-1">Tuition Price (USD)</label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted text-xs font-mono">$</span>
+                      <input
+                        type="number"
+                        min={0}
+                        value={workshop.price ?? 0}
+                        onChange={(e) => setWorkshop({ ...workshop, price: Number(e.target.value) })}
+                        className="w-full pl-7 pr-3 py-2 rounded-lg border border-border bg-white text-xs font-mono focus:border-gold"
+                        placeholder="0"
+                      />
+                    </div>
+                    <p className="text-[10px] text-muted mt-1">Set to 0 for Free / Executive Access</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-navy mb-1">Recording / Replay URL</label>
+                    <div className="relative">
+                      <Video className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
+                      <input
+                        type="url"
+                        value={workshop.recordingUrl || ''}
+                        onChange={(e) => setWorkshop({ ...workshop, recordingUrl: e.target.value })}
+                        className="w-full pl-8 pr-3 py-2 rounded-lg border border-border bg-white text-xs focus:border-gold"
+                        placeholder="https://vimeo.com/... or cloud link"
+                      />
+                    </div>
+                    <p className="text-[10px] text-muted mt-1">Displayed to verified attendees post-session</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Learning Outcomes */}
+              <div className="p-4 bg-white rounded-xl border border-border space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-bold text-navy uppercase tracking-wider">
+                      Learning Outcomes ({((workshop.learningOutcomes || []).length)})
+                    </p>
+                    <p className="text-[11px] text-muted">Core competencies attendees master</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const list = [...(workshop.learningOutcomes || [])];
+                      setWorkshop({ ...workshop, learningOutcomes: [...list, ''] });
+                    }}
+                    className="text-xs text-gold font-bold hover:underline flex items-center gap-1"
+                  >
+                    <Plus className="w-3 h-3" /> Add Outcome
+                  </button>
+                </div>
+
+                <div className="space-y-2">
+                  {(workshop.learningOutcomes || []).map((outcome, idx) => (
+                    <div key={idx} className="flex items-center gap-2">
+                      <span className="w-5 text-[11px] font-mono text-muted text-right">#{idx + 1}</span>
+                      <input
+                        type="text"
+                        value={outcome}
+                        onChange={(e) => {
+                          const list = [...(workshop.learningOutcomes || [])];
+                          list[idx] = e.target.value;
+                          setWorkshop({ ...workshop, learningOutcomes: list });
+                        }}
+                        placeholder="e.g. Architect multi-agent deal sourcing workflows"
+                        className="flex-1 px-3 py-1.5 rounded-lg border border-border bg-white text-navy text-xs focus:border-gold"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const list = (workshop.learningOutcomes || []).filter((_, i) => i !== idx);
+                          setWorkshop({ ...workshop, learningOutcomes: list });
+                        }}
+                        className="text-red-500 hover:text-red-700 p-1"
+                        title="Remove"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                  {(!workshop.learningOutcomes || workshop.learningOutcomes.length === 0) && (
+                    <p className="text-xs text-muted italic py-1">No learning outcomes added yet.</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Requirements & Prerequisites */}
+              <div className="p-4 bg-white rounded-xl border border-border space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-bold text-navy uppercase tracking-wider">
+                      Prerequisites & Requirements ({((workshop.requirements || []).length)})
+                    </p>
+                    <p className="text-[11px] text-muted">Technical or domain preparation needed</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const list = [...(workshop.requirements || [])];
+                      setWorkshop({ ...workshop, requirements: [...list, ''] });
+                    }}
+                    className="text-xs text-gold font-bold hover:underline flex items-center gap-1"
+                  >
+                    <Plus className="w-3 h-3" /> Add Requirement
+                  </button>
+                </div>
+
+                <div className="space-y-2">
+                  {(workshop.requirements || []).map((req, idx) => (
+                    <div key={idx} className="flex items-center gap-2">
+                      <span className="w-5 text-[11px] font-mono text-muted text-right">#{idx + 1}</span>
+                      <input
+                        type="text"
+                        value={req}
+                        onChange={(e) => {
+                          const list = [...(workshop.requirements || [])];
+                          list[idx] = e.target.value;
+                          setWorkshop({ ...workshop, requirements: list });
+                        }}
+                        placeholder="e.g. Familiarity with private equity deal documentation or LBO models"
+                        className="flex-1 px-3 py-1.5 rounded-lg border border-border bg-white text-navy text-xs focus:border-gold"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const list = (workshop.requirements || []).filter((_, i) => i !== idx);
+                          setWorkshop({ ...workshop, requirements: list });
+                        }}
+                        className="text-red-500 hover:text-red-700 p-1"
+                        title="Remove"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                  {(!workshop.requirements || workshop.requirements.length === 0) && (
+                    <p className="text-xs text-muted italic py-1">No requirements specified yet.</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Agenda / Session Schedule */}
+              <div className="p-4 bg-white rounded-xl border border-border space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-bold text-navy uppercase tracking-wider">
+                      Curriculum Agenda ({((workshop.agenda || []).length)})
+                    </p>
+                    <p className="text-[11px] text-muted">Modules and timetable breakdown</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const list = [...(workshop.agenda || [])];
+                      setWorkshop({
+                        ...workshop,
+                        agenda: [
+                          ...list,
+                          {
+                            time: '09:00 - 10:00',
+                            title: 'New Agenda Session',
+                            description: 'Module breakdown and exercises',
+                          },
+                        ],
+                      });
+                    }}
+                    className="text-xs text-gold font-bold hover:underline flex items-center gap-1"
+                  >
+                    <Plus className="w-3 h-3" /> Add Module
+                  </button>
+                </div>
+
+                <div className="space-y-3">
+                  {(workshop.agenda || []).map((item, idx) => (
+                    <div key={idx} className="p-3 bg-cream rounded-xl border border-border space-y-2 text-xs">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-navy">Module #{idx + 1}</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const list = (workshop.agenda || []).filter((_, i) => i !== idx);
+                            setWorkshop({ ...workshop, agenda: list });
+                          }}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <input
+                          type="text"
+                          value={item.time || ''}
+                          placeholder="Time / Slot (e.g. 09:00 - 10:15)"
+                          onChange={(e) => {
+                            const list = [...(workshop.agenda || [])];
+                            list[idx] = { ...list[idx], time: e.target.value };
+                            setWorkshop({ ...workshop, agenda: list });
+                          }}
+                          className="px-2.5 py-1.5 rounded-lg border border-border bg-white text-navy font-mono text-xs focus:border-gold"
+                        />
+                        <input
+                          type="text"
+                          value={item.title || ''}
+                          placeholder="Session Title"
+                          onChange={(e) => {
+                            const list = [...(workshop.agenda || [])];
+                            list[idx] = { ...list[idx], title: e.target.value };
+                            setWorkshop({ ...workshop, agenda: list });
+                          }}
+                          className="sm:col-span-2 px-2.5 py-1.5 rounded-lg border border-border bg-white text-navy font-semibold text-xs focus:border-gold"
+                        />
+                      </div>
+                      <textarea
+                        rows={2}
+                        value={item.description || ''}
+                        placeholder="Session description, key topics covered, or live demo details..."
+                        onChange={(e) => {
+                          const list = [...(workshop.agenda || [])];
+                          list[idx] = { ...list[idx], description: e.target.value };
+                          setWorkshop({ ...workshop, agenda: list });
+                        }}
+                        className="w-full px-2.5 py-1.5 rounded-lg border border-border bg-white text-navy text-xs resize-none focus:border-gold"
+                      />
+                    </div>
+                  ))}
+                  {(!workshop.agenda || workshop.agenda.length === 0) && (
+                    <p className="text-xs text-muted italic py-1">No agenda items added yet.</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Speakers / Instructors */}
+              <div className="p-4 bg-white rounded-xl border border-border space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-bold text-navy uppercase tracking-wider">
+                      Instructors & Speakers ({((workshop.speakers || []).length)})
+                    </p>
+                    <p className="text-[11px] text-muted">Profiles featured on event page</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {(!workshop.speakers || workshop.speakers.length === 0) && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setWorkshop({
+                            ...workshop,
+                            speakers: [
+                              {
+                                name: 'Ayub.',
+                                title: 'Founder & Principal, Due Diligence Lab',
+                                bio: 'Ex-KPMG & BDO Binder International. Built and exited tech companies. Specializes in multi-model agentic AI orchestration for institutional deal teams.',
+                                photoUrl: '/ayub-founder-full.jpg',
+                              },
+                            ],
+                          });
+                        }}
+                        className="text-[11px] text-navy font-bold hover:underline bg-cream border border-border px-2 py-1 rounded-md"
+                      >
+                        Preset: Ayub
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const list = [...(workshop.speakers || [])];
+                        setWorkshop({
+                          ...workshop,
+                          speakers: [
+                            ...list,
+                            {
+                              name: '',
+                              title: '',
+                              bio: '',
+                              photoUrl: '/ayub-founder-full.jpg',
+                            },
+                          ],
+                        });
+                      }}
+                      className="text-xs text-gold font-bold hover:underline flex items-center gap-1"
+                    >
+                      <Plus className="w-3 h-3" /> Add Speaker
+                    </button>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  {(workshop.speakers || []).map((speaker, idx) => (
+                    <div key={idx} className="p-3 bg-cream rounded-xl border border-border space-y-3 text-xs">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-navy">Speaker #{idx + 1}: {speaker.name || 'Unnamed'}</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const list = (workshop.speakers || []).filter((_, i) => i !== idx);
+                            setWorkshop({ ...workshop, speakers: list });
+                          }}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <div>
+                          <label className="block text-[11px] text-muted mb-1 font-semibold">Name</label>
+                          <input
+                            type="text"
+                            value={speaker.name || ''}
+                            placeholder="e.g. Ayub."
+                            onChange={(e) => {
+                              const list = [...(workshop.speakers || [])];
+                              list[idx] = { ...list[idx], name: e.target.value };
+                              setWorkshop({ ...workshop, speakers: list });
+                            }}
+                            className="w-full px-2.5 py-1.5 rounded-lg border border-border bg-white text-navy font-semibold text-xs focus:border-gold"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] text-muted mb-1 font-semibold">Title / Credentials</label>
+                          <input
+                            type="text"
+                            value={speaker.title || ''}
+                            placeholder="e.g. Ex-KPMG, Founder Due Diligence Lab"
+                            onChange={(e) => {
+                              const list = [...(workshop.speakers || [])];
+                              list[idx] = { ...list[idx], title: e.target.value };
+                              setWorkshop({ ...workshop, speakers: list });
+                            }}
+                            className="w-full px-2.5 py-1.5 rounded-lg border border-border bg-white text-navy text-xs focus:border-gold"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] text-muted mb-1 font-semibold">Bio</label>
+                        <textarea
+                          rows={2}
+                          value={speaker.bio || ''}
+                          placeholder="Short background and expertise overview..."
+                          onChange={(e) => {
+                            const list = [...(workshop.speakers || [])];
+                            list[idx] = { ...list[idx], bio: e.target.value };
+                            setWorkshop({ ...workshop, speakers: list });
+                          }}
+                          className="w-full px-2.5 py-1.5 rounded-lg border border-border bg-white text-navy text-xs resize-none focus:border-gold"
+                        />
+                      </div>
+
+                      <ImageField
+                        label="Speaker Portrait Photo"
+                        value={speaker.photoUrl || '/ayub-founder-full.jpg'}
+                        onChange={(url) => {
+                          const list = [...(workshop.speakers || [])];
+                          list[idx] = { ...list[idx], photoUrl: url };
+                          setWorkshop({ ...workshop, speakers: list });
+                        }}
+                        slotHint="trainer-portrait"
+                        helperText="Portrait headshot (3:4 aspect ratio recommended)"
+                      />
+                    </div>
+                  ))}
+                  {(!workshop.speakers || workshop.speakers.length === 0) && (
+                    <p className="text-xs text-muted italic py-1">No speakers configured yet.</p>
+                  )}
+                </div>
+              </div>
+
+              {/* FAQs */}
+              <div className="p-4 bg-white rounded-xl border border-border space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-bold text-navy uppercase tracking-wider">
+                      Frequently Asked Questions ({((workshop.faqs || []).length)})
+                    </p>
+                    <p className="text-[11px] text-muted">Workshop specific Q&A</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const list = [...(workshop.faqs || [])];
+                      setWorkshop({
+                        ...workshop,
+                        faqs: [
+                          ...list,
+                          {
+                            question: 'What deal tools or software are required for this session?',
+                            answer: 'All systems are provided live in-browser. We provide staging environments for hands-on exercises.',
+                          },
+                        ],
+                      });
+                    }}
+                    className="text-xs text-gold font-bold hover:underline flex items-center gap-1"
+                  >
+                    <Plus className="w-3 h-3" /> Add FAQ
+                  </button>
+                </div>
+
+                <div className="space-y-3">
+                  {(workshop.faqs || []).map((faq, idx) => (
+                    <div key={idx} className="p-3 bg-cream rounded-xl border border-border space-y-2 text-xs">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-navy">Question #{idx + 1}</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const list = (workshop.faqs || []).filter((_, i) => i !== idx);
+                            setWorkshop({ ...workshop, faqs: list });
+                          }}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <input
+                        type="text"
+                        value={faq.question || ''}
+                        placeholder="Question title"
+                        onChange={(e) => {
+                          const list = [...(workshop.faqs || [])];
+                          list[idx] = { ...list[idx], question: e.target.value };
+                          setWorkshop({ ...workshop, faqs: list });
+                        }}
+                        className="w-full px-2.5 py-1.5 rounded-lg border border-border bg-white text-navy font-semibold text-xs focus:border-gold"
+                      />
+                      <textarea
+                        rows={2}
+                        value={faq.answer || ''}
+                        placeholder="Answer explanation..."
+                        onChange={(e) => {
+                          const list = [...(workshop.faqs || [])];
+                          list[idx] = { ...list[idx], answer: e.target.value };
+                          setWorkshop({ ...workshop, faqs: list });
+                        }}
+                        className="w-full px-2.5 py-1.5 rounded-lg border border-border bg-white text-navy text-xs resize-none focus:border-gold"
+                      />
+                    </div>
+                  ))}
+                  {(!workshop.faqs || workshop.faqs.length === 0) && (
+                    <p className="text-xs text-muted italic py-1">No workshop-specific FAQs added yet.</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Resources & Deliverables */}
+              <div className="p-4 bg-white rounded-xl border border-border space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-bold text-navy uppercase tracking-wider">
+                      Resources & Deliverables ({((workshop.resources || []).length)})
+                    </p>
+                    <p className="text-[11px] text-muted">Downloads, financial models, slides, or repo links</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const list = [...(workshop.resources || [])];
+                      setWorkshop({
+                        ...workshop,
+                        resources: [
+                          ...list,
+                          {
+                            title: 'Deal Flow Architecture Deck',
+                            url: 'https://hub.dealflow.ai/resources/architecture-deck.pdf',
+                            type: 'PDF',
+                          },
+                        ],
+                      });
+                    }}
+                    className="text-xs text-gold font-bold hover:underline flex items-center gap-1"
+                  >
+                    <Plus className="w-3 h-3" /> Add Resource
+                  </button>
+                </div>
+
+                <div className="space-y-3">
+                  {(workshop.resources || []).map((resItem, idx) => (
+                    <div key={idx} className="p-3 bg-cream rounded-xl border border-border space-y-2 text-xs">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-navy">Resource #{idx + 1}</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const list = (workshop.resources || []).filter((_, i) => i !== idx);
+                            setWorkshop({ ...workshop, resources: list });
+                          }}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <input
+                          type="text"
+                          value={resItem.title || ''}
+                          placeholder="Resource Title (e.g. LBO Framework Template)"
+                          onChange={(e) => {
+                            const list = [...(workshop.resources || [])];
+                            list[idx] = { ...list[idx], title: e.target.value };
+                            setWorkshop({ ...workshop, resources: list });
+                          }}
+                          className="sm:col-span-2 px-2.5 py-1.5 rounded-lg border border-border bg-white text-navy font-semibold text-xs focus:border-gold"
+                        />
+                        <select
+                          value={resItem.type || 'PDF'}
+                          onChange={(e) => {
+                            const list = [...(workshop.resources || [])];
+                            list[idx] = { ...list[idx], type: e.target.value };
+                            setWorkshop({ ...workshop, resources: list });
+                          }}
+                          className="px-2.5 py-1.5 rounded-lg border border-border bg-white text-navy text-xs focus:border-gold"
+                        >
+                          <option value="PDF">PDF Document</option>
+                          <option value="Slide Deck">Slide Deck</option>
+                          <option value="Model / Template">Model / Template</option>
+                          <option value="Code Repository">Code Repository</option>
+                          <option value="Link">External Link</option>
+                        </select>
+                      </div>
+
+                      <input
+                        type="url"
+                        value={resItem.url || ''}
+                        placeholder="https://..."
+                        onChange={(e) => {
+                          const list = [...(workshop.resources || [])];
+                          list[idx] = { ...list[idx], url: e.target.value };
+                          setWorkshop({ ...workshop, resources: list });
+                        }}
+                        className="w-full px-2.5 py-1.5 rounded-lg border border-border bg-white text-navy font-mono text-xs focus:border-gold"
+                      />
+                    </div>
+                  ))}
+                  {(!workshop.resources || workshop.resources.length === 0) && (
+                    <p className="text-xs text-muted italic py-1">No resources added yet.</p>
+                  )}
                 </div>
               </div>
             </div>

@@ -19,16 +19,24 @@ import {
   ChevronUp,
   ChevronDown,
   Image as ImageIcon,
+  Mail,
+  Table as TableIcon,
 } from 'lucide-react';
 import api from '../../lib/api';
 import ImageField from '../../components/admin/ImageField';
 import ImagePickerModal from '../../components/admin/ImagePickerModal';
+import AdminWorkshopsCalendar from '../../components/admin/AdminWorkshopsCalendar';
+import BroadcastEmailModal from '../../components/admin/BroadcastEmailModal';
+import QuickRescheduleModal from '../../components/admin/QuickRescheduleModal';
 
 export default function AdminWorkshopsPage() {
   const [workshops, setWorkshops] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [viewMode, setViewMode] = useState('table'); // 'table' | 'calendar'
+  const [broadcastWorkshop, setBroadcastWorkshop] = useState(null);
+  const [rescheduleWorkshop, setRescheduleWorkshop] = useState(null);
 
   // Modal for new workshop
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -221,6 +229,28 @@ export default function AdminWorkshopsPage() {
           </p>
         </div>
         <div className="flex items-center gap-3">
+          {/* View Switcher */}
+          <div className="flex items-center bg-cream rounded-xl p-1 border border-border text-xs">
+            <button
+              onClick={() => setViewMode('table')}
+              className={`px-3 py-1.5 rounded-lg font-semibold transition-all flex items-center gap-1.5 ${
+                viewMode === 'table' ? 'bg-white text-navy shadow-2xs' : 'text-muted hover:text-navy'
+              }`}
+            >
+              <TableIcon size={13} />
+              <span>Table</span>
+            </button>
+            <button
+              onClick={() => setViewMode('calendar')}
+              className={`px-3 py-1.5 rounded-lg font-semibold transition-all flex items-center gap-1.5 ${
+                viewMode === 'calendar' ? 'bg-white text-navy shadow-2xs' : 'text-muted hover:text-navy'
+              }`}
+            >
+              <Calendar size={13} />
+              <span>Calendar</span>
+            </button>
+          </div>
+
           <button
             onClick={() => setIsCreateOpen(true)}
             className="btn-primary text-xs py-2 px-4 flex items-center gap-1.5"
@@ -257,9 +287,16 @@ export default function AdminWorkshopsPage() {
           </select>
         </div>
       </div>
-
-      {/* Workshops List */}
-      <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
+      {/* View Switch: Calendar or Table */}
+      {viewMode === 'calendar' ? (
+        <AdminWorkshopsCalendar
+          workshops={filteredWorkshops}
+          onReschedule={(w) => setRescheduleWorkshop(w)}
+          onEdit={(w) => navigate(`/admin/workshops/${w._id || w.id}/edit`)}
+        />
+      ) : (
+        /* Workshops List */
+        <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
         {loading ? (
           <div className="p-12 text-center">
             <Loader2 className="w-8 h-8 text-gold animate-spin mx-auto mb-3" />
@@ -384,6 +421,22 @@ export default function AdminWorkshopsPage() {
                     </Link>
 
                     <button
+                      onClick={() => setRescheduleWorkshop(w)}
+                      className="p-2 rounded-lg border border-border hover:bg-cream text-navy transition-colors"
+                      title="Quick Reschedule / Capacity"
+                    >
+                      <Calendar className="w-4 h-4 text-gold" />
+                    </button>
+
+                    <button
+                      onClick={() => setBroadcastWorkshop(w)}
+                      className="p-2 rounded-lg border border-border hover:bg-cream text-navy transition-colors"
+                      title="Email Registrants"
+                    >
+                      <Mail className="w-4 h-4 text-navy/70" />
+                    </button>
+
+                    <button
                       onClick={() => handleDuplicate(w._id)}
                       disabled={isBusy}
                       className="p-2 rounded-lg border border-border hover:bg-cream text-navy transition-colors"
@@ -416,6 +469,7 @@ export default function AdminWorkshopsPage() {
           </div>
         )}
       </div>
+      )}
 
       {/* Create Modal */}
       {isCreateOpen && (
@@ -556,6 +610,21 @@ export default function AdminWorkshopsPage() {
           defaultSlot="card-banner"
         />
       )}
+
+      {/* Broadcast Email Modal */}
+      <BroadcastEmailModal
+        isOpen={Boolean(broadcastWorkshop)}
+        workshop={broadcastWorkshop}
+        onClose={() => setBroadcastWorkshop(null)}
+      />
+
+      {/* Quick Reschedule Modal */}
+      <QuickRescheduleModal
+        isOpen={Boolean(rescheduleWorkshop)}
+        workshop={rescheduleWorkshop}
+        onClose={() => setRescheduleWorkshop(null)}
+        onUpdated={fetchWorkshops}
+      />
     </div>
   );
 }

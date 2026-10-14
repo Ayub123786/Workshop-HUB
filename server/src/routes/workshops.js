@@ -2,6 +2,7 @@ import express from 'express';
 import Workshop from '../models/Workshop.js';
 import Section from '../models/Section.js';
 import Form from '../models/Form.js';
+import Submission from '../models/Submission.js';
 import { protect, requireEditor, requireAdmin } from '../middleware/auth.js';
 import { createError } from '../middleware/errorHandler.js';
 import slugify from 'slugify';
@@ -383,6 +384,48 @@ router.post('/:id/duplicate', protect, requireEditor, async (req, res, next) => 
     }
 
     res.status(201).json({ success: true, workshop: newWorkshop });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// POST /api/workshops/:id/broadcast – send email to all registrants
+router.post('/:id/broadcast', protect, requireEditor, async (req, res, next) => {
+  try {
+    const { subject, message, recipientFilter = 'confirmed' } = req.body;
+    if (!subject || !message) {
+      throw createError('Subject and message are required', 400);
+    }
+
+    const workshop = await Workshop.findById(req.params.id);
+    if (!workshop) throw createError('Workshop not found', 404);
+
+    const submissions = await Submission.find({ workshopId: workshop.id });
+    let targets = submissions;
+    if (recipientFilter === 'confirmed') {
+      targets = targets.filter((s) => !s.data?.isWaitlist);
+    } else if (recipientFilter === 'waitlist') {
+      targets = targets.filter((s) => Boolean(s.data?.isWaitlist));
+    }
+
+    const emails = Array.from(new Set(targets.map((s) => s.email).filter(Boolean)));
+    if (emails.length === 0) {
+      return res.json({ success: true, message: 'No recipients found matching this filter', sentCount: 0 });
+    }
+
+    const { sendBroadcastEmail } = await import('../utils/email.js');
+    const result = await sendBroadcastEmail({
+      emails,
+      subject,
+      message,
+      workshopTitle: workshop.title,
+    });
+
+    res.json({
+      success: true,
+      message: `Broadcast successfully sent to ${result.sent} recipients`,
+      sentCount: result.sent,
+    });
   } catch (err) {
     next(err);
   }

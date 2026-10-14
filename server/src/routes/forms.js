@@ -283,4 +283,50 @@ router.delete('/:formId/submissions/:submissionId', protect, requireAdmin, async
   }
 });
 
+// PUT /api/forms/admin/submissions/:id/promote
+router.put('/admin/submissions/:id/promote', protect, requireEditor, async (req, res, next) => {
+  try {
+    const submission = await Submission.findById(req.params.id);
+    if (!submission) throw createError('Submission not found', 404);
+
+    const workshop = await Workshop.findById(submission.workshopId);
+    if (!workshop) throw createError('Workshop not found', 404);
+
+    const updatedData = { ...submission.data, isWaitlist: false, promotedAt: new Date().toISOString() };
+    
+    const { isSupabaseConfigured, supabase, readLocalStore, writeLocalStore } = await import('../utils/supabase.js');
+    if (isSupabaseConfigured) {
+      const { error } = await supabase
+        .from('submissions')
+        .update({ data: updatedData })
+        .eq('id', submission.id);
+      if (error) throw error;
+    } else {
+      const store = readLocalStore();
+      const idx = (store.submissions || []).findIndex((s) => s.id === submission.id);
+      if (idx !== -1) {
+        store.submissions[idx].data = updatedData;
+        writeLocalStore(store);
+      }
+    }
+
+    // Increment seats
+    await Workshop.findByIdAndUpdate(workshop.id, { $inc: { seatsBooked: 1 } });
+
+    // Send confirmation email
+    if (submission.email) {
+      sendConfirmationEmail({
+        email: submission.email,
+        name: submission.data?.name,
+        workshop,
+        isWaitlist: false,
+      }).catch(console.error);
+    }
+
+    res.json({ success: true, message: 'Attendee successfully promoted and confirmation email sent' });
+  } catch (err) {
+    next(err);
+  }
+});
+
 export default router;
