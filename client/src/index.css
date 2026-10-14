@@ -1,0 +1,287 @@
+/* ═══════════════════════════════════════════════════════
+   Workshop Hub — Global CSS
+   Minimal Light Design System
+═══════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── CSS Design Tokens (overridable per-workshop via JS) ─── */
+:root {
+  /* Brand Colors */
+  --color-gold: #C8A24F;
+  --color-gold-light: #D4B068;
+  --color-gold-dark: #A8842F;
+  --color-cream: #FAFAFA;
+  --color-cream-alt: #F5F5F5;
+  --color-navy: #0A0A0A;
+  --color-navy-soft: #1a1a2e;
+
+  /* Neutrals */
+  --color-white: #FFFFFF;
+  --color-border: #E8E8E8;
+  --color-muted: #6B7280;
+  --color-subtle: #9CA3AF;
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* Spacing */
+  --section-gap: clamp(4rem, 8vw, 8rem);
+  --section-gap-sm: clamp(3rem, 6vw, 6rem);
+  --container-max: 1200px;
+  --container-pad: clamp(1rem, 5vw, 2rem);
+
+  /* Motion */
+  --transition-base: 200ms ease;
+  --transition-smooth: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ─── Base Reset ─── */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    color: var(--color-navy);
+    background-color: var(--color-white);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+
+  /* Lenis smooth scroll overrides */
+  html.lenis {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  img, video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  button {
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: inherit;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+/* ─── Utility Components ─── */
+@layer components {
+  /* Container */
+  .container {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding-left: var(--container-pad);
+    padding-right: var(--container-pad);
+    width: 100%;
+  }
+
+  .container-wide {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-left: var(--container-pad);
+    padding-right: var(--container-pad);
+    width: 100%;
+  }
+
+  /* Section spacing */
+  .section {
+    padding-top: var(--section-gap);
+    padding-bottom: var(--section-gap);
+  }
+
+  .section-sm {
+    padding-top: var(--section-gap-sm);
+    padding-bottom: var(--section-gap-sm);
+  }
+
+  /* Section badge */
+  .badge {
+    @apply inline-block text-xs font-semibold tracking-[0.15em] uppercase text-navy/60 border border-border px-4 py-2 rounded-badge;
+  }
+
+  .badge-gold {
+    @apply inline-block text-xs font-semibold tracking-[0.15em] uppercase text-gold border border-gold/30 px-4 py-2 rounded-badge bg-gold/5;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    @apply inline-flex items-center gap-2 bg-gold text-white font-semibold px-7 py-3.5 rounded-card transition-all duration-200;
+    @apply hover:bg-gold-dark hover:shadow-gold-glow active:scale-[0.98];
+  }
+
+  .btn-primary-lg {
+    @apply inline-flex items-center gap-3 bg-gold text-white font-semibold px-8 py-4 rounded-card text-base transition-all duration-200;
+    @apply hover:bg-gold-dark hover:shadow-gold-glow active:scale-[0.98];
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center gap-2 border border-border text-navy font-medium px-7 py-3.5 rounded-card transition-all duration-200;
+    @apply hover:border-navy hover:shadow-card-hover;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 text-navy font-medium px-4 py-2 rounded-lg transition-all duration-200;
+    @apply hover:bg-cream-dark;
+  }
+
+  /* Cards */
+  .card {
+    @apply bg-white border border-border rounded-card p-6 transition-all duration-200;
+    @apply hover:shadow-card-hover hover:-translate-y-0.5;
+  }
+
+  .card-subtle {
+    @apply bg-cream rounded-card p-6 transition-all duration-200;
+    @apply hover:shadow-card;
+  }
+
+  /* Form inputs */
+  .input {
+    @apply w-full bg-white border border-border rounded-input px-4 py-3 text-navy text-sm;
+    @apply placeholder:text-subtle transition-all duration-200;
+    @apply focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/10;
+  }
+
+  .select {
+    @apply w-full bg-white border border-border rounded-input px-4 py-3 text-navy text-sm appearance-none;
+    @apply focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/10;
+  }
+
+  .textarea {
+    @apply w-full bg-white border border-border rounded-input px-4 py-3 text-navy text-sm resize-none;
+    @apply placeholder:text-subtle transition-all duration-200;
+    @apply focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/10;
+  }
+
+  .label {
+    @apply block text-sm font-medium text-navy/80 mb-1.5;
+  }
+
+  /* Section separator label */
+  .section-label {
+    @apply text-xs font-semibold tracking-[0.18em] uppercase text-muted mb-3;
+  }
+
+  /* Scroll progress bar */
+  .scroll-progress {
+    @apply fixed top-0 left-0 h-0.5 z-50 origin-left;
+    background: var(--color-gold);
+  }
+
+  /* Stage card */
+  .stage-card {
+    @apply bg-white border border-border rounded-card p-6 relative transition-all duration-200;
+    @apply hover:shadow-card-hover hover:-translate-y-0.5;
+  }
+
+  /* Skeleton loader */
+  .skeleton {
+    @apply bg-gray-200 rounded-lg animate-pulse;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  /* Workshop status badges */
+  .status-upcoming { @apply bg-blue-50 text-blue-600 border border-blue-100 text-xs font-semibold px-2.5 py-1 rounded-full; }
+  .status-live { @apply bg-green-50 text-green-600 border border-green-100 text-xs font-semibold px-2.5 py-1 rounded-full; }
+  .status-completed { @apply bg-gray-100 text-gray-500 border border-gray-200 text-xs font-semibold px-2.5 py-1 rounded-full; }
+  .status-sold-out { @apply bg-red-50 text-red-600 border border-red-100 text-xs font-semibold px-2.5 py-1 rounded-full; }
+  .status-draft { @apply bg-yellow-50 text-yellow-600 border border-yellow-100 text-xs font-semibold px-2.5 py-1 rounded-full; }
+}
+
+/* ─── Utilities ─── */
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+
+  .gold-text { color: var(--color-gold); }
+
+  /* Marquee pause on hover */
+  .marquee-track:hover .marquee-inner {
+    animation-play-state: paused;
+  }
+
+  /* No scrollbar */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* Image lazy loading no-shift */
+  .img-fixed {
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ─── Swiper Overrides ─── */
+.swiper-pagination-bullet {
+  background: var(--color-border);
+  opacity: 1;
+}
+.swiper-pagination-bullet-active {
+  background: var(--color-gold);
+}
+
+/* ─── Custom scrollbar ─── */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #D1D5DB transparent;
+}
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #9CA3AF; }
+
+/* ─── React Easy Crop ─── */
+.reactEasyCrop_Container {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* ─── Admin sidebar transitions ─── */
+.admin-sidebar {
+  transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ─── Prose ─── */
+.prose-workshop p {
+  @apply text-muted leading-relaxed mb-4;
+}
+.prose-workshop strong {
+  @apply text-navy font-semibold;
+}

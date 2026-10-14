@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><title>PE Deal Flow Automation Master Class</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "error-container": "#ffdad6", "surface-container-high": "#ebe7e7", "surface-bright": "#fcf8f8", "primary-container": "#131b2e", "inverse-on-surface": "#f3f0ef", "primary-fixed": "#dae2fd", "secondary": "#775a19", "surface-variant": "#e5e2e1", "surface": "#fcf8f8", "on-primary": "#ffffff", "on-tertiary-fixed-variant": "#3a485b", "on-secondary-fixed-variant": "#5d4201", "on-background": "#1c1b1b", "tertiary": "#000000", "inverse-primary": "#bec6e0", "secondary-container": "#fed488", "error": "#ba1a1a", "secondary-fixed": "#ffdea5", "on-secondary-container": "#785a1a", "on-error": "#ffffff", "on-secondary": "#ffffff", "on-surface-variant": "#45464d", "on-primary-container": "#7c839b", "tertiary-container": "#0d1c2e", "surface-container-low": "#f6f3f2", "secondary-fixed-dim": "#e9c176", "tertiary-fixed": "#d5e3fc", "outline-variant": "#c6c6cd", "on-primary-fixed": "#131b2e", "on-primary-fixed-variant": "#3f465c", "on-tertiary-container": "#77859a", "on-error-container": "#93000a", "on-surface": "#1c1b1b", "on-tertiary-fixed": "#0d1c2e", "primary": "#000000", "inverse-surface": "#313030", "on-secondary-fixed": "#261900", "on-tertiary": "#ffffff", "tertiary-fixed-dim": "#b9c7df", "background": "#fcf8f8", "primary-fixed-dim": "#bec6e0", "surface-dim": "#dcd9d9", "outline": "#76777d", "surface-container-highest": "#e5e2e1", "surface-tint": "#565e74", "surface-container": "#f0edec", "surface-container-lowest": "#ffffff" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-xs": "0.25rem", "margin-mobile": "1.25rem", "space-sm": "0.5rem", "space-md": "1rem", "space-lg": "1.5rem", "space-xl": "2.5rem", "gutter": "2rem", "gutter-mobile": "1rem", "margin": "4rem" }, "fontFamily": { "headline-md": ["Inter"], "display-mobile": ["Inter"], "label-badge": ["Inter"], "body-muted": ["Inter"], "body-lead": ["Inter"], "headline-md-mobile": ["Inter"], "headline-sm": ["Inter"], "label-executive": ["Inter"], "display": ["Inter"], "headline-lg-mobile": ["Inter"], "body-default": ["Inter"], "headline-lg": ["Inter"] }, "fontSize": { "headline-md": ["2.25rem", { "lineHeight": "2.75rem", "letterSpacing": "-0.02em", "fontWeight": "700" }], "display-mobile": ["2.5rem", { "lineHeight": "2.875rem", "letterSpacing": "-0.025em", "fontWeight": "800" }], "label-badge": ["0.6875rem", { "lineHeight": "0.875rem", "letterSpacing": "0.1em", "fontWeight": "700" }], "body-muted": ["0.875rem", { "lineHeight": "1.375rem", "letterSpacing": "0em", "fontWeight": "400" }], "body-lead": ["1.25rem", { "lineHeight": "1.875rem", "letterSpacing": "-0.01em", "fontWeight": "400" }], "headline-md-mobile": ["1.625rem", { "lineHeight": "2rem", "letterSpacing": "-0.015em", "fontWeight": "700" }], "headline-sm": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.015em", "fontWeight": "600" }], "label-executive": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0.125em", "fontWeight": "600" }], "display": ["3.75rem", { "lineHeight": "4.25rem", "letterSpacing": "-0.03em", "fontWeight": "800" }], "headline-lg-mobile": ["2rem", { "lineHeight": "2.375rem", "letterSpacing": "-0.02em", "fontWeight": "700" }], "body-default": ["1rem", { "lineHeight": "1.625rem", "letterSpacing": "0em", "fontWeight": "400" }], "headline-lg": ["3rem", { "lineHeight": "3.5rem", "letterSpacing": "-0.025em", "fontWeight": "700" }] } } } };</script></head><body class="min-h-full bg-background font-body-default text-on-surface antialiased flex flex-col"><header class="fixed top-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-md border-b border-outline-variant/40"><div class="h-20 max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between gap-6"><div class="flex items-center gap-3 shrink-0"><img alt="AlphaDeal PE Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRDE4FRtSFmnKUJ5vg_LFrVpjpOhOhJs2KBIF2K6ZpfPYqt4an51qPl5sSeoVuaJzO6xqW8qzmI-6UP8OUEYzhMY2yJQGAFNztk3OU_MDVp6L1C5rvf4opkHlJtlssGfwSbLEIHPgGEVRADY2KoEltotUFO3IDbr8LoXJZHsDyzBvg5z0B2CdJ431OSURncul9IicWrsl8d8g9CzSpisCp-ergqxIGR5yn3nB27PF6J-h2E3V7D5kc"/><div class="flex flex-col"><span class="font-label-executive text-label-executive tracking-widest text-on-surface uppercase">ALPHA DEALS</span><span class="font-label-badge text-label-badge text-on-surface-variant uppercase tracking-wider">PE AUTOMATION</span></div></div><nav class="hidden xl:flex items-center gap-8" data-active-classes="text-on-surface font-semibold"><a aria-current="page" class="transition-colors text-on-surface font-semibold" data-path="curriculum" href="#">Curriculum</a><a class="font-body-muted text-body-muted text-on-surface-variant hover:text-on-surface transition-colors" data-path="firms-trained" href="#">Firms Trained</a><a class="font-body-muted text-body-muted text-on-surface-variant hover:text-on-surface transition-colors" data-path="8-stage-blueprint" href="#">8-Stage Blueprint</a><a class="font-body-muted text-body-muted text-on-surface-variant hover:text-on-surface transition-colors" data-path="instructor" href="#">Instructor</a><a class="font-body-muted text-body-muted text-on-surface-variant hover:text-on-surface transition-colors" data-path="reviews" href="#">Reviews</a></nav><div class="flex items-center gap-4 shrink-0"><div class="hidden sm:inline-flex items-center px-3 py-1 rounded-full bg-secondary-fixed/30 border border-secondary/30 text-secondary font-label-badge text-label-badge tracking-wider uppercase"><span class="w-1.5 h-1.5 rounded-full bg-secondary mr-2 animate-pulse"></span>Next Cohort: Oct 24</div><a class="inline-flex items-center justify-center bg-primary text-on-primary font-body-muted text-body-muted font-semibold px-5 py-2.5 rounded-lg hover:bg-inverse-surface hover:text-inverse-on-surface transition-all duration-200 shadow-sm" data-path="reserve-spot" href="#">Reserve Your Spot →</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full flex-1 pt-20 bg-background"><div class="flex flex-col w-full">
+<!-- SECTION 1: HERO -->
+<section class="relative w-full overflow-hidden bg-surface-container-lowest py-20 lg:py-28">
+<div class="absolute inset-0 bg-[radial-gradient(#e5e2e1_1px,transparent_1px)] [background-size:24px_24px] opacity-40 pointer-events-none"></div>
+<div class="max-w-7xl mx-auto px-6 lg:px-12 relative z-10 flex flex-col items-center text-center">
+<!-- Live Badge Pill -->
+<div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-surface-container-low border border-outline-variant/60 shadow-sm mb-8">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+<span class="font-label-executive text-label-executive tracking-widest text-on-surface uppercase font-semibold">LIVE MASTER CLASS</span>
+</div>
+<!-- Main Headline -->
+<h1 class="font-display text-display text-on-surface max-w-4xl tracking-tight leading-tight mb-8">
+        PE Deal Flow Automation Master Class
+      </h1>
+<!-- Subtitle -->
+<p class="font-body-lead text-body-lead text-on-surface-variant max-w-3xl mb-10 leading-relaxed">
+        Transform unstructured CIMs, teaser PDFs, and fragmented intermediary emails into an automated deal evaluation engine. Learn the exact proprietary AI workflows and Python pipelines deployed by top-decile buyout funds to screen 10x more transactions with institutional precision.
+      </p>
+<!-- Primary Action CTA -->
+<div class="flex flex-col sm:flex-row items-center gap-4 mb-16">
+<a class="inline-flex items-center justify-center px-8 py-4 rounded-xl bg-primary text-on-primary font-body-default font-semibold shadow-lg hover:shadow-secondary/20 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] group" href="#reserve">
+          Reserve Your Spot →
+        </a>
+<span class="font-label-badge text-label-badge text-on-surface-variant uppercase tracking-wider">Accredited by AlphaDeals Syndicate</span>
+</div>
+<!-- Hero Visualization Canvas -->
+<div class="w-full relative mt-4">
+<!-- Main Dashboard Graphic -->
+<div class="relative w-full rounded-2xl overflow-hidden border border-outline-variant/70 shadow-2xl bg-surface-container">
+<img alt="PE Deal Flow Pipeline &amp; CIM Automation Interface" class="w-full h-auto object-cover max-h-[640px]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyK-E0EHbJhFT_x_05xj60PJdANRo9cLMgfVMspS8v4_Cf-MqZllM2wmEW8Rpp8hiZCx_6Hz_xybGgPlI1AwS3z-TdqZKEGaMo8k6qYf2c5EmUcBzuqBgkNVAb86UCQZW7sxyNqNkSof5NhHqNH9TS_yjjl7lXsZcrRSY0I2DenD-ba4XtrASjs_X2WLKaaDLQgUaHJH59-iX-p0MhTsM6e6zR5LHnUera7P2twsvTD6kBRm8OM-mG"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none"></div>
+</div>
+<!-- Overlapping Next Master Class Floating Card -->
+<div class="relative lg:absolute -bottom-10 lg:bottom-8 lg:left-12 lg:right-12 z-20 mt-6 lg:mt-0">
+<div class="mx-auto max-w-4xl bg-surface-container-lowest/95 backdrop-blur-md rounded-2xl border border-outline-variant/80 p-6 lg:p-8 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+<div class="flex flex-col items-center md:items-start text-center md:text-left gap-1">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-fixed/50 text-secondary font-label-badge text-label-badge font-bold tracking-wider uppercase">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span>
+                UPCOMING LIVE SESSION
+              </span>
+<span class="font-headline-sm text-headline-sm text-on-surface mt-1">Thursday, November 14, 2024</span>
+<span class="font-label-badge text-label-badge text-secondary font-semibold uppercase tracking-wider flex items-center gap-1 mt-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                Limited to 35 Partner &amp; Principal Seats
+              </span>
+</div>
+<div class="grid grid-cols-3 gap-3 sm:gap-4 w-full md:w-auto">
+<div class="flex flex-col items-center bg-surface-container-low px-4 py-3 rounded-xl border border-outline-variant/40">
+<span class="font-label-badge text-label-badge text-on-surface-variant font-medium uppercase tracking-wider">DUBAI</span>
+<span class="font-body-default text-body-default font-semibold text-on-surface">5:00 PM GST</span>
+</div>
+<div class="flex flex-col items-center bg-surface-container-low px-4 py-3 rounded-xl border border-outline-variant/40">
+<span class="font-label-badge text-label-badge text-on-surface-variant font-medium uppercase tracking-wider">NEW YORK</span>
+<span class="font-body-default text-body-default font-semibold text-on-surface">9:00 AM EST</span>
+</div>
+<div class="flex flex-col items-center bg-surface-container-low px-4 py-3 rounded-xl border border-outline-variant/40">
+<span class="font-label-badge text-label-badge text-on-surface-variant font-medium uppercase tracking-wider">LONDON</span>
+<span class="font-body-default text-body-default font-semibold text-on-surface">2:00 PM GMT</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 2: WHAT YOU GET OUT OF IT -->
+<section class="w-full bg-surface py-24 border-t border-outline-variant/40 relative">
+<div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col items-center">
+<div class="flex flex-col items-center text-center mb-16">
+<span class="font-label-executive text-label-executive text-secondary uppercase tracking-widest font-semibold mb-2">PROGRAM DELIVERABLES</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">What you get out of it</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
+<!-- Card 1 -->
+<div class="flex flex-col bg-surface-container-lowest rounded-2xl p-8 border border-outline-variant/70 shadow-sm hover:shadow-md transition-shadow duration-200">
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-on-surface mb-6 border border-outline-variant/30">
+<span class="material-symbols-outlined text-[26px]">terminal</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface mb-3">Video Tutorial</span>
+<p class="font-body-muted text-body-muted text-on-surface-variant leading-relaxed">
+            Full 4K session recording and modular chapter breakdowns with lifetime institutional access for your investment committee.
+          </p>
+</div>
+<!-- Card 2 -->
+<div class="flex flex-col bg-surface-container-lowest rounded-2xl p-8 border border-outline-variant/70 shadow-sm hover:shadow-md transition-shadow duration-200">
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-on-surface mb-6 border border-outline-variant/30">
+<span class="material-symbols-outlined text-[26px]">menu_book</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface mb-3">Playbook</span>
+<p class="font-body-muted text-body-muted text-on-surface-variant leading-relaxed">
+            Comprehensive 85-page architectural blueprint detailing proprietary prompting schemas, data room scrapers, and committee memos.
+          </p>
+</div>
+<!-- Card 3 -->
+<div class="flex flex-col bg-surface-container-lowest rounded-2xl p-8 border border-outline-variant/70 shadow-sm hover:shadow-md transition-shadow duration-200">
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-on-surface mb-6 border border-outline-variant/30">
+<span class="material-symbols-outlined text-[26px]">description</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface mb-3">Case Study Docs</span>
+<p class="font-body-muted text-body-muted text-on-surface-variant leading-relaxed">
+            Raw anonymized CIM datasets, financial models, and parsed valuation scripts from three real mid-market buyout transactions.
+          </p>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 3: FIRMS WE TRAINED -->
+<section class="w-full bg-surface-container-low py-24 border-t border-outline-variant/40">
+<div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col items-center">
+<div class="flex flex-col items-center text-center mb-12">
+<span class="font-label-executive text-label-executive text-secondary uppercase tracking-widest font-semibold mb-2">TRACK RECORD &amp; ALUMNI</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight mb-3">Firms we trained</h2>
+<p class="font-body-default text-body-default text-on-surface-variant max-w-xl">
+          Trusted by investment professionals from global mega-funds and mid-market sponsors.
+        </p>
+</div>
+<div class="w-full bg-surface-container-lowest rounded-2xl border border-outline-variant/70 p-10 md:p-14 shadow-sm">
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8 items-center text-center">
+<div class="flex items-center justify-center p-4"><span class="font-headline-sm text-headline-sm tracking-tighter text-on-surface font-extrabold opacity-80 hover:opacity-100 transition-opacity">BLACKSTONE</span></div>
+<div class="flex items-center justify-center p-4"><span class="font-headline-sm text-headline-sm tracking-widest text-on-surface font-bold opacity-80 hover:opacity-100 transition-opacity">K K R</span></div>
+<div class="flex items-center justify-center p-4"><span class="font-headline-sm text-headline-sm tracking-wider text-on-surface font-semibold opacity-80 hover:opacity-100 transition-opacity">APOLLO</span></div>
+<div class="flex items-center justify-center p-4"><span class="font-headline-sm text-headline-sm tracking-tight text-on-surface font-serif uppercase font-bold opacity-80 hover:opacity-100 transition-opacity">Carlyle</span></div>
+<div class="flex items-center justify-center p-4"><span class="font-headline-sm text-headline-sm tracking-widest text-on-surface font-black opacity-80 hover:opacity-100 transition-opacity">CVC</span></div>
+<div class="flex items-center justify-center p-4"><span class="font-headline-sm text-headline-sm tracking-tight text-on-surface font-bold opacity-80 hover:opacity-100 transition-opacity">EQT</span></div>
+<div class="flex items-center justify-center p-4"><span class="font-headline-sm text-headline-sm tracking-normal text-on-surface font-semibold uppercase opacity-80 hover:opacity-100 transition-opacity">Advent Intl</span></div>
+<div class="flex items-center justify-center p-4"><span class="font-headline-sm text-headline-sm tracking-tight text-on-surface font-bold opacity-80 hover:opacity-100 transition-opacity">BainCapital</span></div>
+<div class="flex items-center justify-center p-4"><span class="font-headline-sm text-headline-sm tracking-tighter text-on-surface font-semibold opacity-80 hover:opacity-100 transition-opacity">FRANCISCO</span></div>
+<div class="flex items-center justify-center p-4"><span class="font-headline-sm text-headline-sm tracking-wider text-on-surface font-medium uppercase opacity-80 hover:opacity-100 transition-opacity">Thoma Bravo</span></div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 4: COMMUNITY & ALUMNI NETWORKING -->
+<section class="w-full bg-surface-container-lowest py-24 border-t border-outline-variant/40">
+<div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col items-center">
+<div class="flex flex-col items-center text-center mb-12">
+<span class="font-label-executive text-label-executive text-secondary uppercase tracking-widest font-semibold mb-2">THE PE AI SYNDICATE</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight mb-4">Our community / Alumni Reflection &amp; Networking</h2>
+<p class="font-body-lead text-body-lead text-on-surface-variant max-w-2xl leading-relaxed">
+          Join an invite-only peer network of 650+ buyout partners, principals, and operating executives exchanging battle-tested workflows and proprietary automation agents.
+        </p>
+</div>
+<div class="w-full relative rounded-2xl overflow-hidden border border-outline-variant/80 shadow-lg bg-surface-container">
+<img alt="Private Equity Partners Networking Mayfair Executive Boardroom" class="w-full h-[420px] lg:h-[500px] object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFxRKBaZcovshQEmvyxuVL_yXLo90qgeRezmfCkz5KzXdep2WJl6n0PCiyJW1iq5ypj2I6KJhIISXnqkGG-5KQLyVGeowgnOoR9nY4BTA8STJSYY765AlLof19LyfA0Wryg335pWf-nAaWdt954Ml9JNpcpk8Sz9l2sKELHPUnDRiNZPuGP7azs0zNuWzZDmvFMSvRFcpXmTXVi72foFcHfYkZTzhZWxYyf5pGlBMFM4-UDZ9MjOLh"/>
+<div class="absolute bottom-6 left-6 right-6 lg:left-10 lg:bottom-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 rounded-xl bg-surface-container-lowest/90 backdrop-blur-md border border-outline-variant/60 max-w-3xl">
+<div class="flex flex-col">
+<span class="font-label-executive text-label-executive uppercase tracking-wider text-secondary font-bold">EXECUTIVE FORUM • LONDON &amp; NEW YORK</span>
+<span class="font-body-default text-body-default font-semibold text-on-surface">Closed-Door Quarterly In-Person Dinners &amp; Deal Strategy Summits</span>
+</div>
+<div class="shrink-0 flex items-center -space-x-2">
+<span class="w-9 h-9 rounded-full bg-primary text-on-primary text-[12px] font-bold flex items-center justify-center border-2 border-surface">KKR</span>
+<span class="w-9 h-9 rounded-full bg-secondary-fixed text-on-secondary-fixed text-[12px] font-bold flex items-center justify-center border-2 border-surface">BX</span>
+<span class="w-9 h-9 rounded-full bg-primary-fixed text-on-primary-fixed text-[12px] font-bold flex items-center justify-center border-2 border-surface">EQT</span>
+<span class="w-9 h-9 rounded-full bg-surface-variant text-on-surface text-[12px] font-bold flex items-center justify-center border-2 border-surface">+647</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 5: WHAT ATTENDEES SAY -->
+<section class="w-full bg-surface py-24 border-t border-outline-variant/40">
+<div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col items-center">
+<div class="flex flex-col items-center text-center mb-16">
+<span class="font-label-executive text-label-executive text-secondary uppercase tracking-widest font-semibold mb-2">VERIFIED EXECUTIVE REVIEWS</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">What attendees say</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+<!-- Review 1 -->
+<div class="flex flex-col justify-between bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant/70 shadow-sm">
+<div>
+<div class="flex items-center gap-1 text-secondary mb-4">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="font-body-default text-body-default text-on-surface leading-relaxed italic mb-6">
+              “We shaved 14 hours per week off our initial screening pipeline. The CIM parsing model caught an EBITDA adjustment that our third-party diligence team flagged 3 weeks later.”
+            </p>
+</div>
+<div class="flex flex-col border-t border-outline-variant/40 pt-4">
+<span class="font-body-default text-body-default font-bold text-on-surface">Marcus Vance</span>
+<span class="font-body-muted text-body-muted text-on-surface-variant">Managing Partner, Mayfair Buyout Partners</span>
+</div>
+</div>
+<!-- Review 2 -->
+<div class="flex flex-col justify-between bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant/70 shadow-sm">
+<div>
+<div class="flex items-center gap-1 text-secondary mb-4">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="font-body-default text-body-default text-on-surface leading-relaxed italic mb-6">
+              “The single highest ROI training our deal team took this year. We went from reviewing 12 CIMs weekly to over 60 without expanding headcount.”
+            </p>
+</div>
+<div class="flex flex-col border-t border-outline-variant/40 pt-4">
+<span class="font-body-default text-body-default font-bold text-on-surface">Elena Rostova</span>
+<span class="font-body-muted text-body-muted text-on-surface-variant">Investment Principal, Helios Capital</span>
+</div>
+</div>
+<!-- Review 3 -->
+<div class="flex flex-col justify-between bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant/70 shadow-sm">
+<div>
+<div class="flex items-center gap-1 text-secondary mb-4">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="font-body-default text-body-default text-on-surface leading-relaxed italic mb-6">
+              “Most AI courses are theoretical fluff. This gave us copy-paste Python scripts and prompting schemas designed specifically for LBO screening.”
+            </p>
+</div>
+<div class="flex flex-col border-t border-outline-variant/40 pt-4">
+<span class="font-body-default text-body-default font-bold text-on-surface">David Sterling</span>
+<span class="font-body-muted text-body-muted text-on-surface-variant">Operating Partner, Crestview Private Capital</span>
+</div>
+</div>
+<!-- Review 4 -->
+<div class="flex flex-col justify-between bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant/70 shadow-sm">
+<div>
+<div class="flex items-center gap-1 text-secondary mb-4">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="font-body-default text-body-default text-on-surface leading-relaxed italic mb-6">
+              “The automated IC memo generator alone paid for the ticket 100x over. Indispensable for any modern sponsor looking for alpha.”
+            </p>
+</div>
+<div class="flex flex-col border-t border-outline-variant/40 pt-4">
+<span class="font-body-default text-body-default font-bold text-on-surface">Sofia Chen</span>
+<span class="font-body-muted text-body-muted text-on-surface-variant">Vice President, Apex Global Partners</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 6: 8-STAGE BLUEPRINT -->
+<section class="w-full bg-surface-container-lowest py-24 border-t border-outline-variant/40">
+<div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col items-center">
+<div class="flex flex-col items-center text-center mb-16">
+<span class="font-label-executive text-label-executive text-secondary uppercase tracking-widest font-semibold mb-2">END-TO-END BLUEPRINT</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight mb-3">What you'll build: 8 Stages. Live Results.</h2>
+<p class="font-body-default text-body-default text-on-surface-variant max-w-2xl">
+          Construct a modular, enterprise-grade deal evaluation suite directly inside your own private infrastructure.
+        </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+<!-- Stage 01 -->
+<div class="bg-surface p-7 rounded-2xl border border-outline-variant/70 shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-4">
+<span class="font-mono text-sm font-bold text-secondary uppercase">Stage 01</span>
+<span class="px-2.5 py-1 rounded-md bg-surface-container text-on-surface-variant font-label-badge text-label-badge font-semibold">10 min</span>
+</div>
+<div class="flex items-center gap-3 mb-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[22px]">document_scanner</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Automated CIM Ingestion &amp; OCR parsing</h3>
+</div>
+<p class="font-body-muted text-body-muted text-on-surface-variant leading-relaxed mb-6">
+              Ingest 100+ page Confidential Information Memorandums and scanned teaser PDFs using layout-aware optical recognition models with zero text scrambling.
+            </p>
+</div>
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-secondary-fixed/30 border border-secondary/20 text-secondary font-label-badge text-label-badge font-bold w-fit">
+<span>⚡ Time Saved: 3.5 hrs/deal</span>
+</div>
+</div>
+<!-- Stage 02 -->
+<div class="bg-surface p-7 rounded-2xl border border-outline-variant/70 shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-4">
+<span class="font-mono text-sm font-bold text-secondary uppercase">Stage 02</span>
+<span class="px-2.5 py-1 rounded-md bg-surface-container text-on-surface-variant font-label-badge text-label-badge font-semibold">15 min</span>
+</div>
+<div class="flex items-center gap-3 mb-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[22px]">table_chart</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Multi-Year Financial &amp; Debt Schedule Extraction</h3>
+</div>
+<p class="font-body-muted text-body-muted text-on-surface-variant leading-relaxed mb-6">
+              Automatically isolate historical income statements, balance sheets, and complex capital structures into clean, standardized Excel-compatible formats.
+            </p>
+</div>
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-secondary-fixed/30 border border-secondary/20 text-secondary font-label-badge text-label-badge font-bold w-fit">
+<span>⚡ Time Saved: 5 hrs/deal</span>
+</div>
+</div>
+<!-- Stage 03 -->
+<div class="bg-surface p-7 rounded-2xl border border-outline-variant/70 shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-4">
+<span class="font-mono text-sm font-bold text-secondary uppercase">Stage 03</span>
+<span class="px-2.5 py-1 rounded-md bg-surface-container text-on-surface-variant font-label-badge text-label-badge font-semibold">12 min</span>
+</div>
+<div class="flex items-center gap-3 mb-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[22px]">hub</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Competitor Landscape &amp; Market Synthesis Agent</h3>
+</div>
+<p class="font-body-muted text-body-muted text-on-surface-variant leading-relaxed mb-6">
+              Dispatch autonomous research workers to map direct competitors, market concentration indices, and secular headwind analyses in under 90 seconds.
+            </p>
+</div>
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-secondary-fixed/30 border border-secondary/20 text-secondary font-label-badge text-label-badge font-bold w-fit">
+<span>⚡ Time Saved: 4 hrs/deal</span>
+</div>
+</div>
+<!-- Stage 04 -->
+<div class="bg-surface p-7 rounded-2xl border border-outline-variant/70 shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-4">
+<span class="font-mono text-sm font-bold text-secondary uppercase">Stage 04</span>
+<span class="px-2.5 py-1 rounded-md bg-surface-container text-on-surface-variant font-label-badge text-label-badge font-semibold">20 min</span>
+</div>
+<div class="flex items-center gap-3 mb-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[22px]">verified_user</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Quality of Earnings &amp; Red-Flag Audit Engine</h3>
+</div>
+<p class="font-body-muted text-body-muted text-on-surface-variant leading-relaxed mb-6">
+              Cross-examine aggressive add-backs, revenue recognition discrepancies, and customer concentration risks against institutional diligence benchmarks.
+            </p>
+</div>
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-secondary-fixed/30 border border-secondary/20 text-secondary font-label-badge text-label-badge font-bold w-fit">
+<span>⚡ Time Saved: 6 hrs/deal</span>
+</div>
+</div>
+<!-- Stage 05 -->
+<div class="bg-surface p-7 rounded-2xl border border-outline-variant/70 shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-4">
+<span class="font-mono text-sm font-bold text-secondary uppercase">Stage 05</span>
+<span class="px-2.5 py-1 rounded-md bg-surface-container text-on-surface-variant font-label-badge text-label-badge font-semibold">15 min</span>
+</div>
+<div class="flex items-center gap-3 mb-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[22px]">calculate</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Automated LBO Returns &amp; Valuation Matrix</h3>
+</div>
+<p class="font-body-muted text-body-muted text-on-surface-variant leading-relaxed mb-6">
+              Run automated sensitivity simulations mapping entry multiples, leverage configurations, and exit horizons to calculate instant IRR and MoIC bands.
+            </p>
+</div>
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-secondary-fixed/30 border border-secondary/20 text-secondary font-label-badge text-label-badge font-bold w-fit">
+<span>⚡ Time Saved: 3 hrs/deal</span>
+</div>
+</div>
+<!-- Stage 06 -->
+<div class="bg-surface p-7 rounded-2xl border border-outline-variant/70 shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-4">
+<span class="font-mono text-sm font-bold text-secondary uppercase">Stage 06</span>
+<span class="px-2.5 py-1 rounded-md bg-surface-container text-on-surface-variant font-label-badge text-label-badge font-semibold">18 min</span>
+</div>
+<div class="flex items-center gap-3 mb-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[22px]">history_edu</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Investment Committee Memo First-Draft Generator</h3>
+</div>
+<p class="font-body-muted text-body-muted text-on-surface-variant leading-relaxed mb-6">
+              Synthesize qualitative thesis, financial schedules, and downside scenario modeling into an institutional-grade preliminary IC memorandum.
+            </p>
+</div>
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-secondary-fixed/30 border border-secondary/20 text-secondary font-label-badge text-label-badge font-bold w-fit">
+<span>⚡ Time Saved: 4.5 hrs/deal</span>
+</div>
+</div>
+<!-- Stage 07 -->
+<div class="bg-surface p-7 rounded-2xl border border-outline-variant/70 shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-4">
+<span class="font-mono text-sm font-bold text-secondary uppercase">Stage 07</span>
+<span class="px-2.5 py-1 rounded-md bg-surface-container text-on-surface-variant font-label-badge text-label-badge font-semibold">15 min</span>
+</div>
+<div class="flex items-center gap-3 mb-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[22px]">glass</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Data Room Q&amp;A Auto-Responder System</h3>
+</div>
+<p class="font-body-muted text-body-muted text-on-surface-variant leading-relaxed mb-6">
+              Connect a vector database to thousands of diligence documents to draft instant, cited responses to buyer inquiries or committee objections.
+            </p>
+</div>
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-secondary-fixed/30 border border-secondary/20 text-secondary font-label-badge text-label-badge font-bold w-fit">
+<span>⚡ Time Saved: 2.5 hrs/deal</span>
+</div>
+</div>
+<!-- Stage 08 -->
+<div class="bg-surface p-7 rounded-2xl border border-outline-variant/70 shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-4">
+<span class="font-mono text-sm font-bold text-secondary uppercase">Stage 08</span>
+<span class="px-2.5 py-1 rounded-md bg-surface-container text-on-surface-variant font-label-badge text-label-badge font-semibold">15 min</span>
+</div>
+<div class="flex items-center gap-3 mb-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[22px]">view_kanban</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Unified Multi-Deal Pipeline Dashboard Integration</h3>
+</div>
+<p class="font-body-muted text-body-muted text-on-surface-variant leading-relaxed mb-6">
+              Plug parsed deal cards into a centralized executive terminal with automated stage progression, scoring weights, and firm-wide triage rules.
+            </p>
+</div>
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-secondary-fixed/30 border border-secondary/20 text-secondary font-label-badge text-label-badge font-bold w-fit">
+<span>⚡ Time Saved: 8 hrs/deal</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 7: WHO THIS IS FOR -->
+<section class="w-full bg-surface-container py-24 border-t border-outline-variant/40">
+<div class="max-w-4xl mx-auto px-6 text-center flex flex-col items-center">
+<span class="font-label-executive text-label-executive text-secondary uppercase tracking-widest font-semibold mb-2">TARGET AUDIENCE</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight mb-4">Who this is for</h2>
+<p class="font-body-lead text-body-lead text-on-surface-variant max-w-2xl mb-10">
+        Engineered specifically for investment and portfolio professionals who evaluate live private equity transactions.
+      </p>
+<!-- 4 Pill Chips -->
+<div class="flex flex-wrap items-center justify-center gap-4 mb-12">
+<div class="px-6 py-3 rounded-full bg-surface-container-lowest border border-outline-variant/60 shadow-sm font-headline-sm text-headline-sm text-on-surface font-semibold">
+          PE Partners
+        </div>
+<div class="px-6 py-3 rounded-full bg-surface-container-lowest border border-outline-variant/60 shadow-sm font-headline-sm text-headline-sm text-on-surface font-semibold">
+          Principals
+        </div>
+<div class="px-6 py-3 rounded-full bg-surface-container-lowest border border-outline-variant/60 shadow-sm font-headline-sm text-headline-sm text-on-surface font-semibold">
+          Analysts
+        </div>
+<div class="px-6 py-3 rounded-full bg-surface-container-lowest border border-outline-variant/60 shadow-sm font-headline-sm text-headline-sm text-on-surface font-semibold">
+          Operations Teams
+        </div>
+</div>
+<!-- High-Visibility Button -->
+<a class="inline-flex items-center justify-center px-10 py-4 rounded-xl bg-primary text-on-primary font-body-default font-semibold shadow-xl hover:bg-inverse-surface hover:text-inverse-on-surface transition-all duration-200" href="#reserve">
+        Check Eligibility &amp; Reserve Spot →
+      </a>
+</div>
+</section>
+<!-- SECTION 8: YOUR TRAINER -->
+<section class="w-full bg-surface-container-lowest py-24 border-t border-outline-variant/40">
+<div class="max-w-7xl mx-auto px-6 lg:px-12">
+<div class="flex flex-col items-center text-center mb-16">
+<span class="font-label-executive text-label-executive text-secondary uppercase tracking-widest font-semibold mb-2">EXECUTIVE INSTRUCTOR</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight mb-3">Your trainer</h2>
+<p class="font-body-default text-body-default text-on-surface-variant max-w-xl">
+          Learn directly from a senior PE operator who built production deal pipelines.
+        </p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+<!-- Left: Portrait Card -->
+<div class="lg:col-span-5 flex flex-col bg-surface rounded-2xl overflow-hidden border border-outline-variant/70 shadow-sm p-4">
+<div class="w-full aspect-square rounded-xl overflow-hidden bg-surface-container-high mb-6">
+<img alt="Julian Montgomery Senior PE Operating Partner &amp; AI Trainer" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjzLsX4mQq2jpPa6k21Q2L_XruVYVatmm5fwjBHGRDaLuV7xvPnRdHj5i8key-dDzk0jMmVXsewc3aNitV5ok4WQb8OBKEDEhrKjLGSzHGgq8laUkZw8aU171c291kRJTZPqfzCQgyu9CwaTvCIz0tlwQ0AKkp5sj0dHyIKMiW5A9c8s5hzGiq450hxqAn4lytkJMQsm5kyGVgXT77M77cNygLZ9vZqK56cSfzX20_AsM8knSAWSsE"/>
+</div>
+<div class="px-2 pb-2">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Julian Montgomery</h3>
+<p class="font-body-muted text-body-muted text-on-surface-variant mt-1 leading-snug">
+              Former Senior Operating Partner at Nordic Capital &amp; Managing Director at Palantir Financial Intelligence.
+            </p>
+</div>
+</div>
+<!-- Right: Bio and Key-Value Rows -->
+<div class="lg:col-span-7 flex flex-col">
+<!-- 3 Bio Paragraphs -->
+<div class="flex flex-col gap-4 text-on-surface-variant font-body-default text-body-default leading-relaxed mb-10">
+<p>
+              Over a 15-year career in mid-market buyout private equity, Julian led deal qualification, technical due diligence, and portfolio platform acquisitions representing over $4.2B in aggregate closed transaction volume across North America and Western Europe.
+            </p>
+<p>
+              Recognizing the acute inefficiency of manual CIM review and fragmented intermediary email flow, he spearheaded the implementation of enterprise AI automation architectures for Tier-1 investment committees, reducing preliminary triage time from days to minutes.
+            </p>
+<p>
+              His proprietary screening framework pairs cutting-edge large language models with strict deterministic financial verification routines, ensuring zero-hallucination compliance across audited Quality of Earnings schedules and LBO return matrices.
+            </p>
+</div>
+<!-- 4 Key-Value Rows with Dividers -->
+<div class="flex flex-col border-t border-outline-variant/60">
+<div class="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-outline-variant/40">
+<span class="font-label-executive text-label-executive uppercase tracking-widest text-secondary font-bold sm:w-28 shrink-0">Audit</span>
+<span class="font-body-default text-body-default text-on-surface font-medium">Over 850+ CIMs Parsed &amp; Evaluated Across Industrials &amp; Tech</span>
+</div>
+<div class="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-outline-variant/40">
+<span class="font-label-executive text-label-executive uppercase tracking-widest text-secondary font-bold sm:w-28 shrink-0">Founder</span>
+<span class="font-body-default text-body-default text-on-surface font-medium">Architect of DealFlowOS (acquired by global sponsor)</span>
+</div>
+<div class="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-outline-variant/40">
+<span class="font-label-executive text-label-executive uppercase tracking-widest text-secondary font-bold sm:w-28 shrink-0">Now</span>
+<span class="font-body-default text-body-default text-on-surface font-medium">Advising top 20 buyout firms on operational AI transformation</span>
+</div>
+<div class="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-outline-variant/40">
+<span class="font-label-executive text-label-executive uppercase tracking-widest text-secondary font-bold sm:w-28 shrink-0">Focus</span>
+<span class="font-body-default text-body-default text-on-surface font-medium">Zero-hallucination structured financial extraction</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- FINAL CTA / ENROLLMENT ANCHOR (RESERVE) -->
+<section class="w-full bg-surface-container-low py-20 border-t border-outline-variant/40" id="reserve">
+<div class="max-w-4xl mx-auto px-6 text-center flex flex-col items-center">
+<span class="font-label-executive text-label-executive text-secondary uppercase tracking-widest font-semibold mb-2">LIMITED CAPACITY ADMISSION</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight mb-4">Secure Your Investment Committee Seat</h2>
+<p class="font-body-default text-body-default text-on-surface-variant max-w-xl mb-8">
+        Live cohort size is capped at 35 investment professionals to facilitate direct code execution assistance, private Q&amp;A, and high-trust peer discussion.
+      </p>
+<form class="w-full max-w-md flex flex-col gap-4" onsubmit="event.preventDefault(); alert('Application received. Admissions will review your fund affiliation within 4 business hours.');">
+<input class="w-full h-12 px-4 rounded-lg bg-surface-container-lowest border border-outline-variant/80 text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:ring-2 focus:ring-primary font-body-default text-body-default" placeholder="corporate.email@firm.com" required="" type="email"/>
+<button class="w-full h-12 rounded-lg bg-primary text-on-primary font-body-default text-body-default font-semibold shadow-md hover:bg-inverse-surface transition-all duration-200" type="submit">
+          Submit Accreditation Application →
+        </button>
+<span class="font-label-badge text-label-badge text-on-surface-variant tracking-wider uppercase">Direct institutional billing &amp; expense invoice available</span>
+</form>
+</div>
+</section>
+<!-- SECTION 9: FOOTER -->
+<footer class="w-full bg-surface-container-lowest py-12 border-t border-outline-variant/60">
+<div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
+<div class="flex flex-col items-center md:items-start gap-1">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold tracking-tight">AlphaDeals Executive Intelligence</span>
+<span class="font-body-muted text-body-muted text-on-surface-variant">
+          © 2024 AlphaDeals Institute. All rights reserved. Registered in London &amp; New York.
+        </span>
+</div>
+<div class="flex flex-wrap items-center justify-center gap-6 text-on-surface-variant">
+<a class="font-body-muted text-body-muted hover:text-on-surface transition-colors" href="#terms">Terms of Service</a>
+<a class="font-body-muted text-body-muted hover:text-on-surface transition-colors" href="#privacy">Privacy Policy</a>
+<a class="font-body-muted text-body-muted hover:text-on-surface transition-colors" href="#accreditation">Accreditation</a>
+<a class="font-body-muted text-body-muted hover:text-on-surface transition-colors" href="#contact">Contact Admissions</a>
+</div>
+</div>
+</footer>
+</div></main><footer class="w-full bg-surface-container-lowest border-t border-outline-variant/40 py-16 mt-auto"><div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col gap-10"><div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6"><div class="flex flex-col gap-1"><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight">AlphaDeals Institute of Financial Automation &amp; Intelligence</span><span class="font-body-muted text-body-muted text-on-surface-variant">Designed for Private Equity Partners &amp; Investment Teams</span></div><div class="flex flex-wrap items-center gap-6 text-on-surface-variant"><a class="font-body-muted text-body-muted hover:text-on-surface transition-colors" data-path="privacy-policy" href="#">Privacy</a><a class="font-body-muted text-body-muted hover:text-on-surface transition-colors" data-path="terms-of-service" href="#">Terms</a><a class="font-body-muted text-body-muted hover:text-on-surface transition-colors" data-path="institutional-inquiries" href="#">Institutional Inquiries</a><a class="font-body-muted text-body-muted hover:text-on-surface transition-colors inline-flex items-center gap-1.5" data-path="syllabus-download" href="#">Syllabus PDF</a></div></div><div class="h-px w-full bg-surface-variant"></div><div class="flex flex-col sm:flex-row justify-between items-center gap-4 text-on-surface-variant"><span class="font-label-badge text-label-badge tracking-wider uppercase">© 2024 ALPHADEALS INSTITUTE. ALL RIGHTS RESERVED. PRIVATE EQUITY COHORTS.</span><div class="flex items-center gap-4"><span class="font-label-badge text-label-badge tracking-widest uppercase text-secondary">AUM COMPLIANT • INSTITUTIONAL GRADE</span></div></div></div></footer></body></html>
