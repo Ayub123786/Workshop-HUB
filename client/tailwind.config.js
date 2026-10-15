@@ -28,6 +28,8 @@ export default {
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
         display: ['Inter', 'system-ui', 'sans-serif'],
+        orbitron: ['Orbitron', 'Space Grotesk', 'sans-serif'],
+        syne: ['Syne', 'sans-serif'],
       },
       fontSize: {
         'display-xl': ['clamp(3rem, 8vw, 6rem)', { lineHeight: '1.05', letterSpacing: '-0.02em' }],

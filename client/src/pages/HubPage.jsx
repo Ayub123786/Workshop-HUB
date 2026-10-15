@@ -32,6 +32,7 @@ import FeaturedBanner from '../components/workshop/FeaturedBanner';
 import NextSessionStrip from '../components/workshop/NextSessionStrip';
 import QuickViewDrawer from '../components/workshop/QuickViewDrawer';
 import HeroVideoPlayer from '../components/home/HeroVideoPlayer';
+import PastEventsCoverflow from '../components/home/PastEventsCoverflow';
 import FirmsTrustSection from '../components/sections/FirmsTrustSection';
 import PlatformFaqSection from '../components/sections/PlatformFaqSection';
 import NewsletterSection from '../components/sections/NewsletterSection';
@@ -715,90 +716,8 @@ export default function HubPage() {
         </section>
       )}
 
-      {/* ─── 5. PAST EVENTS & ARCHIVED SESSIONS SECTION ─── */}
-      <section id="past" className="bg-white py-16 sm:py-20 border-b border-[#E8E8E8]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeUp>
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
-              <div>
-                <span className="text-[11px] font-bold text-muted uppercase tracking-widest block mb-1">
-                  ARCHIVED LABS & RECORDINGS
-                </span>
-                <h2 className="text-2xl sm:text-3xl font-bold text-navy tracking-tight">
-                  Past Events & Master Classes
-                </h2>
-                <p className="text-xs sm:text-sm text-muted mt-1 max-w-xl">
-                  Access course recordings, tool summaries, deal models, and take-home architectures from completed cohorts.
-                </p>
-              </div>
-
-              {/* Email Capture for Next Session */}
-              <div className="bg-[#FAF9F6] border border-[#E8E8E8] rounded-xl p-3 sm:p-4 max-w-md w-full shrink-0">
-                <span className="text-[10px] font-bold text-navy uppercase tracking-wider block mb-1">
-                  Notify me when these rerun
-                </span>
-                {pastNotifySuccess ? (
-                  <div className="flex items-center gap-1.5 text-xs text-emerald-800 font-semibold py-1">
-                    <CheckCircle2 size={14} className="text-emerald-600" />
-                    <span>We will notify you when a rerun is scheduled!</span>
-                  </div>
-                ) : (
-                  <form onSubmit={handlePastNotifySubmit} className="flex gap-2">
-                    <input
-                      type="email"
-                      value={pastNotifyEmail}
-                      onChange={(e) => setPastNotifyEmail(e.target.value)}
-                      placeholder="your@fund.com"
-                      required
-                      className="flex-1 px-3 py-1.5 rounded-lg border border-[#E8E8E8] bg-white text-xs text-navy focus:outline-none focus:border-gold"
-                    />
-                    <button
-                      type="submit"
-                      disabled={pastNotifySubmitting}
-                      className="btn-primary text-xs py-1.5 px-3 font-semibold shrink-0"
-                    >
-                      {pastNotifySubmitting ? <Loader2 size={12} className="animate-spin" /> : 'Notify Me'}
-                    </button>
-                  </form>
-                )}
-              </div>
-            </div>
-          </FadeUp>
-
-          {pastWorkshops.length > 0 ? (
-            <StaggerContainer
-              stagger={0.06}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch"
-            >
-              {pastWorkshops.map((w) => (
-                <StaggerItem key={w._id || w.id} className="h-full">
-                  <WorkshopCard workshop={w} onQuickView={setQuickViewWorkshop} />
-                </StaggerItem>
-              ))}
-            </StaggerContainer>
-          ) : (
-            <div className="bg-[#FAF9F6] border border-[#E8E8E8] rounded-2xl p-8 sm:p-10 text-center max-w-2xl mx-auto">
-              <span className="w-12 h-12 rounded-full bg-gold/15 text-gold flex items-center justify-center mx-auto mb-3 font-bold text-sm">
-                DD
-              </span>
-              <h4 className="text-base font-bold text-navy mb-1">
-                Completed Cohort Toolkits & Replays
-              </h4>
-              <p className="text-xs text-muted max-w-md mx-auto mb-6 leading-relaxed">
-                All previous sessions including the Family Office Deal Sourcing Masterclass and Cross-Border LBO Modeling modules are available for alumni review and corporate deal-team licensing.
-              </p>
-              <div className="flex items-center justify-center gap-3">
-                <Link
-                  to="/workshops?status=completed"
-                  className="btn-primary text-xs py-2 px-5 font-semibold"
-                >
-                  Browse Archived Cohorts →
-                </Link>
-              </div>
-            </div>
-          )}
-        </div>
-      </section>
+      {/* ─── 5. PAST EVENTS COVERFLOW & ARCHIVED PREVIEWS ─── */}
+      <PastEventsCoverflow pastWorkshops={pastWorkshops} />
 
       {/* ─── 6. FIRMS WE'VE TRAINED & TESTIMONIALS ─── */}
       <FirmsTrustSection settings={settings} />

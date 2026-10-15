@@ -285,3 +285,25 @@
 .prose-workshop strong {
   @apply text-navy font-semibold;
 }
+
+/* ─── High-Tech Coverflow & Grid (Past Events / MyRisingTime aesthetic) ─── */
+.font-orbitron {
+  font-family: 'Orbitron', 'Space Grotesk', system-ui, sans-serif;
+  letter-spacing: 0.06em;
+}
+
+.bg-tech-grid {
+  background-color: #070A12;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+
+.perspective-1200 {
+  perspective: 1200px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
