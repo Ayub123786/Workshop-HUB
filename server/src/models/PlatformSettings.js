@@ -3,6 +3,7 @@ import { randomUUID } from 'crypto';
 
 function normalize(s) {
   if (!s) return null;
+  const gt = (s.global_trust ?? s.globalTrust ?? {});
   const normalized = {
     ...s,
     _id: s.id,
@@ -11,17 +12,38 @@ function normalize(s) {
     logo: s.logo || '/Logo.png',
     hubHeadline: s.hub_headline ?? s.hubHeadline ?? 'Build What the Best Funds Already Run',
     hubSubtitle: s.hub_subtitle ?? s.hubSubtitle ?? 'Live, expert-led master classes for finance and investment professionals. Walk away with systems, not slides.',
+    heroVideoUrl: s.hero_video_url ?? s.heroVideoUrl ?? gt.heroVideoUrl ?? '',
+    announcementBar: s.announcement_bar ?? s.announcementBar ?? gt.announcementBar ?? {
+      enabled: true,
+      badge: 'NEXT COHORT',
+      text: '',
+      link: '/workshops',
+    },
+    heroStats: s.hero_stats ?? s.heroStats ?? gt.heroStats ?? {
+      totalWorkshops: 18,
+      totalAttendees: 1480,
+      countries: 18,
+      aumTrained: 246,
+    },
+    faqs: s.faqs ?? gt.faqs ?? [],
+    firms: s.firms ?? gt.firms ?? [],
+    testimonials: s.testimonials ?? gt.testimonials ?? [],
+    pastEventsSettings: s.past_events_settings ?? s.pastEventsSettings ?? gt.pastEventsSettings ?? null,
     navbarLinks: s.navbar_links ?? s.navbarLinks ?? [
       { label: 'Workshops', href: '/workshops', order: 0 },
       { label: 'Upcoming', href: '/workshops?filter=upcoming', order: 1 },
       { label: 'Past', href: '/workshops?filter=past', order: 2 },
     ],
     footerText: s.footer_text ?? s.footerText ?? '© 2026 Workshop Hub · Morse Bridge Ventures. All rights reserved.',
-    globalTrust: s.global_trust ?? s.globalTrust ?? {
+    globalTrust: {
       aumNumber: '246',
       aumLabel: 'Billion AUM+',
       aumPrefix: '$',
       testimonials: [],
+      firms: [],
+      faqs: [],
+      heroStats: { totalWorkshops: 18, totalAttendees: 1480, countries: 18, aumTrained: 246 },
+      ...gt,
     },
     uiVariant: s.ui_variant ?? s.uiVariant ?? 'minimal',
     animationsEnabled: s.animations_enabled ?? s.animationsEnabled ?? true,
@@ -55,9 +77,24 @@ function denormalize(s) {
   if (s.footerText !== undefined || s.footer_text !== undefined) {
     record.footer_text = s.footerText ?? s.footer_text;
   }
-  if (s.globalTrust !== undefined || s.global_trust !== undefined) {
-    record.global_trust = s.globalTrust ?? s.global_trust;
-  }
+
+  // Pack structured settings into JSONB global_trust
+  const baseGt = (s.globalTrust && typeof s.globalTrust === 'object')
+    ? { ...s.globalTrust }
+    : (s.global_trust && typeof s.global_trust === 'object')
+      ? { ...s.global_trust }
+      : {};
+
+  if (s.faqs !== undefined) baseGt.faqs = s.faqs;
+  if (s.firms !== undefined) baseGt.firms = s.firms;
+  if (s.testimonials !== undefined) baseGt.testimonials = s.testimonials;
+  if (s.heroStats !== undefined) baseGt.heroStats = s.heroStats;
+  if (s.announcementBar !== undefined) baseGt.announcementBar = s.announcementBar;
+  if (s.heroVideoUrl !== undefined) baseGt.heroVideoUrl = s.heroVideoUrl;
+  if (s.pastEventsSettings !== undefined) baseGt.pastEventsSettings = s.pastEventsSettings;
+
+  record.global_trust = baseGt;
+
   if (s.uiVariant !== undefined || s.ui_variant !== undefined) {
     record.ui_variant = s.uiVariant ?? s.ui_variant;
   }

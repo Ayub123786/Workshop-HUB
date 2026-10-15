@@ -282,11 +282,12 @@ export default function HubPage() {
           </FadeUp>
 
           {/* Live Stats Row: Database computed counters */}
+          {/* Live Stats Row: Database computed counters & Admin configurable */}
           <FadeUp delay={0.28}>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 pt-8 border-t border-[#E8E8E8] max-w-4xl mx-auto">
               <div className="text-center">
                 <p className="text-2xl sm:text-3xl font-extrabold text-navy font-mono">
-                  <CountUp end={hubStats?.totalWorkshops || 18} duration={2} />+
+                  <CountUp end={settings?.heroStats?.totalWorkshops ?? hubStats?.totalWorkshops ?? 18} duration={2} />+
                 </p>
                 <p className="text-[11px] font-semibold text-muted uppercase tracking-wider mt-1">
                   Workshops Hosted
@@ -295,7 +296,7 @@ export default function HubPage() {
 
               <div className="text-center">
                 <p className="text-2xl sm:text-3xl font-extrabold text-navy font-mono">
-                  <CountUp end={hubStats?.totalAttendees || 1480} duration={2.2} separator="," />+
+                  <CountUp end={settings?.heroStats?.totalAttendees ?? hubStats?.totalAttendees ?? 1480} duration={2.2} separator="," />+
                 </p>
                 <p className="text-[11px] font-semibold text-muted uppercase tracking-wider mt-1">
                   Professionals Trained
@@ -304,7 +305,7 @@ export default function HubPage() {
 
               <div className="text-center">
                 <p className="text-2xl sm:text-3xl font-extrabold text-navy font-mono">
-                  <CountUp end={hubStats?.countries || 18} duration={1.8} />
+                  <CountUp end={settings?.heroStats?.countries ?? hubStats?.countries ?? 18} duration={1.8} />
                 </p>
                 <p className="text-[11px] font-semibold text-muted uppercase tracking-wider mt-1">
                   Financial Hubs / Countries
@@ -313,7 +314,7 @@ export default function HubPage() {
 
               <div className="text-center">
                 <p className="text-2xl sm:text-3xl font-extrabold text-navy font-mono">
-                  $<CountUp end={hubStats?.aumTrained || 246} duration={2.2} />B+
+                  $<CountUp end={settings?.heroStats?.aumTrained ?? (parseFloat(settings?.globalTrust?.aumNumber) || hubStats?.aumTrained || 246)} duration={2.2} />B+
                 </p>
                 <p className="text-[11px] font-semibold text-muted uppercase tracking-wider mt-1">
                   AUM Across Trained Funds

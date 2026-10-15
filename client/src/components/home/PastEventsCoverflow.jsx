@@ -21,6 +21,7 @@ import {
   FileText
 } from 'lucide-react';
 import api from '../../lib/api';
+import { useSettings } from '../../contexts/SettingsContext';
 
 // Curated 11 executive demo day / summit highlights matching screenshot specs
 const DEFAULT_PAST_EVENTS = [
@@ -247,6 +248,7 @@ const DEFAULT_PAST_EVENTS = [
 ];
 
 export default function PastEventsCoverflow({ pastWorkshops = [] }) {
+  const { settings } = useSettings();
   // Combine real past workshops with curated demo day highlights
   const items = useMemo(() => {
     if (pastWorkshops && pastWorkshops.length > 0) {
@@ -369,18 +371,19 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FAF9F6] border border-[#E8E8E8] shadow-2xs">
             <span className="w-2 h-2 rounded-full bg-gold animate-pulse" />
             <span className="tracking-[0.16em] text-[11px] font-mono font-bold text-navy uppercase">
-              LIVE EVENT PREVIEWS
+              {settings?.pastEventsSettings?.badge || 'LIVE EVENT PREVIEWS'}
             </span>
           </div>
 
           {/* Minimal Light Title */}
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-navy tracking-tight uppercase mt-4 leading-tight">
-            OUR PAST <br className="hidden sm:inline" /> EVENTS
+            {settings?.pastEventsSettings?.title || 'OUR PAST EVENTS'}
           </h2>
 
           {/* Subtitle */}
           <p className="text-xs sm:text-sm md:text-base text-muted max-w-2xl mx-auto mt-2.5 leading-relaxed">
-            Explore live keynote highlights, speed pitches, and investor roundtables from our global gatherings. Click any panel to view in full resolution.
+            {settings?.pastEventsSettings?.subtitle ||
+              'Explore live keynote highlights, speed pitches, and investor roundtables from our global gatherings. Click any panel to view in full resolution.'}
           </p>
 
           {/* ─── 2. CONTROLS STRIP (Numbered Pills + Triangle Chevrons + Count) ─── */}

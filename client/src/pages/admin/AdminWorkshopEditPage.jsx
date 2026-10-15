@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useSearchParams } from 'react-router-dom';
 import {
   Save,
   ArrowLeft,
@@ -48,9 +48,11 @@ export default function AdminWorkshopEditPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [searchParams] = useSearchParams();
 
-  // Tabs
-  const [activeTab, setActiveTab] = useState('sections'); // 'sections' | 'details' | 'theme' | 'cardPreview'
+  // Tabs (support direct URL jump e.g. ?tab=curriculum)
+  const initialTab = searchParams.get('tab') || 'sections';
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [selectedSectionIndex, setSelectedSectionIndex] = useState(0);
   const [previewMode, setPreviewMode] = useState('split'); // 'split' | 'editor' | 'preview'
 
@@ -978,18 +980,87 @@ export default function AdminWorkshopEditPage() {
                     <p className="text-[10px] text-muted mt-1">Set to 0 for Free / Executive Access</p>
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-navy mb-1">Recording / Replay URL</label>
+                    <label className="block text-xs font-semibold text-navy mb-1">Session Replay or Trailer URL</label>
                     <div className="relative">
                       <Video className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
                       <input
                         type="url"
-                        value={workshop.recordingUrl || ''}
-                        onChange={(e) => setWorkshop({ ...workshop, recordingUrl: e.target.value })}
+                        value={workshop.videoUrl || workshop.recordingUrl || ''}
+                        onChange={(e) => setWorkshop({ ...workshop, videoUrl: e.target.value, recordingUrl: e.target.value })}
                         className="w-full pl-8 pr-3 py-2 rounded-lg border border-border bg-white text-xs focus:border-gold"
-                        placeholder="https://vimeo.com/... or cloud link"
+                        placeholder="https://vimeo.com/... or MP4 link"
                       />
                     </div>
-                    <p className="text-[10px] text-muted mt-1">Displayed to verified attendees post-session</p>
+                    <p className="text-[10px] text-muted mt-1">Powers the fullscreen video player on event detail page & past events</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Executive Prerequisites & Attendee Profile */}
+              <div className="p-4 bg-white rounded-xl border border-border space-y-3">
+                <p className="text-xs font-bold text-navy uppercase tracking-wider">
+                  Executive Lab Prerequisites & Audience Profile
+                </p>
+                <p className="text-[11px] text-muted">
+                  Displayed on the Event Page under Curriculum & Prerequisites.
+                </p>
+
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-navy mb-1">Who It's For</label>
+                    <textarea
+                      rows={2}
+                      value={workshop.prerequisites?.whoItsFor ?? 'Private Equity partners, Principals, VC deal sponsors, and senior investment analysts.'}
+                      placeholder="Private Equity partners, Principals, VC deal sponsors, and senior investment analysts."
+                      onChange={(e) =>
+                        setWorkshop({
+                          ...workshop,
+                          prerequisites: {
+                            ...(workshop.prerequisites || {}),
+                            whoItsFor: e.target.value,
+                          },
+                        })
+                      }
+                      className="w-full px-3 py-2 rounded-lg border border-border bg-white text-navy text-xs focus:border-gold resize-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-navy mb-1">Technical Level Required</label>
+                    <textarea
+                      rows={2}
+                      value={workshop.prerequisites?.technicalLevel ?? 'No engineering or deep programming background required; focuses on agent stacks & prompt orchestration.'}
+                      placeholder="No engineering or deep programming background required; focuses on agent stacks & prompt orchestration."
+                      onChange={(e) =>
+                        setWorkshop({
+                          ...workshop,
+                          prerequisites: {
+                            ...(workshop.prerequisites || {}),
+                            technicalLevel: e.target.value,
+                          },
+                        })
+                      }
+                      className="w-full px-3 py-2 rounded-lg border border-border bg-white text-navy text-xs focus:border-gold resize-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-navy mb-1">Take-Home Deliverables</label>
+                    <textarea
+                      rows={2}
+                      value={workshop.prerequisites?.deliverables ?? 'Production agent architectures, prompt harness blueprints, and permanent session video archives.'}
+                      placeholder="Production agent architectures, prompt harness blueprints, and permanent session video archives."
+                      onChange={(e) =>
+                        setWorkshop({
+                          ...workshop,
+                          prerequisites: {
+                            ...(workshop.prerequisites || {}),
+                            deliverables: e.target.value,
+                          },
+                        })
+                      }
+                      className="w-full px-3 py-2 rounded-lg border border-border bg-white text-navy text-xs focus:border-gold resize-none"
+                    />
                   </div>
                 </div>
               </div>

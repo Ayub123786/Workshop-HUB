@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FadeUp } from '../motion/index.jsx';
+import { useSettings } from '../../contexts/SettingsContext';
 
 const FAQS = [
   {
@@ -30,8 +31,11 @@ const FAQS = [
   },
 ];
 
-export default function PlatformFaqSection() {
+export default function PlatformFaqSection({ faqs: propFaqs }) {
+  const { settings } = useSettings();
   const [openIndex, setOpenIndex] = useState(0);
+
+  const displayFaqs = propFaqs || (settings?.faqs && settings.faqs.length > 0 ? settings.faqs : FAQS);
 
   const toggle = (idx) => {
     setOpenIndex(openIndex === idx ? -1 : idx);
@@ -55,7 +59,7 @@ export default function PlatformFaqSection() {
         </FadeUp>
 
         <div className="space-y-3">
-          {FAQS.map((faq, idx) => {
+          {displayFaqs.map((faq, idx) => {
             const isOpen = openIndex === idx;
             return (
               <div

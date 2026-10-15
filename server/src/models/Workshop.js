@@ -55,8 +55,13 @@ function normalize(w) {
     agenda: (w.agenda && w.agenda.length > 0) ? w.agenda : (ext.agenda || []),
     faqs: (w.faqs && w.faqs.length > 0) ? w.faqs : (ext.faqs || []),
     learningOutcomes: w.learning_outcomes ?? w.learningOutcomes ?? ext.learningOutcomes ?? ext.learning_outcomes ?? [],
-    requirements: (w.requirements && w.requirements.length > 0) ? w.requirements : (ext.requirements || []),
     recordingUrl: w.recording_url ?? w.recordingUrl ?? ext.recordingUrl ?? ext.recording_url ?? '',
+    videoUrl: w.video_url ?? w.videoUrl ?? ext.videoUrl ?? ext.video_url ?? w.recording_url ?? ext.recordingUrl ?? '',
+    prerequisites: w.prerequisites ?? ext.prerequisites ?? {
+      whoItsFor: 'Private Equity partners, Principals, VC deal sponsors, and senior investment analysts.',
+      technicalLevel: 'No engineering or deep programming background required; focuses on agent stacks & prompt orchestration.',
+      deliverables: 'Production agent architectures, prompt harness blueprints, and permanent session video archives.',
+    },
     resources: (w.resources && w.resources.length > 0) ? w.resources : (ext.resources || []),
     reminder24hSent: w.reminder_24h_sent ?? w.reminder24hSent ?? ext.reminder24hSent ?? false,
     reminder1hSent: w.reminder_1h_sent ?? w.reminder1hSent ?? ext.reminder1hSent ?? false,
@@ -123,10 +128,13 @@ function denormalize(data) {
     learningOutcomes: (data.learningOutcomes !== undefined || data.learning_outcomes !== undefined)
       ? (data.learningOutcomes ?? data.learning_outcomes)
       : (prevExt.learningOutcomes || []),
-    requirements: data.requirements !== undefined ? data.requirements : (prevExt.requirements || []),
     recordingUrl: (data.recordingUrl !== undefined || data.recording_url !== undefined)
       ? (data.recordingUrl ?? data.recording_url)
       : (prevExt.recordingUrl || ''),
+    videoUrl: (data.videoUrl !== undefined || data.video_url !== undefined)
+      ? (data.videoUrl ?? data.video_url)
+      : (prevExt.videoUrl || prevExt.recordingUrl || ''),
+    prerequisites: data.prerequisites !== undefined ? data.prerequisites : (prevExt.prerequisites || {}),
     resources: data.resources !== undefined ? data.resources : (prevExt.resources || []),
     reminder24hSent: (data.reminder24hSent !== undefined || data.reminder_24h_sent !== undefined)
       ? (data.reminder24hSent ?? data.reminder_24h_sent)
