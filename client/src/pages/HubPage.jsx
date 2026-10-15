@@ -17,6 +17,7 @@ import {
   ArrowRight,
   Bookmark,
   History,
+  Play,
 } from 'lucide-react';
 import CountUp from 'react-countup';
 import api from '../lib/api';
@@ -30,6 +31,7 @@ import WorkshopCalendar from '../components/calendar/WorkshopCalendar';
 import FeaturedBanner from '../components/workshop/FeaturedBanner';
 import NextSessionStrip from '../components/workshop/NextSessionStrip';
 import QuickViewDrawer from '../components/workshop/QuickViewDrawer';
+import HeroVideoPlayer from '../components/home/HeroVideoPlayer';
 import FirmsTrustSection from '../components/sections/FirmsTrustSection';
 import PlatformFaqSection from '../components/sections/PlatformFaqSection';
 import NewsletterSection from '../components/sections/NewsletterSection';
@@ -246,29 +248,29 @@ export default function HubPage() {
         />
       </Helmet>
 
-      {/* ─── 1. HERO with Live Stats under CTA ─── */}
-      <section className="bg-white pt-20 pb-16 sm:pt-24 sm:pb-20 border-b border-[#E8E8E8]">
+      {/* ─── 1. HERO with Dedicated Space for Video ─── */}
+      <section className="bg-white pt-20 pb-12 sm:pt-24 sm:pb-16 border-b border-[#E8E8E8]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
           <FadeUp>
-            <span className="inline-block text-xs font-semibold tracking-[0.18em] uppercase text-navy/70 border border-[#E8E8E8] px-4 py-1.5 rounded-full mb-6 bg-cream shadow-2xs">
+            <span className="inline-block text-xs font-semibold tracking-[0.18em] uppercase text-navy/70 border border-[#E8E8E8] px-4 py-1.5 rounded-full mb-5 bg-cream shadow-2xs">
               LIVE EXECUTIVE MASTER CLASSES
             </span>
           </FadeUp>
           <FadeUp delay={0.06}>
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-navy mb-6 tracking-tight text-balance leading-[1.12]">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-navy mb-4 tracking-tight text-balance leading-[1.12]">
               {settings?.hubHeadline || 'Build What the Best Funds Already Run'}
             </h1>
           </FadeUp>
           <FadeUp delay={0.12}>
-            <p className="text-sm sm:text-lg text-muted max-w-2xl mx-auto mb-8 leading-relaxed">
-              {settings?.hubSubtitle || 'Live, expert-led master classes for private equity, venture capital, and investment teams.'}
+            <p className="text-sm sm:text-base text-muted max-w-xl mx-auto mb-6 leading-relaxed">
+              {settings?.hubSubtitle || 'Live, expert-led master classes for private equity and venture capital deal teams.'}
             </p>
           </FadeUp>
           <FadeUp delay={0.18}>
-            <div className="flex items-center justify-center gap-3 mb-12">
+            <div className="flex items-center justify-center gap-3 mb-6 flex-wrap">
               <a
                 href="#explore"
-                className="btn-primary text-xs sm:text-sm py-3 px-7 shadow-xs font-semibold"
+                className="btn-primary text-xs sm:text-sm py-2.5 px-6 shadow-xs font-semibold"
                 onClick={(e) => {
                   e.preventDefault();
                   document.getElementById('explore')?.scrollIntoView({ behavior: 'smooth' });
@@ -276,12 +278,33 @@ export default function HubPage() {
               >
                 Explore Master Classes ↓
               </a>
+              <a
+                href="#video-showcase"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[#E8E8E8] bg-cream/70 text-navy hover:bg-cream hover:border-gold transition-all text-xs sm:text-sm font-semibold shadow-2xs"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('video-showcase')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                <Play size={13} className="text-gold fill-current" />
+                <span>Watch Overview (1:45)</span>
+              </a>
             </div>
           </FadeUp>
 
+          {/* DEDICATED EXECUTIVE VIDEO SPACE */}
+          <FadeUp delay={0.22}>
+            <HeroVideoPlayer
+              videoUrl={settings?.heroVideoUrl}
+              title={nextWorkshop?.title ? `${nextWorkshop.title} · Live Lab Demo` : 'PE Deal Flow Automation Master Class Walkthrough'}
+              subtitle="Watch Ayub build the end-to-end Due Diligence AI Agent stack in 90 minutes"
+              duration="01:45"
+            />
+          </FadeUp>
+
           {/* Live Stats Row: Database computed counters */}
-          <FadeUp delay={0.24}>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 pt-10 border-t border-[#E8E8E8] max-w-4xl mx-auto">
+          <FadeUp delay={0.28}>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 pt-8 border-t border-[#E8E8E8] max-w-4xl mx-auto">
               <div className="text-center">
                 <p className="text-2xl sm:text-3xl font-extrabold text-navy font-mono">
                   <CountUp end={hubStats?.totalWorkshops || 18} duration={2} />+
@@ -360,31 +383,57 @@ export default function HubPage() {
               </h2>
             </div>
 
-            {/* View Switcher: Grid | List | Calendar | Timeline */}
-            <div className="flex items-center bg-white border border-[#E8E8E8] rounded-xl p-1 text-xs shadow-2xs shrink-0">
-              {[
-                { id: 'grid', label: 'Grid', icon: LayoutGrid },
-                { id: 'list', label: 'List', icon: ListIcon },
-                { id: 'calendar', label: 'Calendar', icon: CalendarIcon },
-                { id: 'timeline', label: 'Timeline', icon: GitCommit },
-              ].map((item) => {
-                const Icon = item.icon;
-                const isActive = view === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => updateFilter('view', item.id)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-all ${
-                      isActive
-                        ? 'bg-navy text-white shadow-2xs'
-                        : 'text-muted hover:text-navy hover:bg-cream'
-                    }`}
-                  >
-                    <Icon size={13} />
-                    <span>{item.label}</span>
-                  </button>
-                );
-              })}
+            <div className="flex items-center gap-2.5 flex-wrap">
+              {/* Event State Toggle: Upcoming vs Past */}
+              <div className="flex items-center bg-white border border-[#E8E8E8] rounded-xl p-1 text-xs shadow-2xs">
+                <button
+                  onClick={() => updateFilter('status', 'all')}
+                  className={`px-3 py-1.5 rounded-lg font-semibold transition-all ${
+                    statusFilter !== 'past'
+                      ? 'bg-navy text-white shadow-2xs'
+                      : 'text-muted hover:text-navy hover:bg-cream'
+                  }`}
+                >
+                  Upcoming Cohorts
+                </button>
+                <button
+                  onClick={() => updateFilter('status', 'past')}
+                  className={`px-3 py-1.5 rounded-lg font-semibold transition-all ${
+                    statusFilter === 'past'
+                      ? 'bg-navy text-white shadow-2xs'
+                      : 'text-muted hover:text-navy hover:bg-cream'
+                  }`}
+                >
+                  Past Events & Replays
+                </button>
+              </div>
+
+              {/* View Switcher: Grid | List | Calendar | Timeline */}
+              <div className="flex items-center bg-white border border-[#E8E8E8] rounded-xl p-1 text-xs shadow-2xs shrink-0">
+                {[
+                  { id: 'grid', label: 'Grid', icon: LayoutGrid },
+                  { id: 'list', label: 'List', icon: ListIcon },
+                  { id: 'calendar', label: 'Calendar', icon: CalendarIcon },
+                  { id: 'timeline', label: 'Timeline', icon: GitCommit },
+                ].map((item) => {
+                  const Icon = item.icon;
+                  const isActive = view === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => updateFilter('view', item.id)}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-all ${
+                        isActive
+                          ? 'bg-navy text-white shadow-2xs'
+                          : 'text-muted hover:text-navy hover:bg-cream'
+                      }`}
+                    >
+                      <Icon size={13} />
+                      <span>{item.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
@@ -666,57 +715,57 @@ export default function HubPage() {
         </section>
       )}
 
-      {/* ─── 5. PAST SESSIONS SECTION (Resources & Notify Me Capture) ─── */}
-      {pastWorkshops.length > 0 && (
-        <section className="bg-white py-16 sm:py-20 border-b border-[#E8E8E8]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <FadeUp>
-              <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
-                <div>
-                  <span className="text-[11px] font-bold text-muted uppercase tracking-widest block mb-1">
-                    ARCHIVED LABS
-                  </span>
-                  <h2 className="text-2xl sm:text-3xl font-bold text-navy tracking-tight">
-                    Past Master Classes
-                  </h2>
-                  <p className="text-xs sm:text-sm text-muted mt-1">
-                    Access course recordings, tool summaries, and take-home architectures.
-                  </p>
-                </div>
-
-                {/* Email Capture for Next Session */}
-                <div className="bg-[#FAF9F6] border border-[#E8E8E8] rounded-xl p-3 sm:p-4 max-w-md w-full shrink-0">
-                  <span className="text-[10px] font-bold text-navy uppercase tracking-wider block mb-1">
-                    Notify me when these rerun
-                  </span>
-                  {pastNotifySuccess ? (
-                    <div className="flex items-center gap-1.5 text-xs text-emerald-800 font-semibold py-1">
-                      <CheckCircle2 size={14} className="text-emerald-600" />
-                      <span>We will notify you when a rerun is scheduled!</span>
-                    </div>
-                  ) : (
-                    <form onSubmit={handlePastNotifySubmit} className="flex gap-2">
-                      <input
-                        type="email"
-                        value={pastNotifyEmail}
-                        onChange={(e) => setPastNotifyEmail(e.target.value)}
-                        placeholder="your@fund.com"
-                        required
-                        className="flex-1 px-3 py-1.5 rounded-lg border border-[#E8E8E8] bg-white text-xs text-navy focus:outline-none focus:border-gold"
-                      />
-                      <button
-                        type="submit"
-                        disabled={pastNotifySubmitting}
-                        className="btn-primary text-xs py-1.5 px-3 font-semibold shrink-0"
-                      >
-                        {pastNotifySubmitting ? <Loader2 size={12} className="animate-spin" /> : 'Notify Me'}
-                      </button>
-                    </form>
-                  )}
-                </div>
+      {/* ─── 5. PAST EVENTS & ARCHIVED SESSIONS SECTION ─── */}
+      <section id="past" className="bg-white py-16 sm:py-20 border-b border-[#E8E8E8]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeUp>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+              <div>
+                <span className="text-[11px] font-bold text-muted uppercase tracking-widest block mb-1">
+                  ARCHIVED LABS & RECORDINGS
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-bold text-navy tracking-tight">
+                  Past Events & Master Classes
+                </h2>
+                <p className="text-xs sm:text-sm text-muted mt-1 max-w-xl">
+                  Access course recordings, tool summaries, deal models, and take-home architectures from completed cohorts.
+                </p>
               </div>
-            </FadeUp>
 
+              {/* Email Capture for Next Session */}
+              <div className="bg-[#FAF9F6] border border-[#E8E8E8] rounded-xl p-3 sm:p-4 max-w-md w-full shrink-0">
+                <span className="text-[10px] font-bold text-navy uppercase tracking-wider block mb-1">
+                  Notify me when these rerun
+                </span>
+                {pastNotifySuccess ? (
+                  <div className="flex items-center gap-1.5 text-xs text-emerald-800 font-semibold py-1">
+                    <CheckCircle2 size={14} className="text-emerald-600" />
+                    <span>We will notify you when a rerun is scheduled!</span>
+                  </div>
+                ) : (
+                  <form onSubmit={handlePastNotifySubmit} className="flex gap-2">
+                    <input
+                      type="email"
+                      value={pastNotifyEmail}
+                      onChange={(e) => setPastNotifyEmail(e.target.value)}
+                      placeholder="your@fund.com"
+                      required
+                      className="flex-1 px-3 py-1.5 rounded-lg border border-[#E8E8E8] bg-white text-xs text-navy focus:outline-none focus:border-gold"
+                    />
+                    <button
+                      type="submit"
+                      disabled={pastNotifySubmitting}
+                      className="btn-primary text-xs py-1.5 px-3 font-semibold shrink-0"
+                    >
+                      {pastNotifySubmitting ? <Loader2 size={12} className="animate-spin" /> : 'Notify Me'}
+                    </button>
+                  </form>
+                )}
+              </div>
+            </div>
+          </FadeUp>
+
+          {pastWorkshops.length > 0 ? (
             <StaggerContainer
               stagger={0.06}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch"
@@ -727,9 +776,29 @@ export default function HubPage() {
                 </StaggerItem>
               ))}
             </StaggerContainer>
-          </div>
-        </section>
-      )}
+          ) : (
+            <div className="bg-[#FAF9F6] border border-[#E8E8E8] rounded-2xl p-8 sm:p-10 text-center max-w-2xl mx-auto">
+              <span className="w-12 h-12 rounded-full bg-gold/15 text-gold flex items-center justify-center mx-auto mb-3 font-bold text-sm">
+                DD
+              </span>
+              <h4 className="text-base font-bold text-navy mb-1">
+                Completed Cohort Toolkits & Replays
+              </h4>
+              <p className="text-xs text-muted max-w-md mx-auto mb-6 leading-relaxed">
+                All previous sessions including the Family Office Deal Sourcing Masterclass and Cross-Border LBO Modeling modules are available for alumni review and corporate deal-team licensing.
+              </p>
+              <div className="flex items-center justify-center gap-3">
+                <Link
+                  to="/workshops?status=completed"
+                  className="btn-primary text-xs py-2 px-5 font-semibold"
+                >
+                  Browse Archived Cohorts →
+                </Link>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
 
       {/* ─── 6. FIRMS WE'VE TRAINED & TESTIMONIALS ─── */}
       <FirmsTrustSection settings={settings} />

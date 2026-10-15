@@ -51,9 +51,23 @@ export default function Navbar({ onReserveSpot, onOpenSearch }) {
     { label: 'Workshops', href: '/workshops' },
     { label: 'Calendar', href: '/workshops?view=calendar' },
     { label: 'Upcoming', href: '/workshops?status=upcoming' },
-    { label: 'Past', href: '/workshops?status=completed' },
+    { label: 'Past', href: '/#past' },
     { label: 'About', href: '/#about' },
   ];
+
+  const handleNavClick = (e, href) => {
+    if (href.startsWith('/#')) {
+      const targetId = href.replace('/#', '');
+      if (location.pathname === '/') {
+        e.preventDefault();
+        const el = document.getElementById(targetId);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+          window.history.pushState(null, '', href);
+        }
+      }
+    }
+  };
 
   const handleReserveClick = () => {
     if (onReserveSpot && nextWorkshop) {
@@ -108,6 +122,7 @@ export default function Navbar({ onReserveSpot, onOpenSearch }) {
                 <Link
                   key={link.label}
                   to={link.href}
+                  onClick={(e) => handleNavClick(e, link.href)}
                   className={`relative text-xs lg:text-sm font-medium px-3 py-2 rounded-lg transition-colors duration-150 ${
                     active
                       ? 'text-navy font-semibold'
@@ -188,7 +203,10 @@ export default function Navbar({ onReserveSpot, onOpenSearch }) {
                   <Link
                     key={link.label}
                     to={link.href}
-                    onClick={() => setMobileOpen(false)}
+                    onClick={(e) => {
+                      setMobileOpen(false);
+                      handleNavClick(e, link.href);
+                    }}
                     className={`block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                       active
                         ? 'bg-cream text-navy font-semibold border-l-2 border-gold pl-2.5'

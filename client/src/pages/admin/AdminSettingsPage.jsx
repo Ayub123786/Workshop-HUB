@@ -167,6 +167,22 @@ export default function AdminSettingsPage() {
 
         <div>
           <label className="block text-xs font-semibold text-navy mb-1">
+            Hub Hero Video URL (YouTube, Vimeo, or direct MP4)
+          </label>
+          <input
+            type="text"
+            placeholder="e.g. https://www.youtube.com/watch?v=... or https://player.vimeo.com/video/..."
+            value={settings.heroVideoUrl || ''}
+            onChange={(e) => setSettings({ ...settings, heroVideoUrl: e.target.value })}
+            className="w-full px-3 py-2 rounded-xl border border-border bg-white text-xs"
+          />
+          <p className="text-[11px] text-muted mt-1">
+            Featured 16:9 executive showcase player on the main page.
+          </p>
+        </div>
+
+        <div>
+          <label className="block text-xs font-semibold text-navy mb-1">
             Global Footer Copyright Text
           </label>
           <input
