@@ -83,6 +83,37 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', time: new Date().toISOString() });
 });
 
+/* ─── Root & API Welcome endpoints ─── */
+app.get('/', (req, res) => {
+  res.json({
+    name: 'Workshop Hub API',
+    status: 'online',
+    version: '1.0.0',
+    health: '/health',
+    endpoints: {
+      workshops: '/api/workshops',
+      stats: '/api/workshops/stats/hub',
+      subscribers: '/api/subscribers',
+      calendar: '/api/calendar.ics',
+    },
+  });
+});
+
+app.get('/api', (req, res) => {
+  res.json({
+    status: 'online',
+    message: 'Workshop Hub API is operational',
+    endpoints: {
+      workshops: '/api/workshops',
+      stats: '/api/workshops/stats/hub',
+      subscribers: '/api/subscribers',
+      auth: '/api/auth',
+      settings: '/api/settings',
+      calendar: '/api/calendar.ics',
+    },
+  });
+});
+
 /* ─── API Routes ─── */
 app.use('/api/auth', authRoutes);
 app.use('/api/workshops', workshopRoutes);
