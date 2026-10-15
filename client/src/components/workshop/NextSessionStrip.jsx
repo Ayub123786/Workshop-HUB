@@ -1,108 +1,87 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, Clock, ArrowRight, Sparkles } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Calendar, Clock, ArrowRight, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import MagneticButton from '../animations/MagneticButton';
 
-export default function NextSessionStrip({ workshop, onReserve }) {
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+export default function NextSessionStrip({ workshop }) {
+  const [visible, setVisible] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
-    if (!workshop?.startDate) return;
-    const calc = () => {
-      const diff = Math.max(0, new Date(workshop.startDate).getTime() - Date.now());
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((diff / (1000 * 60)) % 60);
-      const seconds = Math.floor((diff / 1000) % 60);
-      setTimeLeft({ days, hours, minutes, seconds });
+    const handleScroll = () => {
+      // Show sticky strip once user scrolls past the hero section (>450px)
+      if (window.scrollY > 450) {
+        setVisible(true);
+      } else {
+        setVisible(false);
+      }
     };
-    calc();
-    const interval = setInterval(calc, 1000);
-    return () => clearInterval(interval);
-  }, [workshop?.startDate]);
 
-  if (!workshop) return null;
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  if (!workshop || dismissed) return null;
 
   const dateStr = workshop.startDate
     ? new Date(workshop.startDate).toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
-        year: 'numeric',
       })
     : '';
 
-  const timeStr = workshop.timezones?.[0]
-    ? `${workshop.timezones[0].city} ${workshop.timezones[0].time}`
-    : '';
-
   return (
-    <div className="bg-[#FAF9F6] border-y border-[#E8E8E8] py-4">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          {/* Left: Next Session Meta */}
-          <div className="flex items-center gap-3 min-w-0">
-            <span className="inline-flex items-center gap-1.5 bg-navy text-white text-[11px] font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider shrink-0">
-              <span className="w-1.5 h-1.5 rounded-full bg-gold" />
-              Next Session
-            </span>
-            <div className="min-w-0">
-              <Link
-                to={`/w/${workshop.slug}`}
-                className="font-bold text-navy text-xs sm:text-sm hover:text-gold transition-colors truncate block"
-              >
-                {workshop.title}
-              </Link>
-              <div className="flex items-center gap-2 text-[11px] text-muted">
-                {dateStr && (
-                  <span className="flex items-center gap-1">
-                    <Calendar size={11} className="text-navy/60" />
-                    {dateStr}
-                  </span>
-                )}
-                {timeStr && (
-                  <span className="flex items-center gap-1">
-                    <Clock size={11} className="text-navy/60" />
-                    {timeStr}
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Right: Countdown & Reserve Button */}
-          <div className="flex items-center gap-4 shrink-0 flex-wrap justify-between lg:justify-end">
-            <div className="flex items-center gap-1.5">
-              <span className="text-[10px] font-semibold text-muted uppercase tracking-wider hidden sm:inline">
-                Starts in:
+    <AnimatePresence>
+      {visible && (
+        <motion.div
+          initial={{ y: 80, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 80, opacity: 0 }}
+          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          className="fixed bottom-4 left-4 right-4 z-40 max-w-3xl mx-auto"
+        >
+          <div className="bg-white/95 backdrop-blur-md border border-[#E8E8E8] rounded-full p-2 sm:px-4 sm:py-2.5 shadow-[0_12px_36px_rgba(0,0,0,0.1)] flex items-center justify-between gap-3">
+            {/* Meta */}
+            <div className="flex items-center gap-2.5 min-w-0">
+              <span className="w-2 h-2 rounded-full bg-gold animate-pulse shrink-0" />
+              <span className="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider text-navy shrink-0">
+                Next Cohort
               </span>
-              <div className="flex items-center gap-1">
-                {[
-                  { l: 'd', v: timeLeft.days },
-                  { l: 'h', v: timeLeft.hours },
-                  { l: 'm', v: timeLeft.minutes },
-                  { l: 's', v: timeLeft.seconds },
-                ].map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-baseline gap-0.5 bg-white border border-[#E8E8E8] px-2 py-0.5 rounded text-xs font-mono font-bold text-navy shadow-2xs"
-                  >
-                    <span>{String(item.v).padStart(2, '0')}</span>
-                    <span className="text-[9px] text-muted font-sans font-normal">{item.l}</span>
-                  </div>
-                ))}
-              </div>
+              <span className="text-muted/40 hidden sm:inline">|</span>
+              <p className="text-xs font-bold text-navy truncate max-w-[220px] sm:max-w-[320px]">
+                {workshop.title}
+              </p>
+              {dateStr && (
+                <span className="hidden md:inline-flex items-center gap-1 text-[11px] font-mono text-muted bg-[#FAF9F6] border border-[#E8E8E8] px-2 py-0.5 rounded-full shrink-0">
+                  <Calendar size={10} className="text-gold" />
+                  {dateStr}
+                </span>
+              )}
             </div>
 
-            <Link
-              to={`/w/${workshop.slug}`}
-              className="btn-primary text-xs py-1.5 px-3.5 shadow-2xs font-semibold flex items-center gap-1"
-            >
-              <span>Reserve</span>
-              <ArrowRight size={12} />
-            </Link>
+            {/* Actions */}
+            <div className="flex items-center gap-2 shrink-0">
+              <MagneticButton
+                as={Link}
+                to={`/w/${workshop.slug}`}
+                className="btn-primary text-xs py-1.5 px-3.5 shadow-2xs font-semibold flex items-center gap-1 rounded-full"
+              >
+                <span>Reserve</span>
+                <ArrowRight size={12} />
+              </MagneticButton>
+
+              <button
+                onClick={() => setDismissed(true)}
+                className="p-1 rounded-full text-muted hover:text-navy hover:bg-[#FAF9F6] transition-colors"
+                aria-label="Dismiss sticky session bar"
+              >
+                <X size={14} />
+              </button>
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

@@ -18,10 +18,21 @@ import {
   Bookmark,
   History,
   Play,
+  BookOpen,
+  Globe,
+  TrendingUp,
+  Users,
 } from 'lucide-react';
 import CountUp from 'react-countup';
 import api from '../lib/api';
 import { useSettings } from '../contexts/SettingsContext';
+
+// Animation Components
+import GoldParticles from '../components/animations/GoldParticles';
+import MagneticButton from '../components/animations/MagneticButton';
+import Reveal from '../components/animations/Reveal';
+import { wordRevealContainer, wordRevealItem } from '../lib/motion';
+import { motion } from 'framer-motion';
 
 // Components
 import WorkshopCard from '../components/workshop/WorkshopCard';
@@ -248,80 +259,121 @@ export default function HubPage() {
         />
       </Helmet>
 
-      {/* ─── 1. HERO with Dedicated Space for Video ─── */}
-      <section className="bg-white pt-20 pb-12 sm:pt-24 sm:pb-16 border-b border-[#E8E8E8]">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
-          <FadeUp>
-            <span className="inline-block text-xs font-semibold tracking-[0.18em] uppercase text-navy/70 border border-[#E8E8E8] px-4 py-1.5 rounded-full mb-5 bg-cream shadow-2xs">
+      {/* ─── 1. HERO with Gold Particles, Word-by-Word Masked Reveal & Less Text ─── */}
+      <section className="relative bg-white pt-24 pb-14 sm:pt-28 sm:pb-16 border-b border-[#E8E8E8] overflow-hidden">
+        {/* Lightweight 60fps Gold Constellation with Mouse Parallax */}
+        <GoldParticles particleCount={36} />
+
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center relative z-10">
+          <Reveal delay={0.02}>
+            <span className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-[0.18em] uppercase text-navy border border-[#E8E8E8] px-4 py-1.5 rounded-full mb-6 bg-[#FAF9F6] shadow-2xs">
+              <span className="w-2 h-2 rounded-full bg-gold animate-pulse" />
               LIVE EXECUTIVE MASTER CLASSES
             </span>
-          </FadeUp>
-          <FadeUp delay={0.06}>
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-navy mb-4 tracking-tight text-balance leading-[1.12]">
-              {settings?.hubHeadline || 'Build What the Best Funds Already Run'}
-            </h1>
-          </FadeUp>
-          <FadeUp delay={0.12}>
-            <p className="text-sm sm:text-base text-muted max-w-xl mx-auto mb-6 leading-relaxed">
-              {settings?.hubSubtitle || 'Live, expert-led master classes for private equity and venture capital deal teams.'}
+          </Reveal>
+
+          {/* Word-by-Word Masked Slide-up Headline with Gold Shimmer on 'Funds' */}
+          <motion.h1
+            variants={wordRevealContainer}
+            initial="hidden"
+            animate="visible"
+            className="text-3xl sm:text-5xl lg:text-6xl font-bold text-navy mb-4 tracking-tight leading-[1.12]"
+          >
+            {(settings?.hubHeadline || 'Build What the Best Funds Already Run')
+              .split(' ')
+              .map((word, index) => {
+                const isFunds = word.toLowerCase().includes('funds');
+                return (
+                  <span key={index} className="overflow-hidden inline-block mr-[0.25em] align-top">
+                    <motion.span
+                      variants={wordRevealItem}
+                      className={`inline-block ${
+                        isFunds ? 'text-gold-shimmer font-extrabold relative' : ''
+                      }`}
+                    >
+                      {word}
+                    </motion.span>
+                  </span>
+                );
+              })}
+          </motion.h1>
+
+          {/* Cut Subtitle to ONE Short Line */}
+          <Reveal delay={0.16}>
+            <p className="text-sm sm:text-base text-muted max-w-lg mx-auto mb-7 leading-relaxed font-normal">
+              {settings?.hubSubtitle || 'Live, production-grade master classes engineered for PE & VC deal teams.'}
             </p>
-          </FadeUp>
-          <FadeUp delay={0.18}>
-            <div className="flex items-center justify-center gap-3 mb-6 flex-wrap">
-              <a
-                href="#explore"
-                className="btn-primary text-xs sm:text-sm py-2.5 px-6 shadow-xs font-semibold"
-                onClick={(e) => {
-                  e.preventDefault();
+          </Reveal>
+
+          {/* Action Button */}
+          <Reveal delay={0.22}>
+            <div className="flex items-center justify-center gap-3 mb-10">
+              <MagneticButton
+                onClick={() => {
                   document.getElementById('explore')?.scrollIntoView({ behavior: 'smooth' });
                 }}
+                className="btn-primary text-xs sm:text-sm py-3 px-8 shadow-xs font-semibold rounded-full hover:shadow-card-hover"
               >
                 Explore Master Classes ↓
-              </a>
+              </MagneticButton>
             </div>
-          </FadeUp>
+          </Reveal>
 
-          {/* Live Stats Row: Database computed counters */}
-          {/* Live Stats Row: Database computed counters & Admin configurable */}
-          <FadeUp delay={0.28}>
+          {/* Graphic Stats Row: Icons + Animated CountUp + Shorter Labels */}
+          <Reveal delay={0.28}>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 pt-8 border-t border-[#E8E8E8] max-w-4xl mx-auto">
-              <div className="text-center">
+              <div className="p-3.5 rounded-xl bg-[#FAF9F6]/80 border border-[#E8E8E8]/70 text-center hover:border-gold/60 transition-colors">
+                <BookOpen size={16} className="text-gold mx-auto mb-1.5 opacity-80" />
                 <p className="text-2xl sm:text-3xl font-extrabold text-navy font-mono">
                   <CountUp end={settings?.heroStats?.totalWorkshops ?? hubStats?.totalWorkshops ?? 18} duration={2} />+
                 </p>
-                <p className="text-[11px] font-semibold text-muted uppercase tracking-wider mt-1">
-                  Workshops Hosted
+                <p className="text-[10px] font-mono font-bold text-muted uppercase tracking-wider mt-0.5">
+                  Workshops
                 </p>
               </div>
 
-              <div className="text-center">
+              <div className="p-3.5 rounded-xl bg-[#FAF9F6]/80 border border-[#E8E8E8]/70 text-center hover:border-gold/60 transition-colors">
+                <Users size={16} className="text-gold mx-auto mb-1.5 opacity-80" />
                 <p className="text-2xl sm:text-3xl font-extrabold text-navy font-mono">
                   <CountUp end={settings?.heroStats?.totalAttendees ?? hubStats?.totalAttendees ?? 1480} duration={2.2} separator="," />+
                 </p>
-                <p className="text-[11px] font-semibold text-muted uppercase tracking-wider mt-1">
-                  Professionals Trained
+                <p className="text-[10px] font-mono font-bold text-muted uppercase tracking-wider mt-0.5">
+                  Pros Trained
                 </p>
               </div>
 
-              <div className="text-center">
+              <div className="p-3.5 rounded-xl bg-[#FAF9F6]/80 border border-[#E8E8E8]/70 text-center hover:border-gold/60 transition-colors">
+                <Globe size={16} className="text-gold mx-auto mb-1.5 opacity-80" />
                 <p className="text-2xl sm:text-3xl font-extrabold text-navy font-mono">
                   <CountUp end={settings?.heroStats?.countries ?? hubStats?.countries ?? 18} duration={1.8} />
                 </p>
-                <p className="text-[11px] font-semibold text-muted uppercase tracking-wider mt-1">
-                  Financial Hubs / Countries
+                <p className="text-[10px] font-mono font-bold text-muted uppercase tracking-wider mt-0.5">
+                  Countries
                 </p>
               </div>
 
-              <div className="text-center">
+              <div className="p-3.5 rounded-xl bg-[#FAF9F6]/80 border border-[#E8E8E8]/70 text-center hover:border-gold/60 transition-colors">
+                <TrendingUp size={16} className="text-gold mx-auto mb-1.5 opacity-80" />
                 <p className="text-2xl sm:text-3xl font-extrabold text-navy font-mono">
                   $<CountUp end={settings?.heroStats?.aumTrained ?? (parseFloat(settings?.globalTrust?.aumNumber) || hubStats?.aumTrained || 246)} duration={2.2} />B+
                 </p>
-                <p className="text-[11px] font-semibold text-muted uppercase tracking-wider mt-1">
-                  AUM Across Trained Funds
+                <p className="text-[10px] font-mono font-bold text-muted uppercase tracking-wider mt-0.5">
+                  AUM
                 </p>
               </div>
             </div>
-          </FadeUp>
+          </Reveal>
+
+          {/* Bouncing Scroll Cue */}
+          <motion.div
+            animate={{ y: [0, 5, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            onClick={() => document.getElementById('explore')?.scrollIntoView({ behavior: 'smooth' })}
+            className="inline-flex flex-col items-center mt-10 text-muted/60 text-[10px] font-mono tracking-widest uppercase cursor-pointer hover:text-navy transition-colors select-none"
+          >
+            <span>Scroll</span>
+            <ChevronDown size={14} className="text-gold mt-0.5" />
+          </motion.div>
         </div>
       </section>
 

@@ -500,6 +500,8 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
               opacity = 0.3;
             }
 
+            const blur = isActive ? 0 : Math.abs(offset) * 2;
+
             return (
               <motion.div
                 key={item.id}
@@ -510,23 +512,34 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
                   scale: scale,
                   zIndex: zIndex,
                   opacity: opacity,
+                  filter: `blur(${blur}px)`,
                 }}
                 transition={{
                   type: 'spring',
-                  stiffness: 260,
+                  stiffness: 280,
                   damping: 26,
                   mass: 0.8,
                 }}
                 style={{
                   transformStyle: 'preserve-3d',
                 }}
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                onDragEnd={(e, { offset: dragOffset, velocity }) => {
+                  if (dragOffset.x < -40 || velocity.x < -300) {
+                    goToNext();
+                  } else if (dragOffset.x > 40 || velocity.x > 300) {
+                    goToPrev();
+                  }
+                }}
+                data-cursor="Play"
                 onClick={() => handleCardClick(index)}
               >
                 {/* Individual Card */}
                 <div
                   className={`relative w-[280px] sm:w-[340px] md:w-[380px] h-[450px] sm:h-[500px] rounded-2xl overflow-hidden transition-all duration-300 group bg-white ${
                     isActive
-                      ? 'border-2 border-gold shadow-card-hover shadow-gold/20'
+                      ? 'border-2 border-gold shadow-[0_16px_48px_rgba(201,162,77,0.22)] scale-[1.01]'
                       : 'border border-[#E8E8E8] hover:border-gold/60 shadow-card'
                   }`}
                 >

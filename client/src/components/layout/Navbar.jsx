@@ -1,28 +1,47 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, Calendar as CalendarIcon, Sparkles, Search } from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 import { useSettings } from '../../contexts/SettingsContext';
 import api from '../../lib/api';
+import MagneticButton from '../animations/MagneticButton';
 
 export default function Navbar({ onReserveSpot, onOpenSearch }) {
   const { settings } = useSettings();
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const [hoveredLink, setHoveredLink] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [nextWorkshop, setNextWorkshop] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
+  const lastScrollY = useRef(0);
 
   // Scroll progress bar directly bound to navbar bottom edge
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
+    stiffness: 140,
     damping: 30,
     restDelta: 0.001,
   });
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10);
+    const onScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // Blur trigger
+      setScrolled(currentScrollY > 20);
+
+      // Hide on scroll down, reveal on scroll up
+      if (currentScrollY > 120 && currentScrollY > lastScrollY.current + 8) {
+        setHidden(true);
+      } else if (currentScrollY < lastScrollY.current - 8 || currentScrollY <= 100) {
+        setHidden(false);
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -95,9 +114,13 @@ export default function Navbar({ onReserveSpot, onOpenSearch }) {
   };
 
   return (
-    <header
-      className={`sticky top-0 left-0 right-0 z-40 transition-all duration-200 bg-white/85 backdrop-blur-md border-b border-[#E8E8E8] ${
-        scrolled ? 'shadow-[0_2px_12px_rgba(0,0,0,0.05)]' : ''
+    <motion.header
+      animate={{ y: hidden ? '-100%' : '0%' }}
+      transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+      className={`sticky top-0 left-0 right-0 z-40 transition-colors duration-300 ${
+        scrolled
+          ? 'bg-white/80 backdrop-blur-[16px] border-b border-[#E8E8E8] shadow-[0_4px_24px_rgba(0,0,0,0.04)]'
+          : 'bg-white/95 md:bg-white/70 backdrop-blur-sm border-b border-[#E8E8E8]/60'
       }`}
     >
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -115,26 +138,43 @@ export default function Navbar({ onReserveSpot, onOpenSearch }) {
           </Link>
 
           {/* Desktop Nav Links */}
-          <div className="hidden md:flex items-center gap-1 lg:gap-2">
+          <div
+            className="hidden md:flex items-center gap-1 lg:gap-2"
+            onMouseLeave={() => setHoveredLink(null)}
+          >
             {navLinks.map((link) => {
               const active = isActiveLink(link.href);
+              const isHovered = hoveredLink === link.label;
+
               return (
                 <Link
                   key={link.label}
                   to={link.href}
+                  onMouseEnter={() => setHoveredLink(link.label)}
                   onClick={(e) => handleNavClick(e, link.href)}
                   className={`relative text-xs lg:text-sm font-medium px-3 py-2 rounded-lg transition-colors duration-150 ${
                     active
                       ? 'text-navy font-semibold'
-                      : 'text-muted hover:text-navy hover:bg-cream/80'
+                      : 'text-muted hover:text-navy'
                   }`}
                 >
                   {link.label}
+
+                  {/* Active Gold Underline */}
                   {active && (
                     <motion.div
                       layoutId="activeNavUnderline"
                       className="absolute bottom-0 left-3 right-3 h-[2px] bg-gold rounded-full"
                       transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  )}
+
+                  {/* Hover Floating Underline Indicator */}
+                  {!active && isHovered && (
+                    <motion.div
+                      layoutId="hoverNavIndicator"
+                      className="absolute bottom-0 left-3 right-3 h-[1.5px] bg-gold/50 rounded-full"
+                      transition={{ type: 'spring', stiffness: 400, damping: 28 }}
                     />
                   )}
                 </Link>
@@ -146,7 +186,7 @@ export default function Navbar({ onReserveSpot, onOpenSearch }) {
           <div className="hidden md:flex items-center gap-2.5">
             <button
               onClick={onOpenSearch}
-              className="flex items-center gap-2 py-2 px-3 rounded-xl border border-[#E8E8E8] bg-[#FAFAFA] text-muted hover:text-navy hover:border-[#D0D0D0] transition-colors text-xs"
+              className="flex items-center gap-2 py-2 px-3 rounded-xl border border-[#E8E8E8] bg-[#FAFAFA] text-muted hover:text-navy hover:border-gold/50 transition-colors text-xs"
               title="Search masterclasses (⌘K)"
             >
               <Search size={13} className="text-navy/60" />
@@ -156,12 +196,12 @@ export default function Navbar({ onReserveSpot, onOpenSearch }) {
               </kbd>
             </button>
 
-            <button
+            <MagneticButton
               onClick={handleReserveClick}
-              className="btn-primary text-xs lg:text-sm py-2 px-4 shadow-2xs hover:shadow-xs transition-all"
+              className="btn-primary text-xs lg:text-sm py-2 px-4 shadow-2xs hover:shadow-xs transition-all font-semibold rounded-full"
             >
               Reserve a Spot
-            </button>
+            </MagneticButton>
           </div>
 
           {/* Mobile Right Controls: Search + Hamburger */}
@@ -239,6 +279,6 @@ export default function Navbar({ onReserveSpot, onOpenSearch }) {
         style={{ scaleX }}
         className="absolute -bottom-[1px] left-0 right-0 h-[2px] bg-gold origin-left pointer-events-none z-50"
       />
-    </header>
+    </motion.header>
   );
 }

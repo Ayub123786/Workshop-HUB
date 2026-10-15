@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
-import { motion, useScroll, useSpring } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 import Lenis from 'lenis';
 import { Loader2 } from 'lucide-react';
 
@@ -15,6 +15,8 @@ import Footer from './components/layout/Footer';
 import AnnouncementBar from './components/layout/AnnouncementBar';
 import CommandPalette from './components/search/CommandPalette';
 import AdminLayout from './components/admin/AdminLayout';
+import CustomCursor from './components/animations/CustomCursor';
+import { pageTransitionVariants } from './lib/motion';
 
 // Public Pages
 import HubPage from './pages/HubPage';
@@ -98,6 +100,7 @@ function ProtectedRoute({ children }) {
 // Public site layout wrapper (Navbar + Content + Footer)
 function PublicLayout() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const location = useLocation();
 
   // Global Cmd+K / Ctrl+K listener
   useEffect(() => {
@@ -113,11 +116,23 @@ function PublicLayout() {
 
   return (
     <SmoothScrollManager>
-      <div className="flex flex-col min-h-screen bg-white">
+      <div className="flex flex-col min-h-screen bg-white relative">
+        <CustomCursor />
+        <div className="noise-overlay" aria-hidden="true" />
         <AnnouncementBar />
         <Navbar onOpenSearch={() => setIsSearchOpen(true)} />
         <main className="flex-1">
-          <Outlet />
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={location.pathname}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              variants={pageTransitionVariants}
+            >
+              <Outlet />
+            </motion.div>
+          </AnimatePresence>
         </main>
         <Footer />
         <CommandPalette

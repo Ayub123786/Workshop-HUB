@@ -6,8 +6,11 @@ export function WorkshopCardSkeleton({ count = 3 }) {
       {Array.from({ length: count }).map((_, i) => (
         <div
           key={i}
-          className="bg-white border border-[#E8E8E8] rounded-2xl overflow-hidden flex flex-col h-full animate-pulse"
+          className="bg-white border border-[#E8E8E8] rounded-2xl overflow-hidden flex flex-col h-full relative"
         >
+          {/* Shimmer sweep effect */}
+          <div className="absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-white/40 to-transparent z-10 pointer-events-none" />
+
           {/* Banner Skeleton (16:10 aspect ratio) */}
           <div className="w-full aspect-[16/10] bg-[#F5F5F5] relative">
             <div className="absolute top-3 left-3 w-20 h-5 bg-[#E8E8E8] rounded-full" />

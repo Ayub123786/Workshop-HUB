@@ -1,33 +1,35 @@
 import { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, HelpCircle, Video, Layers, Receipt, Clock, Users } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FadeUp } from '../motion/index.jsx';
+import Reveal from '../animations/Reveal';
 import { useSettings } from '../../contexts/SettingsContext';
+
+const DEFAULT_ICONS = [Users, Video, Layers, Receipt, Clock, HelpCircle];
 
 const FAQS = [
   {
-    q: 'Who are these workshops designed for?',
-    a: 'Our master classes are engineered specifically for private equity partners, venture capital deal teams, family office investment directors, and financial analysts who want to deploy multi-model agentic systems into due diligence, memo synthesis, and deal sourcing.',
+    q: 'Who are these master classes designed for?',
+    a: 'Engineered for private equity deal leads, VC partners, and financial analysts deploying AI into due diligence and memo generation.',
   },
   {
     q: 'Are the sessions live or pre-recorded?',
-    a: 'Every master class is delivered live and interactive by Ayub. You work through live stress-tests, model orchestration architectures, and proprietary tool stacks with real-time Q&A.',
+    a: 'Every workshop is 100% live and interactive with model stress-testing, real datasets, and real-time Q&A.',
   },
   {
-    q: 'What materials and templates do attendees receive?',
-    a: 'Attendees receive production-ready agent prompt architectures, pipeline orchestration blueprints, sample valuation data sets, and lifetime access to our alumni community and session slide decks.',
+    q: 'What models and toolkits do attendees receive?',
+    a: 'You get full production prompt architectures, orchestration code blueprints, financial models, and lifetime cohort access.',
   },
   {
-    q: 'Can my firm get an invoice for corporate reimbursement?',
-    a: 'Yes. Automated corporate receipts and tax invoices with your fund or firm name are generated immediately upon registration. Contact team@morsebridge.com for bulk team booking passes.',
+    q: 'Can my fund receive a corporate invoice?',
+    a: 'Yes. Tax invoices and fund reimbursement receipts are generated immediately upon checkout.',
   },
   {
-    q: 'What if I am unable to attend the live scheduled time?',
-    a: 'All registered attendees receive full on-demand video access, transcript summaries, and key takeaway packages within 24 hours of session completion.',
+    q: 'What happens if I miss the live schedule?',
+    a: 'All enrolled participants receive 4K recordings, key takeaways, and workbook files within 24 hours.',
   },
   {
-    q: 'How does the waitlist work for sold-out workshops?',
-    a: 'When an executive cohort reaches maximum capacity, you can join the verified waitlist for free. If an attendee reschedules or a seat opens, waitlisted professionals are notified immediately in first-come order.',
+    q: 'How does the sold-out cohort waitlist work?',
+    a: 'Waitlist enrollment is free. If a registered seat becomes available, waitlisted members are offered priority access.',
   },
 ];
 
@@ -42,63 +44,92 @@ export default function PlatformFaqSection({ faqs: propFaqs }) {
   };
 
   return (
-    <section className="bg-white py-16 sm:py-20 border-b border-[#E8E8E8]">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <FadeUp>
-          <div className="text-center mb-12">
-            <span className="text-[11px] font-bold text-gold uppercase tracking-widest block mb-1">
-              QUESTIONS & ANSWERS
+    <section id="faq" className="bg-white py-16 sm:py-20 border-b border-[#E8E8E8] relative">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <Reveal>
+          <div className="text-center mb-10">
+            <span className="inline-block text-[11px] font-mono font-bold text-gold uppercase tracking-widest px-3 py-1 rounded-full bg-[#FAF9F6] border border-[#E8E8E8] shadow-2xs mb-2">
+              FREQUENT INQUIRIES
             </span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-navy tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-bold text-navy tracking-tight uppercase">
               Frequently Asked Questions
             </h2>
-            <p className="text-muted text-xs sm:text-sm mt-2 max-w-lg mx-auto">
-              Everything you need to know about our executive master classes, curriculum access, and platform policies.
+            <p className="text-muted text-xs sm:text-sm mt-1 max-w-md mx-auto">
+              Key details regarding syllabus access, live sessions, and fund receipts.
             </p>
           </div>
-        </FadeUp>
+        </Reveal>
 
         <div className="space-y-3">
           {displayFaqs.map((faq, idx) => {
             const isOpen = openIndex === idx;
-            return (
-              <div
-                key={idx}
-                className="border border-[#E8E8E8] rounded-2xl overflow-hidden transition-colors duration-150"
-              >
-                <button
-                  type="button"
-                  onClick={() => toggle(idx)}
-                  className="w-full text-left px-5 sm:px-6 py-4 flex items-center justify-between gap-4 bg-white hover:bg-cream/60 transition-colors"
-                  aria-expanded={isOpen}
-                >
-                  <span className="font-semibold text-navy text-sm sm:text-base">
-                    {faq.q}
-                  </span>
-                  <ChevronDown
-                    size={16}
-                    className={`text-muted transition-transform duration-200 shrink-0 ${
-                      isOpen ? 'rotate-180 text-gold' : ''
-                    }`}
-                  />
-                </button>
+            const Icon = DEFAULT_ICONS[idx % DEFAULT_ICONS.length] || HelpCircle;
 
-                <AnimatePresence initial={false}>
-                  {isOpen && (
+            return (
+              <Reveal key={idx} delay={idx * 0.04}>
+                <div
+                  className={`relative rounded-2xl border transition-all duration-300 overflow-hidden ${
+                    isOpen
+                      ? 'border-gold/60 shadow-[0_4px_16px_rgba(201,162,77,0.08)] bg-white'
+                      : 'border-[#E8E8E8] bg-white hover:border-[#D0D0D0]'
+                  }`}
+                >
+                  {/* Expanding Left Gold Accent Border */}
+                  <motion.div
+                    initial={false}
+                    animate={{ scaleY: isOpen ? 1 : 0 }}
+                    transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                    className="absolute left-0 top-0 bottom-0 w-1 bg-gold origin-top z-10"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => toggle(idx)}
+                    className="w-full text-left px-5 sm:px-6 py-4 flex items-center justify-between gap-3.5 transition-colors"
+                    aria-expanded={isOpen}
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span
+                        className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
+                          isOpen ? 'bg-gold/15 text-gold' : 'bg-[#FAF9F6] text-muted'
+                        }`}
+                      >
+                        <Icon size={14} />
+                      </span>
+                      <span className="font-bold text-navy text-xs sm:text-sm leading-snug">
+                        {faq.q}
+                      </span>
+                    </div>
+
                     <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-                      className="overflow-hidden"
+                      animate={{ rotate: isOpen ? 180 : 0 }}
+                      transition={{ duration: 0.24, ease: 'easeOut' }}
+                      className="shrink-0"
                     >
-                      <div className="px-5 sm:px-6 pb-5 pt-1 text-xs sm:text-sm text-muted leading-relaxed border-t border-[#E8E8E8]/60 bg-[#FAF9F6]">
-                        {faq.a}
-                      </div>
+                      <ChevronDown
+                        size={15}
+                        className={isOpen ? 'text-gold' : 'text-muted'}
+                      />
                     </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+                  </button>
+
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-5 sm:px-6 pb-4 pt-1 text-xs sm:text-sm text-muted leading-relaxed border-t border-[#F0F0F0] bg-[#FAF9F6]/50 pl-14">
+                          {faq.a}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </Reveal>
             );
           })}
         </div>
