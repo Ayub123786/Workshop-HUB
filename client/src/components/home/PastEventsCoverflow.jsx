@@ -28,10 +28,10 @@ const DEFAULT_PAST_EVENTS = [
     id: 'evt-01',
     badge: 'DEMO DAY HIGHLIGHT',
     subBadge: 'Live Preview',
-    title: 'INVESTORS ROUNDTABLE & DEMO DAY',
+    title: 'Investors Roundtable & Demo Day',
     subtitle: 'Annual institutional allocators & emerging GP presentation day',
     category: 'Venture Capital & PE',
-    date: 'OCT 12, 2025',
+    date: 'Oct 12, 2025',
     duration: '48 mins',
     attendees: '450+ Allocators',
     location: 'New York & Global Stream',
@@ -48,10 +48,10 @@ const DEFAULT_PAST_EVENTS = [
     id: 'evt-02',
     badge: 'FAST-TRACK MATCHING',
     subBadge: 'Live Preview',
-    title: 'DEMO DAY PITCHES & FAST-TRACK MATCHING',
+    title: 'Demo Day Pitches & Fast-Track Matching',
     subtitle: '1-on-1 bilateral deal rooms and structured syndicate pitches',
     category: 'Direct Dealmaking',
-    date: 'SEP 28, 2025',
+    date: 'Sep 28, 2025',
     duration: '62 mins',
     attendees: '320+ Investors',
     location: 'San Francisco & Hybrid',
@@ -68,10 +68,10 @@ const DEFAULT_PAST_EVENTS = [
     id: 'evt-03',
     badge: 'SPEED PITCHES',
     subBadge: 'Live Preview',
-    title: 'BREAKTHROUGH MOMENTS DEMO DAY',
+    title: 'Breakthrough Moments Demo Day',
     subtitle: 'High-conviction pitches in growth equity and enterprise infrastructure',
     category: 'Growth Equity & AI',
-    date: 'AUG 18, 2025',
+    date: 'Aug 18, 2025',
     duration: '55 mins',
     attendees: '280+ Dealmakers',
     location: 'London Mayfair & Live Stream',
@@ -88,10 +88,10 @@ const DEFAULT_PAST_EVENTS = [
     id: 'evt-04',
     badge: 'COHORT MASTERCLASS',
     subBadge: 'Live Preview',
-    title: 'FAMILY OFFICE DIRECT DEAL SOURCING',
+    title: 'Family Office Direct Deal Sourcing',
     subtitle: 'Off-market proprietary deal origination and club-deal syndication',
     category: 'Family Office',
-    date: 'JUL 22, 2025',
+    date: 'Jul 22, 2025',
     duration: '90 mins',
     attendees: '190+ Principals',
     location: 'Zurich Executive Room',
@@ -108,10 +108,10 @@ const DEFAULT_PAST_EVENTS = [
     id: 'evt-05',
     badge: 'WORKSHOP ARCHIVE',
     subBadge: 'Live Preview',
-    title: 'CROSS-BORDER LBO MODELING & VALUE CREATION',
+    title: 'Cross-Border LBO Modeling & Value Creation',
     subtitle: 'Advanced debt sculpting, return sensitivity, and waterfall math',
     category: 'Private Equity',
-    date: 'JUN 14, 2025',
+    date: 'Jun 14, 2025',
     duration: '110 mins',
     attendees: '210+ PE Associates',
     location: 'New York Wall Street Lab',
@@ -128,10 +128,10 @@ const DEFAULT_PAST_EVENTS = [
     id: 'evt-06',
     badge: 'TECH KEYNOTE',
     subBadge: 'Live Preview',
-    title: 'AI-POWERED DUE DILIGENCE AGENT ARCHITECTURE',
+    title: 'AI-Powered Due Diligence Agent Architecture',
     subtitle: 'Autonomous document parsing, financial reconciliation, and red-flags',
     category: 'AI & FinTech',
-    date: 'MAY 30, 2025',
+    date: 'May 30, 2025',
     duration: '75 mins',
     attendees: '510+ Delegates',
     location: 'Singapore Marina Bay',
@@ -148,10 +148,10 @@ const DEFAULT_PAST_EVENTS = [
     id: 'evt-07',
     badge: 'EXECUTIVE FORUM',
     subBadge: 'Live Preview',
-    title: 'GLOBAL REAL ASSETS & LOGISTICS SYNDICATION',
+    title: 'Global Real Assets & Logistics Syndication',
     subtitle: 'Underwriting industrial logistics and core-plus infrastructure',
     category: 'Real Assets',
-    date: 'APR 19, 2025',
+    date: 'Apr 19, 2025',
     duration: '80 mins',
     attendees: '340+ Delegates',
     location: 'Dubai DIFC Center',
@@ -168,10 +168,10 @@ const DEFAULT_PAST_EVENTS = [
     id: 'evt-08',
     badge: 'SECTOR FOCUS',
     subBadge: 'Live Preview',
-    title: 'HEALTHCARE & MED-TECH M&A ROUNDTABLE',
+    title: 'Healthcare & Med-Tech M&A Roundtable',
     subtitle: 'Regulatory pathway appraisal and buy-and-build rollups',
     category: 'Healthcare PE',
-    date: 'MAR 25, 2025',
+    date: 'Mar 25, 2025',
     duration: '65 mins',
     attendees: '175+ Fund Partners',
     location: 'Boston Innovation District',
@@ -188,10 +188,10 @@ const DEFAULT_PAST_EVENTS = [
     id: 'evt-09',
     badge: 'MARKET BRIEFING',
     subBadge: 'Live Preview',
-    title: 'SECONDARIES & GP-LED CONTINUATION VEHICLES',
+    title: 'Secondaries & GP-Led Continuation Vehicles',
     subtitle: 'Pricing tail-end funds, NAV loans, and preferred equity',
     category: 'Secondaries',
-    date: 'FEB 17, 2025',
+    date: 'Feb 17, 2025',
     duration: '50 mins',
     attendees: '260+ Secondary Buyers',
     location: 'Frankfurt Financial Hub',
@@ -208,10 +208,10 @@ const DEFAULT_PAST_EVENTS = [
     id: 'evt-10',
     badge: 'STRATEGIC BRIEF',
     subBadge: 'Live Preview',
-    title: 'DUAL-USE DEFENSE TECH & SOVEREIGN CAPITAL',
+    title: 'Dual-Use Defense Tech & Sovereign Capital',
     subtitle: 'National security clearances, procurement cycles, and defense syndicates',
     category: 'DeepTech & Defense',
-    date: 'JAN 21, 2025',
+    date: 'Jan 21, 2025',
     duration: '70 mins',
     attendees: '390+ Delegates',
     location: 'Washington D.C. Forum',
@@ -228,10 +228,10 @@ const DEFAULT_PAST_EVENTS = [
     id: 'evt-11',
     badge: 'ANNUAL GALA',
     subBadge: 'Live Preview',
-    title: 'GLOBAL CHAIRS & CHIEF ALLOCATORS GALA',
+    title: 'Global Chairs & Chief Allocators Gala',
     subtitle: 'Macroeconomic forecast, private credit expansion, and annual awards',
     category: 'Executive Leadership',
-    date: 'DEC 05, 2024',
+    date: 'Dec 05, 2024',
     duration: '95 mins',
     attendees: '600+ Global Allocators',
     location: 'Geneva Lakeside Palace',
@@ -249,16 +249,15 @@ const DEFAULT_PAST_EVENTS = [
 export default function PastEventsCoverflow({ pastWorkshops = [] }) {
   // Combine real past workshops with curated demo day highlights
   const items = useMemo(() => {
-    // If backend has completed past workshops, map them into the beginning of the list
     if (pastWorkshops && pastWorkshops.length > 0) {
       const realItems = pastWorkshops.map((w, idx) => ({
         id: w._id || w.id || `real-${idx}`,
         badge: w.category ? `${w.category.toUpperCase()} MASTERCLASS` : 'COHORT RECORDING',
         subBadge: 'Live Preview',
-        title: (w.title || 'Executive Masterclass').toUpperCase(),
+        title: w.title || 'Executive Masterclass',
         subtitle: w.shortDescription || 'Completed cohort recording & deal model archive',
         category: w.category || 'Executive Finance',
-        date: w.startDate ? new Date(w.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase() : 'RECENT COHORT',
+        date: w.startDate ? new Date(w.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recent Cohort',
         duration: w.duration || '90 mins',
         attendees: `${w.seatsBooked || 120}+ Enrolled`,
         location: w.location || 'Virtual Executive Studio',
@@ -275,7 +274,6 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
             ]
       }));
 
-      // Deduplicate and fill up to 11 items
       const combined = [...realItems];
       DEFAULT_PAST_EVENTS.forEach((def) => {
         if (combined.length < 11 && !combined.some(c => c.title === def.title)) {
@@ -351,7 +349,6 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
       setNotifySuccess(true);
       setNotifyEmail('');
     } catch {
-      // Fail gracefully or show success
       setNotifySuccess(true);
     } finally {
       setNotifySubmitting(false);
@@ -363,36 +360,33 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
   return (
     <section
       id="past"
-      className="relative bg-tech-grid py-20 sm:py-24 border-t border-b border-[#1E2538] overflow-hidden select-none"
+      className="relative bg-white py-16 sm:py-20 border-b border-[#E8E8E8] overflow-hidden select-none"
     >
-      {/* Background ambient radial glow matching high-tech aesthetic */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[550px] bg-gradient-to-tr from-[#C8A24F]/10 via-[#FACC15]/5 to-transparent blur-[120px] pointer-events-none" />
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* ─── 1. TOP BADGE & HEADLINE (Exact MyRisingTime style) ─── */}
+        {/* ─── 1. TOP BADGE & HEADLINE (Minimal Light Design System) ─── */}
         <div className="flex flex-col items-center text-center">
           {/* Live Event Previews Pill */}
-          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#111726]/90 border border-white/10 backdrop-blur shadow-inner">
-            <span className="w-2 h-2 rounded-full bg-[#FACC15] animate-pulse shadow-[0_0_8px_#FACC15]" />
-            <span className="tracking-[0.2em] text-[11px] font-mono font-bold text-gray-200 uppercase">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FAF9F6] border border-[#E8E8E8] shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-gold animate-pulse" />
+            <span className="tracking-[0.16em] text-[11px] font-mono font-bold text-navy uppercase">
               LIVE EVENT PREVIEWS
             </span>
           </div>
 
-          {/* Block Futuristic Title (OUR PAST EVENTS) */}
-          <h2 className="font-orbitron font-black text-3xl sm:text-5xl md:text-6xl text-white tracking-[0.16em] uppercase mt-5 leading-tight">
+          {/* Minimal Light Title */}
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-navy tracking-tight uppercase mt-4 leading-tight">
             OUR PAST <br className="hidden sm:inline" /> EVENTS
           </h2>
 
           {/* Subtitle */}
-          <p className="text-xs sm:text-sm md:text-base text-gray-400 max-w-2xl mx-auto mt-3.5 leading-relaxed font-sans">
+          <p className="text-xs sm:text-sm md:text-base text-muted max-w-2xl mx-auto mt-2.5 leading-relaxed">
             Explore live keynote highlights, speed pitches, and investor roundtables from our global gatherings. Click any panel to view in full resolution.
           </p>
 
           {/* ─── 2. CONTROLS STRIP (Numbered Pills + Triangle Chevrons + Count) ─── */}
-          <div className="flex flex-wrap items-center justify-center gap-4 mt-8">
+          <div className="flex flex-wrap items-center justify-center gap-4 mt-7">
             {/* Numbered Pills container */}
-            <div className="bg-[#0D121F]/90 border border-white/10 backdrop-blur rounded-full px-2.5 py-1.5 flex items-center gap-1 shadow-lg max-w-full overflow-x-auto scrollbar-none">
+            <div className="bg-[#FAF9F6] border border-[#E8E8E8] rounded-full px-2.5 py-1.5 flex items-center gap-1 shadow-2xs max-w-full overflow-x-auto scrollbar-none">
               {items.map((item, idx) => {
                 const isActive = idx === currentIndex;
                 const numberLabel = String(idx + 1).padStart(2, '0');
@@ -400,10 +394,10 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
                   <button
                     key={item.id}
                     onClick={() => setCurrentIndex(idx)}
-                    className={`text-[11px] sm:text-xs font-mono font-bold px-2.5 py-1 rounded-full transition-all duration-300 ${
+                    className={`text-[11px] sm:text-xs font-mono font-bold px-2.5 py-1 rounded-full transition-all duration-200 ${
                       isActive
-                        ? 'bg-[#FACC15] text-[#0A0A0A] shadow-[0_0_12px_rgba(250,204,21,0.5)] scale-105'
-                        : 'text-gray-400 hover:text-white hover:bg-white/5'
+                        ? 'bg-gold text-white shadow-xs scale-105'
+                        : 'text-muted hover:text-navy hover:bg-white'
                     }`}
                     title={item.title}
                     aria-label={`Jump to event ${numberLabel}`}
@@ -431,7 +425,7 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
                 >
                   <polygon
                     points="16,2 2,11 16,20"
-                    className="fill-[#FACC15] group-hover:fill-amber-300 group-hover:drop-shadow-[0_0_8px_rgba(250,204,21,0.8)]"
+                    className="fill-gold group-hover:fill-gold-dark transition-colors"
                   />
                 </svg>
               </button>
@@ -451,37 +445,32 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
                 >
                   <polygon
                     points="2,2 16,11 2,20"
-                    className="fill-[#FACC15] group-hover:fill-amber-300 group-hover:drop-shadow-[0_0_8px_rgba(250,204,21,0.8)]"
+                    className="fill-gold group-hover:fill-gold-dark transition-colors"
                   />
                 </svg>
               </button>
 
               {/* Fraction Display: 1 / 11 */}
-              <span className="font-mono text-xs sm:text-sm font-bold text-gray-300 tracking-wider ml-1">
+              <span className="font-mono text-xs sm:text-sm font-bold text-navy tracking-wider ml-1">
                 {currentIndex + 1} / {items.length}
               </span>
             </div>
           </div>
         </div>
 
-        {/* ─── 3. 3D COVERFLOW CAROUSEL CONTAINER ─── */}
-        <div className="relative mt-12 sm:mt-16 h-[520px] sm:h-[580px] w-full flex items-center justify-center perspective-1200 preserve-3d">
+        {/* ─── 3. 3D COVERFLOW CAROUSEL CONTAINER (Minimal Light Theme) ─── */}
+        <div className="relative mt-10 sm:mt-14 h-[500px] sm:h-[550px] w-full flex items-center justify-center perspective-1200 preserve-3d">
           {items.map((item, index) => {
-            // Circular offset calculation
             const total = items.length;
             let offset = index - currentIndex;
             if (offset > total / 2) offset -= total;
             if (offset < -total / 2) offset += total;
 
-            // Only render items within visual range (-2 to +2) for performance
             const isVisible = Math.abs(offset) <= 2;
             if (!isVisible) return null;
 
             const isActive = offset === 0;
-            const isLeft = offset < 0;
-            const isRight = offset > 0;
 
-            // Compute dynamic 3D transforms
             let xOffset = 0;
             let rotateY = 0;
             let scale = 1;
@@ -497,15 +486,15 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
             } else if (Math.abs(offset) === 1) {
               xOffset = offset * (window.innerWidth < 640 ? 210 : 330);
               rotateY = offset < 0 ? 22 : -22;
-              scale = 0.86;
+              scale = 0.88;
               zIndex = 20;
-              opacity = 0.65;
+              opacity = 0.7;
             } else if (Math.abs(offset) === 2) {
               xOffset = offset * (window.innerWidth < 640 ? 320 : 540);
               rotateY = offset < 0 ? 35 : -35;
-              scale = 0.72;
+              scale = 0.74;
               zIndex = 10;
-              opacity = 0.25;
+              opacity = 0.3;
             }
 
             return (
@@ -532,10 +521,10 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
               >
                 {/* Individual Card */}
                 <div
-                  className={`relative w-[280px] sm:w-[340px] md:w-[380px] h-[460px] sm:h-[520px] rounded-[26px] overflow-hidden transition-all duration-300 group ${
+                  className={`relative w-[280px] sm:w-[340px] md:w-[380px] h-[450px] sm:h-[500px] rounded-2xl overflow-hidden transition-all duration-300 group bg-white ${
                     isActive
-                      ? 'border-2 border-[#FACC15] shadow-[0_0_35px_rgba(250,204,21,0.4),0_25px_50px_rgba(0,0,0,0.9)] ring-1 ring-[#FACC15]/40'
-                      : 'border border-white/10 hover:border-white/30 shadow-2xl'
+                      ? 'border-2 border-gold shadow-card-hover shadow-gold/20'
+                      : 'border border-[#E8E8E8] hover:border-gold/60 shadow-card'
                   }`}
                 >
                   {/* Background Image */}
@@ -546,18 +535,18 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
                   />
 
                   {/* Gradient Overlays for contrast & legibility */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/30" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-navy/95 via-navy/40 to-transparent" />
                   {!isActive && (
-                    <div className="absolute inset-0 bg-black/45 group-hover:bg-black/25 transition-colors" />
+                    <div className="absolute inset-0 bg-navy/30 group-hover:bg-navy/15 transition-colors" />
                   )}
 
                   {/* ─── CARD HEADER BADGES ─── */}
                   <div className="absolute top-4 left-4 right-4 flex items-center justify-between gap-2 z-10">
-                    <span className="bg-black/75 backdrop-blur border border-white/15 px-3 py-1 rounded-md text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-white">
+                    <span className="bg-navy/85 backdrop-blur px-3 py-1 rounded-lg text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-white">
                       {item.badge}
                     </span>
-                    <span className="bg-[#FACC15]/20 backdrop-blur border border-[#FACC15]/40 px-2.5 py-0.5 rounded-full text-[10px] font-semibold text-[#FACC15] flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#FACC15] animate-ping" />
+                    <span className="bg-gold text-white px-2.5 py-0.5 rounded-full text-[10px] font-semibold flex items-center gap-1 shadow-2xs">
+                      <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
                       {item.subBadge}
                     </span>
                   </div>
@@ -565,39 +554,39 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
                   {/* ─── CARD CENTER ACTION (ACTIVE CARD ONLY) ─── */}
                   {isActive && (
                     <div className="absolute inset-0 flex flex-col items-center justify-center z-10 pointer-events-none">
-                      {/* Play Button */}
+                      {/* Play Button in Signature Gold */}
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           setActiveModalItem(item);
                         }}
-                        className="pointer-events-auto w-16 h-16 sm:w-18 sm:h-18 rounded-full bg-[#FACC15] text-[#0A0A0A] flex items-center justify-center shadow-[0_0_30px_rgba(250,204,21,0.6)] group-hover:scale-110 active:scale-95 transition-all duration-300 ring-4 ring-[#FACC15]/30 cursor-pointer"
+                        className="pointer-events-auto w-16 h-16 sm:w-18 sm:h-18 rounded-full bg-gold text-white flex items-center justify-center shadow-lg shadow-gold/40 group-hover:scale-110 active:scale-95 transition-all duration-300 ring-4 ring-gold/25 cursor-pointer"
                         aria-label={`Watch ${item.title}`}
                       >
-                        <Play size={26} fill="currentColor" className="ml-1 text-[#0A0A0A]" />
+                        <Play size={26} fill="currentColor" className="ml-1 text-white" />
                       </button>
 
                       {/* Click to Watch Fullscreen pill */}
-                      <div className="mt-3.5 px-3.5 py-1 rounded-full bg-black/85 backdrop-blur border border-white/20 text-[#FACC15] text-[11px] font-mono font-bold tracking-wide flex items-center gap-1.5 shadow-md">
-                        <Maximize2 size={12} className="text-[#FACC15]" />
+                      <div className="mt-3.5 px-3.5 py-1 rounded-full bg-white/95 backdrop-blur border border-[#E8E8E8] text-navy text-[11px] font-mono font-bold tracking-wide flex items-center gap-1.5 shadow-md">
+                        <Maximize2 size={12} className="text-gold" />
                         <span>Click to Watch Fullscreen</span>
                       </div>
                     </div>
                   )}
 
                   {/* ─── CARD BOTTOM CONTENT ─── */}
-                  <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 z-10 flex flex-col justify-end bg-gradient-to-t from-black via-black/90 to-transparent">
+                  <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 z-10 flex flex-col justify-end bg-gradient-to-t from-navy via-navy/90 to-transparent">
                     {/* Meta info strip */}
-                    <div className="flex items-center gap-3 text-[10px] sm:text-[11px] font-mono text-gray-400 mb-2">
-                      <span className="text-[#FACC15] font-bold uppercase">{item.category}</span>
+                    <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-mono text-gray-300 mb-1.5">
+                      <span className="text-gold-light font-bold uppercase">{item.category}</span>
                       <span>•</span>
                       <span>{item.duration}</span>
                       <span>•</span>
                       <span>{item.date}</span>
                     </div>
 
-                    {/* Futuristic Title */}
-                    <h3 className="font-orbitron font-extrabold text-sm sm:text-base text-white tracking-wide uppercase line-clamp-2 leading-snug group-hover:text-[#FACC15] transition-colors">
+                    {/* Title */}
+                    <h3 className="font-bold text-sm sm:text-base text-white tracking-tight line-clamp-2 leading-snug group-hover:text-gold-light transition-colors">
                       {item.title}
                     </h3>
 
@@ -612,16 +601,16 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
           })}
         </div>
 
-        {/* ─── 4. BOTTOM ACTION & NOTIFY BAR ─── */}
-        <div className="mt-14 pt-10 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-6">
+        {/* ─── 4. BOTTOM ACTION & NOTIFY BAR (Minimal Light) ─── */}
+        <div className="mt-14 bg-[#FAF9F6] border border-[#E8E8E8] rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xs">
           <div className="text-center md:text-left">
-            <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-[#FACC15] block mb-1">
+            <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-gold block mb-1">
               ARCHIVE NOTIFICATIONS & NEW RELEASES
             </span>
-            <h4 className="text-base sm:text-lg font-bold text-white tracking-tight">
+            <h4 className="text-base sm:text-lg font-bold text-navy tracking-tight">
               Get notified when new keynote recordings and cohorts go live
             </h4>
-            <p className="text-xs text-gray-400 mt-1 max-w-lg">
+            <p className="text-xs text-muted mt-1 max-w-lg">
               Receive full recording replays, diligence decks, and financial models directly in your inbox.
             </p>
           </div>
@@ -629,8 +618,8 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
           {/* Email Capture Form */}
           <div className="w-full max-w-md shrink-0">
             {notifySuccess ? (
-              <div className="bg-[#111726] border border-emerald-500/40 rounded-xl px-4 py-3 flex items-center gap-2.5 text-xs text-emerald-300 font-medium">
-                <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
+              <div className="bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3 flex items-center gap-2.5 text-xs text-emerald-800 font-medium">
+                <CheckCircle2 size={16} className="text-emerald-600 shrink-0" />
                 <span>You're on the list! We'll alert you as soon as new recordings publish.</span>
               </div>
             ) : (
@@ -641,12 +630,12 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
                   onChange={(e) => setNotifyEmail(e.target.value)}
                   placeholder="name@fund.com"
                   required
-                  className="flex-1 bg-[#0D121F] border border-white/15 focus:border-[#FACC15] rounded-xl px-3.5 py-2 text-xs text-white placeholder-gray-500 focus:outline-none transition-colors"
+                  className="flex-1 bg-white border border-[#E8E8E8] focus:border-gold rounded-xl px-3.5 py-2 text-xs text-navy placeholder-muted focus:outline-none transition-colors"
                 />
                 <button
                   type="submit"
                   disabled={notifySubmitting}
-                  className="bg-[#FACC15] hover:bg-amber-300 text-[#0A0A0A] font-bold text-xs px-5 py-2 rounded-xl transition-all hover:shadow-[0_0_15px_rgba(250,204,21,0.5)] shrink-0 disabled:opacity-50"
+                  className="btn-primary text-xs py-2 px-5 font-semibold shrink-0 disabled:opacity-50"
                 >
                   {notifySubmitting ? <Loader2 size={14} className="animate-spin" /> : 'Notify Me'}
                 </button>
@@ -656,14 +645,14 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
         </div>
       </div>
 
-      {/* ─── 5. FULLSCREEN VIDEO / LIGHTBOX MODAL ─── */}
+      {/* ─── 5. FULLSCREEN VIDEO / LIGHTBOX MODAL (Minimal Light Theme) ─── */}
       <AnimatePresence>
         {activeModalItem && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/90 backdrop-blur-xl"
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-navy/80 backdrop-blur-md"
             onClick={() => setActiveModalItem(null)}
           >
             <motion.div
@@ -671,20 +660,20 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="relative w-full max-w-4xl bg-[#0B0F19] border border-white/20 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl"
+              className="relative w-full max-w-4xl bg-white border border-[#E8E8E8] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Close Button */}
               <button
                 onClick={() => setActiveModalItem(null)}
-                className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-black/70 hover:bg-[#FACC15] hover:text-black text-white flex items-center justify-center border border-white/20 transition-all duration-200"
+                className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-navy flex items-center justify-center border border-[#E8E8E8] shadow-md transition-all duration-200"
                 aria-label="Close modal"
               >
                 <X size={18} />
               </button>
 
               {/* Video Player Container */}
-              <div className="relative aspect-video bg-black overflow-hidden border-b border-white/10">
+              <div className="relative aspect-video bg-black overflow-hidden border-b border-[#E8E8E8]">
                 <video
                   src={activeModalItem.videoUrl}
                   poster={activeModalItem.image}
@@ -696,35 +685,35 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
               </div>
 
               {/* Modal Body Info */}
-              <div className="p-5 sm:p-7 max-h-[45vh] overflow-y-auto">
+              <div className="p-5 sm:p-7 max-h-[45vh] overflow-y-auto bg-white">
                 {/* Badges & Meta */}
                 <div className="flex flex-wrap items-center gap-2 mb-3">
-                  <span className="bg-[#FACC15] text-[#0A0A0A] px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase font-mono">
+                  <span className="bg-gold/15 text-gold border border-gold/30 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase font-mono">
                     {activeModalItem.badge}
                   </span>
-                  <span className="text-gray-400 text-xs font-mono">
+                  <span className="text-muted text-xs font-mono">
                     {activeModalItem.date} · {activeModalItem.location} · {activeModalItem.attendees}
                   </span>
                 </div>
 
                 {/* Title */}
-                <h3 className="font-orbitron font-black text-lg sm:text-2xl text-white uppercase tracking-wide">
+                <h3 className="font-bold text-lg sm:text-2xl text-navy">
                   {activeModalItem.title}
                 </h3>
-                <p className="text-xs sm:text-sm text-gray-300 mt-2 leading-relaxed">
+                <p className="text-xs sm:text-sm text-muted mt-2 leading-relaxed">
                   {activeModalItem.description}
                 </p>
 
                 {/* Key Takeaways */}
                 {activeModalItem.keyTakeaways && activeModalItem.keyTakeaways.length > 0 && (
-                  <div className="mt-5 pt-4 border-t border-white/10">
-                    <span className="text-[11px] font-mono font-bold text-[#FACC15] uppercase tracking-wider block mb-2.5">
+                  <div className="mt-5 pt-4 border-t border-[#E8E8E8]">
+                    <span className="text-[11px] font-mono font-bold text-gold uppercase tracking-wider block mb-2.5">
                       Session Key Takeaways & Diligence Assets
                     </span>
                     <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {activeModalItem.keyTakeaways.map((point, idx) => (
-                        <li key={idx} className="flex items-start gap-2 text-xs text-gray-300">
-                          <Check size={14} className="text-[#FACC15] shrink-0 mt-0.5" />
+                        <li key={idx} className="flex items-start gap-2 text-xs text-navy/80">
+                          <Check size={14} className="text-gold shrink-0 mt-0.5" />
                           <span>{point}</span>
                         </li>
                       ))}
@@ -733,12 +722,12 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
                 )}
 
                 {/* Modal Footer Actions */}
-                <div className="mt-6 pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
+                <div className="mt-6 pt-4 border-t border-[#E8E8E8] flex flex-wrap items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
                     {activeModalItem.slug && (
                       <Link
                         to={`/w/${activeModalItem.slug}`}
-                        className="bg-[#FACC15] hover:bg-amber-300 text-black font-bold text-xs px-4 py-2 rounded-xl transition-all flex items-center gap-1.5"
+                        className="btn-primary text-xs py-2 px-4 font-semibold flex items-center gap-1.5"
                       >
                         <span>View Workshop Materials</span>
                         <ExternalLink size={13} />
@@ -750,14 +739,14 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
                         setCopiedId(activeModalItem.id);
                         setTimeout(() => setCopiedId(null), 2500);
                       }}
-                      className="bg-white/10 hover:bg-white/20 text-white font-medium text-xs px-3.5 py-2 rounded-xl transition-colors flex items-center gap-1.5"
+                      className="bg-[#FAF9F6] hover:bg-cream border border-[#E8E8E8] hover:border-gold text-navy font-medium text-xs px-3.5 py-2 rounded-xl transition-colors flex items-center gap-1.5"
                     >
                       <Share2 size={13} />
                       <span>{copiedId === activeModalItem.id ? 'Link Copied!' : 'Share Highlight'}</span>
                     </button>
                   </div>
 
-                  <span className="text-[11px] font-mono text-gray-500">
+                  <span className="text-[11px] font-mono text-muted">
                     Resolution: 4K UHD Replay
                   </span>
                 </div>

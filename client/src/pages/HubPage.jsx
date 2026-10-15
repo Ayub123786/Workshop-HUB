@@ -31,7 +31,6 @@ import WorkshopCalendar from '../components/calendar/WorkshopCalendar';
 import FeaturedBanner from '../components/workshop/FeaturedBanner';
 import NextSessionStrip from '../components/workshop/NextSessionStrip';
 import QuickViewDrawer from '../components/workshop/QuickViewDrawer';
-import HeroVideoPlayer from '../components/home/HeroVideoPlayer';
 import PastEventsCoverflow from '../components/home/PastEventsCoverflow';
 import FirmsTrustSection from '../components/sections/FirmsTrustSection';
 import PlatformFaqSection from '../components/sections/PlatformFaqSection';
@@ -279,28 +278,7 @@ export default function HubPage() {
               >
                 Explore Master Classes ↓
               </a>
-              <a
-                href="#video-showcase"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[#E8E8E8] bg-cream/70 text-navy hover:bg-cream hover:border-gold transition-all text-xs sm:text-sm font-semibold shadow-2xs"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('video-showcase')?.scrollIntoView({ behavior: 'smooth' });
-                }}
-              >
-                <Play size={13} className="text-gold fill-current" />
-                <span>Watch Overview (1:45)</span>
-              </a>
             </div>
-          </FadeUp>
-
-          {/* DEDICATED EXECUTIVE VIDEO SPACE */}
-          <FadeUp delay={0.22}>
-            <HeroVideoPlayer
-              videoUrl={settings?.heroVideoUrl}
-              title={nextWorkshop?.title ? `${nextWorkshop.title} · Live Lab Demo` : 'PE Deal Flow Automation Master Class Walkthrough'}
-              subtitle="Watch Ayub build the end-to-end Due Diligence AI Agent stack in 90 minutes"
-              duration="01:45"
-            />
           </FadeUp>
 
           {/* Live Stats Row: Database computed counters */}
