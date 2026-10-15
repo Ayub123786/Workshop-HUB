@@ -1,8 +1,21 @@
 import axios from 'axios';
 
+// Normalize API Base URL (handle trailing slashes and missing /api path)
+const resolveBaseUrl = () => {
+  const envUrl = import.meta.env.VITE_API_URL;
+  if (!envUrl) return '/api';
+
+  const clean = envUrl.trim().replace(/\/+$/, '');
+  // If user passed root URL like https://myapp.onrender.com without /api, append /api
+  if (!clean.endsWith('/api')) {
+    return `${clean}/api`;
+  }
+  return clean;
+};
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
-  timeout: 30000,
+  baseURL: resolveBaseUrl(),
+  timeout: 60000, // 60s timeout to gracefully handle Render free-tier cold starts
   headers: { 'Content-Type': 'application/json' },
 });
 
@@ -21,7 +34,7 @@ api.interceptors.response.use(
       localStorage.removeItem('wh_token');
       localStorage.removeItem('wh_user');
       // Only redirect if we're on an admin page
-      if (window.location.pathname.startsWith('/admin')) {
+      if (window.location.pathname.startsWith('/admin') && !window.location.pathname.includes('/login')) {
         window.location.href = '/admin/login';
       }
     }

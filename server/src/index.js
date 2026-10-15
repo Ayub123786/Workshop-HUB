@@ -28,12 +28,42 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' },
 }));
 
-app.use(cors({
-  origin: [process.env.CLIENT_URL || 'http://localhost:5173', 'http://localhost:3000'],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-}));
+const configuredClients = (process.env.CLIENT_URL || 'http://localhost:5173')
+  .split(',')
+  .map((u) => u.trim().replace(/\/+$/, ''))
+  .filter(Boolean);
+
+const isOriginAllowed = (origin) => {
+  if (!origin) return true; // server-to-server, curl, cron, postman
+  const cleanOrigin = origin.replace(/\/+$/, '');
+  if (configuredClients.includes(cleanOrigin) || configuredClients.includes('*')) {
+    return true;
+  }
+  // Allow localhost
+  if (cleanOrigin.includes('localhost') || cleanOrigin.includes('127.0.0.1')) {
+    return true;
+  }
+  // Automatically allow any Vercel production or preview deployment (*.vercel.app)
+  if (cleanOrigin.endsWith('.vercel.app')) {
+    return true;
+  }
+  return false;
+};
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (isOriginAllowed(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Origin ${origin} not allowed by CORS`));
+      }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  })
+);
 
 // Global rate limit
 const globalLimiter = rateLimit({

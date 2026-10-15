@@ -1,0 +1,13 @@
+{
+  "name": "workshop-hub-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Executive Workshop Hub Platform (Client + Server)",
+  "scripts": {
+    "build": "cd client && npm install && npm run build",
+    "client:dev": "cd client && npm run dev",
+    "client:build": "cd client && npm run build",
+    "server:dev": "cd server && npm run dev",
+    "server:start": "cd server && npm start"
+  }
+}

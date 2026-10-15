@@ -1,11 +1,55 @@
+# Dependencies
 node_modules/
 */node_modules/
+
+# Environment variable files (NEVER commit secrets to GitHub)
 .env
-*/.env
+.env.*
+*.env
+!.env.example
+!client/.env.example
+!server/.env.example
+
+# Local development files
 *.local
+
+# Build outputs
 dist/
 */dist/
+dist-ssr/
+*/dist-ssr/
+build/
+*/build/
+
+# Deployment provider cache
+.vercel
+.render
+
+# Logs
 logs/
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# System & OS files
 .DS_Store
-.vscode/
+Thumbs.db
+ehthumbs.db
+
+# IDE & Editors
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Temporary test / cache files
+.cache/
+coverage/
+*.tsbuildinfo
