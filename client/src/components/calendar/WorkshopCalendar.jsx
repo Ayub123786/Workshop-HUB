@@ -66,6 +66,27 @@ export default function WorkshopCalendar({ workshops = [], onQuickView }) {
   const [copiedFeed, setCopiedFeed] = useState(false);
   const [showSubscribeModal, setShowSubscribeModal] = useState(false);
 
+  // When workshops load or change, ensure currentDate focuses on the month of the first upcoming workshop
+  useEffect(() => {
+    if (workshops.length > 0) {
+      const firstUpcoming = workshops.find((w) => w.startDate && new Date(w.startDate) >= new Date());
+      if (firstUpcoming) {
+        setCurrentDate(new Date(firstUpcoming.startDate));
+      } else if (workshops[0]?.startDate) {
+        setCurrentDate(new Date(workshops[0].startDate));
+      }
+    }
+  }, [workshops]);
+
+  // Dynamically compute available categories from workshops
+  const availableCategories = useMemo(() => {
+    const set = new Set();
+    workshops.forEach((w) => {
+      if (w.category) set.add(w.category);
+    });
+    return ['All', ...Array.from(set)];
+  }, [workshops]);
+
   // Handle timezone change
   const handleTimezoneChange = (e) => {
     const tz = e.target.value;
@@ -207,7 +228,7 @@ export default function WorkshopCalendar({ workshops = [], onQuickView }) {
         <span className="text-[11px] font-bold text-muted uppercase tracking-wider mr-1 shrink-0">
           Filter:
         </span>
-        {['All', 'Private Equity', 'Venture Capital', 'Family Office', 'AI & FinTech'].map((cat) => {
+        {availableCategories.map((cat) => {
           const isSelected = selectedCategory === cat;
           const style = getCatStyle(cat);
           return (
@@ -288,7 +309,15 @@ export default function WorkshopCalendar({ workshops = [], onQuickView }) {
                         return (
                           <div
                             key={w._id || w.id}
-                            className={`hidden sm:flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] truncate border ${style.pill}`}
+                            onClick={(e) => {
+                              if (onQuickView) {
+                                e.stopPropagation();
+                                onQuickView(w);
+                              }
+                            }}
+                            className={`hidden sm:flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] truncate border ${style.pill} ${
+                              onQuickView ? 'hover:opacity-80 cursor-pointer' : ''
+                            }`}
                             title={w.title}
                           >
                             <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${style.dot}`} />
@@ -358,6 +387,14 @@ export default function WorkshopCalendar({ workshops = [], onQuickView }) {
                     </div>
 
                     <div className="flex items-center gap-2 shrink-0">
+                      {onQuickView && (
+                        <button
+                          onClick={() => onQuickView(w)}
+                          className="px-2.5 py-1.5 rounded-lg border border-[#E8E8E8] text-xs font-semibold text-navy hover:bg-cream transition-colors"
+                        >
+                          Quick View
+                        </button>
+                      )}
                       <AddToCalendarMenu workshop={w} />
                       <Link
                         to={`/w/${w.slug}`}
@@ -443,6 +480,14 @@ export default function WorkshopCalendar({ workshops = [], onQuickView }) {
                           </div>
 
                           <div className="flex items-center gap-2 pt-1">
+                            {onQuickView && (
+                              <button
+                                onClick={() => onQuickView(w)}
+                                className="px-2.5 py-1.5 rounded-lg border border-[#E8E8E8] text-xs font-semibold text-navy hover:bg-cream transition-colors"
+                              >
+                                Quick View
+                              </button>
+                            )}
                             <Link
                               to={`/w/${w.slug}`}
                               className="flex-1 btn-primary text-xs py-1.5 px-3 text-center justify-center font-semibold"

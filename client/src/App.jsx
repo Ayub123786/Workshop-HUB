@@ -141,6 +141,9 @@ export default function App() {
               <Route element={<PublicLayout />}>
                 <Route path="/" element={<HubPage />} />
                 <Route path="/workshops" element={<WorkshopsPage />} />
+                <Route path="/calendar" element={<Navigate to="/workshops?view=calendar" replace />} />
+                <Route path="/upcoming" element={<Navigate to="/workshops?status=upcoming" replace />} />
+                <Route path="/past" element={<Navigate to="/workshops?status=completed" replace />} />
                 <Route path="/w/:slug" element={<WorkshopDetailPage />} />
                 <Route path="*" element={<NotFoundPage />} />
               </Route>
