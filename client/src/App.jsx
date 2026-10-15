@@ -15,7 +15,6 @@ import Footer from './components/layout/Footer';
 import AnnouncementBar from './components/layout/AnnouncementBar';
 import CommandPalette from './components/search/CommandPalette';
 import AdminLayout from './components/admin/AdminLayout';
-import CustomCursor from './components/animations/CustomCursor';
 import { pageTransitionVariants } from './lib/motion';
 
 // Public Pages
@@ -117,7 +116,6 @@ function PublicLayout() {
   return (
     <SmoothScrollManager>
       <div className="flex flex-col min-h-screen bg-white relative">
-        <CustomCursor />
         <div className="noise-overlay" aria-hidden="true" />
         <AnnouncementBar />
         <Navbar onOpenSearch={() => setIsSearchOpen(true)} />
