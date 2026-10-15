@@ -90,3 +90,8 @@
   - **Executive Analytics Dashboard**: Enhanced `AdminDashboardPage.jsx` with real-time capacity fill rate progress indicator, visitor-to-enrollment conversion rate (23.4%), capacity utilization breakdown by workshop, and multi-channel traffic source attribution (Direct & Alumni, LinkedIn, Institutional Briefings, Organic Search).
   - **Test Data Seeding & Database Cleanup**: Seeded 6 published master classes covering all status badges (`upcoming`, `live`, `sold-out`, `few-spots`, `completed`) with working images (`/ayub-founder-full.jpg` and verified Unsplash URLs). Populated complete multi-module agendas, speakers, takeaways, prerequisites, and FAQs for multiple workshops. Cleaned up test workshops (`Bhavya Sample` and `sm-s`) by marking them as draft.
 
+- [x] **Part 7: Deployment & Calendar Mode Fix** (COMPLETED)
+  - **Calendar View Mode on /workshops**: Fixed `WorkshopsPage.jsx` which was ignoring `?view=calendar` and only rendering cards in grid mode. Added full 4-way view switcher (`Grid`, `List`, `Calendar`, `Timeline`), wired `WorkshopCalendar` and `WorkshopTimeline`, synchronized month auto-focus to the month of the first upcoming workshop (November 2026), and added `QuickViewDrawer` and dynamic category chips.
+  - **SPA Rewrites & Route Aliases**: Added route aliases for `/calendar`, `/upcoming`, and `/past` in `App.jsx`. Configured clean SPA rewrites in `vercel.json` and `client/vercel.json` to prevent 404s on direct deep links.
+
+
