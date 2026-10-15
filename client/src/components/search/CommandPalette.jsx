@@ -17,24 +17,26 @@ import { getWorkshopStatus, getStatusBadgeConfig } from '../../lib/workshopStatu
 
 export default function CommandPalette({ isOpen, onClose, workshops: initialWorkshops = [] }) {
   const [query, setQuery] = useState('');
-  const [workshops, setWorkshops] = useState(initialWorkshops);
+  const [workshops, setWorkshops] = useState(Array.isArray(initialWorkshops) ? initialWorkshops : []);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef(null);
   const navigate = useNavigate();
 
   // Load workshops if not provided
   useEffect(() => {
-    if (initialWorkshops.length > 0) {
+    if (Array.isArray(initialWorkshops) && initialWorkshops.length > 0) {
       setWorkshops(initialWorkshops);
       return;
     }
     if (isOpen) {
-      api.get('/workshops?status=published')
+      api.get('/workshops?limit=50')
         .then((res) => {
-          const list = res.data?.data || res.data || [];
-          setWorkshops(list);
+          const list = res.data?.workshops || res.data?.data || (Array.isArray(res.data) ? res.data : []);
+          setWorkshops(Array.isArray(list) ? list : []);
         })
-        .catch(() => {});
+        .catch(() => {
+          setWorkshops([]);
+        });
     }
   }, [isOpen, initialWorkshops]);
 
@@ -47,19 +49,21 @@ export default function CommandPalette({ isOpen, onClose, workshops: initialWork
     }
   }, [isOpen]);
 
+  const safeWorkshops = Array.isArray(workshops) ? workshops : [];
+
   // Filtered results
   const filtered = query.trim()
-    ? workshops.filter((w) => {
+    ? safeWorkshops.filter((w) => {
         const q = query.toLowerCase();
         return (
           w.title?.toLowerCase().includes(q) ||
           w.shortDescription?.toLowerCase().includes(q) ||
           w.category?.toLowerCase().includes(q) ||
-          (w.tags && w.tags.some((t) => t.toLowerCase().includes(q))) ||
+          (Array.isArray(w.tags) && w.tags.some((t) => t.toLowerCase().includes(q))) ||
           'ayub due diligence'.includes(q)
         );
       }).slice(0, 8)
-    : workshops.slice(0, 4);
+    : safeWorkshops.slice(0, 4);
 
   // Keyboard navigation
   useEffect(() => {
