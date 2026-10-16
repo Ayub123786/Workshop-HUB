@@ -352,40 +352,32 @@ function SmartVideoPlayer({ url, poster, title }) {
 
 export default function PastEventsCoverflow({ pastWorkshops = [] }) {
   const { settings } = useSettings();
-  // Combine real past workshops with curated demo day highlights
+  // Curated 11 demo day & summit highlights with video previews
   const items = useMemo(() => {
+    // If there are real completed workshops with valid recordings, blend them
+    // while strictly keeping DEFAULT_PAST_EVENTS[0] ("Investors Roundtable & Demo Day") as Slide 01
+    // and maintaining the exact 11 total slide count.
     if (pastWorkshops && pastWorkshops.length > 0) {
-      const realItems = pastWorkshops.map((w, idx) => ({
-        id: w._id || w.id || `real-${idx}`,
-        badge: w.category ? `${w.category.toUpperCase()} MASTERCLASS` : 'COHORT RECORDING',
-        subBadge: 'Live Preview',
-        title: w.title || 'Executive Masterclass',
-        subtitle: w.shortDescription || 'Completed cohort recording & deal model archive',
-        category: w.category || 'Executive Finance',
-        date: w.startDate ? new Date(w.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recent Cohort',
-        duration: w.duration || '90 mins',
-        attendees: `${w.seatsBooked || 120}+ Enrolled`,
-        location: w.location || 'Virtual Executive Studio',
-        image: w.bannerImage || DEFAULT_PAST_EVENTS[idx % DEFAULT_PAST_EVENTS.length].image,
-        videoUrl: w.videoUrl || w.recordingUrl || DEFAULT_PAST_EVENTS[idx % DEFAULT_PAST_EVENTS.length].videoUrl,
-        slug: w.slug,
-        description: w.description || w.shortDescription || 'Archived workshop session with complete course toolkit and replay.',
-        keyTakeaways: (w.learningOutcomes && w.learningOutcomes.length > 0)
-          ? w.learningOutcomes
-          : [
-              'Complete financial models and scenario workbooks',
-              'Recorded Q&A session with industry practitioners',
-              'Comprehensive executive summary and diligence pack'
-            ]
-      }));
-
-      const combined = [...realItems];
-      DEFAULT_PAST_EVENTS.forEach((def) => {
-        if (combined.length < 11 && !combined.some(c => c.title === def.title)) {
-          combined.push(def);
-        }
-      });
-      return combined;
+      const workshopsWithVideo = pastWorkshops.filter((w) => Boolean(w.videoUrl || w.recordingUrl));
+      if (workshopsWithVideo.length > 0) {
+        return DEFAULT_PAST_EVENTS.map((def, idx) => {
+          // Slide 0 is always the flagship Investors Roundtable & Demo Day
+          if (idx === 0) return def;
+          const real = workshopsWithVideo[idx - 1];
+          if (!real) return def;
+          return {
+            ...def,
+            id: real._id || real.id || def.id,
+            title: real.title || def.title,
+            subtitle: real.shortDescription || def.subtitle,
+            category: real.category || def.category,
+            badge: real.category ? `${real.category.toUpperCase()} MASTERCLASS` : def.badge,
+            videoUrl: real.videoUrl || real.recordingUrl || def.videoUrl,
+            image: real.bannerImage || def.image,
+            slug: real.slug || def.slug,
+          };
+        });
+      }
     }
     return DEFAULT_PAST_EVENTS;
   }, [pastWorkshops]);
@@ -440,6 +432,24 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
     } else {
       setCurrentIndex(index);
     }
+  };
+
+  // Touch and pointer swipe handlers
+  const touchStartX = useRef(null);
+  const handleTouchStart = (e) => {
+    if (e.touches && e.touches[0]) {
+      touchStartX.current = e.touches[0].clientX;
+    }
+  };
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null || !e.changedTouches || !e.changedTouches[0]) return;
+    const diff = e.changedTouches[0].clientX - touchStartX.current;
+    if (diff < -45) {
+      goToNext();
+    } else if (diff > 45) {
+      goToPrev();
+    }
+    touchStartX.current = null;
   };
 
   const handleNotifySubmit = async (e) => {
@@ -565,7 +575,11 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
         </div>
 
         {/* ─── 3. 3D COVERFLOW CAROUSEL CONTAINER (Minimal Light Theme) ─── */}
-        <div className="relative mt-10 sm:mt-14 h-[500px] sm:h-[550px] w-full flex items-center justify-center perspective-1200 preserve-3d">
+        <div
+          className="relative mt-10 sm:mt-14 h-[500px] sm:h-[550px] w-full flex items-center justify-center perspective-1200 preserve-3d touch-pan-y"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
           {items.map((item, index) => {
             const total = items.length;
             let offset = index - currentIndex;
@@ -590,13 +604,13 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
               zIndex = 30;
               opacity = 1;
             } else if (Math.abs(offset) === 1) {
-              xOffset = offset * (window.innerWidth < 640 ? 210 : 330);
+              xOffset = offset * (typeof window !== 'undefined' && window.innerWidth < 640 ? 210 : 330);
               rotateY = offset < 0 ? 22 : -22;
               scale = 0.88;
               zIndex = 20;
               opacity = 0.7;
             } else if (Math.abs(offset) === 2) {
-              xOffset = offset * (window.innerWidth < 640 ? 320 : 540);
+              xOffset = offset * (typeof window !== 'undefined' && window.innerWidth < 640 ? 320 : 540);
               rotateY = offset < 0 ? 35 : -35;
               scale = 0.74;
               zIndex = 10;
@@ -607,10 +621,12 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
 
             return (
               <motion.div
-                key={item.id}
-                className="absolute top-0 bottom-0 my-auto cursor-pointer"
+                key={`past-card-${item.id || index}`}
+                className="absolute top-1/2 left-1/2 cursor-pointer select-none"
+                initial={false}
                 animate={{
-                  x: xOffset,
+                  x: `calc(-50% + ${xOffset}px)`,
+                  y: '-50%',
                   rotateY: rotateY,
                   scale: scale,
                   zIndex: zIndex,
@@ -619,38 +635,35 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
                 }}
                 transition={{
                   type: 'spring',
-                  stiffness: 280,
-                  damping: 26,
+                  stiffness: 260,
+                  damping: 24,
                   mass: 0.8,
                 }}
                 style={{
                   transformStyle: 'preserve-3d',
-                }}
-                drag="x"
-                dragConstraints={{ left: 0, right: 0 }}
-                onDragEnd={(e, { offset: dragOffset, velocity }) => {
-                  if (dragOffset.x < -40 || velocity.x < -300) {
-                    goToNext();
-                  } else if (dragOffset.x > 40 || velocity.x > 300) {
-                    goToPrev();
-                  }
+                  width: '380px',
+                  maxWidth: 'calc(100vw - 32px)',
                 }}
                 data-cursor="Play"
                 onClick={() => handleCardClick(index)}
               >
                 {/* Individual Card */}
                 <div
-                  className={`relative w-[280px] sm:w-[340px] md:w-[380px] h-[450px] sm:h-[500px] rounded-2xl overflow-hidden transition-all duration-300 group bg-white ${
+                  className={`relative w-full h-[450px] sm:h-[500px] rounded-2xl overflow-hidden transition-all duration-300 group bg-white ${
                     isActive
                       ? 'border-2 border-gold shadow-[0_16px_48px_rgba(201,162,77,0.22)] scale-[1.01]'
                       : 'border border-[#E8E8E8] hover:border-gold/60 shadow-card'
                   }`}
                 >
-                  {/* Background Image */}
+                  {/* Background Image with guaranteed fallback */}
                   <img
-                    src={item.image}
+                    src={item.image || DEFAULT_PAST_EVENTS[index % DEFAULT_PAST_EVENTS.length].image}
                     alt={item.title}
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = DEFAULT_PAST_EVENTS[index % DEFAULT_PAST_EVENTS.length].image;
+                    }}
                   />
 
                   {/* Gradient Overlays for contrast & legibility */}

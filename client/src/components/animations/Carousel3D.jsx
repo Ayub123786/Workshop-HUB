@@ -20,7 +20,6 @@ const AVATARS = [
 export default function Carousel3D({ testimonials = [], autoRotateInterval = 3500 }) {
   const [step, setStep] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const [progress, setProgress] = useState(0);
   const containerRef = useRef(null);
 
   const total = testimonials.length;
@@ -28,28 +27,19 @@ export default function Carousel3D({ testimonials = [], autoRotateInterval = 350
 
   const nextSlide = useCallback(() => {
     setStep((prev) => prev + 1);
-    setProgress(0);
   }, []);
 
   const prevSlide = useCallback(() => {
     setStep((prev) => prev - 1);
-    setProgress(0);
   }, []);
 
-  // Auto-rotate timer with visual progress fill - moves strictly in one direction (forward)
+  // Auto-rotate timer - moves strictly in one direction (forward) without CPU-heavy interval ticks
   useEffect(() => {
     if (total <= 1 || isPaused || isReducedMotion()) return;
 
-    const stepMs = 50;
     const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          nextSlide();
-          return 0;
-        }
-        return prev + (stepMs / autoRotateInterval) * 100;
-      });
-    }, stepMs);
+      nextSlide();
+    }, autoRotateInterval);
 
     return () => clearInterval(interval);
   }, [total, isPaused, autoRotateInterval, nextSlide]);

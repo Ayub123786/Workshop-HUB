@@ -66,9 +66,29 @@ export default function HubPage() {
   const { settings } = useSettings();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const [workshops, setWorkshops] = useState([]);
-  const [hubStats, setHubStats] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [workshops, setWorkshops] = useState(() => {
+    try {
+      const cached = sessionStorage.getItem('hub_workshops_cache');
+      return cached ? JSON.parse(cached) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [hubStats, setHubStats] = useState(() => {
+    try {
+      const cached = sessionStorage.getItem('hub_stats_cache');
+      return cached ? JSON.parse(cached) : null;
+    } catch {
+      return null;
+    }
+  });
+  const [loading, setLoading] = useState(() => {
+    try {
+      return !sessionStorage.getItem('hub_workshops_cache');
+    } catch {
+      return true;
+    }
+  });
   const [error, setError] = useState('');
 
   // Quick View Drawer state
@@ -122,17 +142,28 @@ export default function HubPage() {
 
   const loadData = async () => {
     try {
-      setLoading(true);
+      if (!sessionStorage.getItem('hub_workshops_cache')) {
+        setLoading(true);
+      }
       const [wRes, sRes] = await Promise.all([
         api.get('/workshops?limit=50'),
         api.get('/workshops/stats/hub').catch(() => null),
       ]);
-      setWorkshops(wRes.data?.workshops || []);
+      const list = wRes.data?.workshops || [];
+      setWorkshops(list);
+      try {
+        sessionStorage.setItem('hub_workshops_cache', JSON.stringify(list));
+      } catch {}
       if (sRes?.data?.stats) {
         setHubStats(sRes.data.stats);
+        try {
+          sessionStorage.setItem('hub_stats_cache', JSON.stringify(sRes.data.stats));
+        } catch {}
       }
     } catch (err) {
-      setError('Unable to load master classes. Please refresh the page.');
+      if (workshops.length === 0) {
+        setError('Unable to load master classes. Please refresh the page.');
+      }
     } finally {
       setLoading(false);
     }
