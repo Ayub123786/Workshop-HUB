@@ -28,7 +28,6 @@ import api from '../lib/api';
 import { useSettings } from '../contexts/SettingsContext';
 
 // Animation Components
-import GoldParticles from '../components/animations/GoldParticles';
 import MagneticButton from '../components/animations/MagneticButton';
 import Reveal from '../components/animations/Reveal';
 import { wordRevealContainer, wordRevealItem } from '../lib/motion';
@@ -290,11 +289,8 @@ export default function HubPage() {
         />
       </Helmet>
 
-      {/* ─── 1. HERO with Gold Particles, Word-by-Word Masked Reveal & Less Text ─── */}
+      {/* ─── 1. HERO with Word-by-Word Masked Reveal & Less Text ─── */}
       <section className="relative bg-white pt-24 pb-14 sm:pt-28 sm:pb-16 border-b border-[#E8E8E8] overflow-hidden">
-        {/* Lightweight 60fps Gold Constellation with Mouse Parallax */}
-        <GoldParticles particleCount={36} />
-
         <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center relative z-10">
           <Reveal delay={0.02}>
             <span className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-[0.18em] uppercase text-navy border border-[#E8E8E8] px-4 py-1.5 rounded-full mb-6 bg-[#FAF9F6] shadow-2xs">
