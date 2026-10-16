@@ -142,7 +142,6 @@ export default function Carousel3D({ testimonials = [], autoRotateInterval = 350
               onClick={() => {
                 if (!isCenter) {
                   setStep((prev) => prev + k);
-                  setProgress(0);
                 }
               }}
               className={`w-[360px] sm:w-[380px] h-[310px] flex flex-col justify-between cursor-grab active:cursor-grabbing rounded-2xl p-6 bg-white border transition-shadow duration-300 ${
@@ -314,7 +313,6 @@ export default function Carousel3D({ testimonials = [], autoRotateInterval = 350
                   const diff = (i - activeIndex + total) % total;
                   if (diff !== 0) {
                     setStep((prev) => prev + diff);
-                    setProgress(0);
                   }
                 }}
                 className="relative h-2 rounded-full overflow-hidden transition-all duration-300 cursor-pointer"
@@ -327,9 +325,14 @@ export default function Carousel3D({ testimonials = [], autoRotateInterval = 350
               >
                 {isActive && (
                   <motion.div
+                    key={step}
+                    initial={{ width: '0%' }}
+                    animate={{ width: isPaused ? '0%' : '100%' }}
+                    transition={{
+                      duration: isPaused ? 0 : autoRotateInterval / 1000,
+                      ease: 'linear',
+                    }}
                     className="absolute inset-0 bg-gold origin-left"
-                    style={{ width: `${progress}%` }}
-                    transition={{ ease: 'linear' }}
                   />
                 )}
               </button>
