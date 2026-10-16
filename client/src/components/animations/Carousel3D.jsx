@@ -74,8 +74,6 @@ export default function Carousel3D({ testimonials = [], autoRotateInterval = 350
   return (
     <div
       ref={containerRef}
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
       className="relative w-full py-6 select-none overflow-hidden"
     >
       {/* ─── Ambient Shifting Gold Radial Glow Behind Active Card ─── */}
@@ -144,6 +142,8 @@ export default function Carousel3D({ testimonials = [], autoRotateInterval = 350
                   setStep((prev) => prev + k);
                 }
               }}
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
               className={`w-[360px] sm:w-[380px] h-[310px] flex flex-col justify-between cursor-grab active:cursor-grabbing rounded-2xl p-6 bg-white border transition-shadow duration-300 ${
                 isCenter
                   ? 'border-gold shadow-[0_16px_40px_rgba(201,162,77,0.18)] ring-1 ring-gold/30'
@@ -245,6 +245,8 @@ export default function Carousel3D({ testimonials = [], autoRotateInterval = 350
                 drag="x"
                 dragConstraints={{ left: 0, right: 0 }}
                 onDragEnd={handleDragEnd}
+                onMouseEnter={() => setIsPaused(true)}
+                onMouseLeave={() => setIsPaused(false)}
                 className="w-full max-w-sm rounded-2xl p-5 bg-white border border-gold shadow-[0_12px_32px_rgba(201,162,77,0.16)] flex flex-col justify-between min-h-[260px]"
               >
                 <div className="flex items-center justify-between mb-3.5">
