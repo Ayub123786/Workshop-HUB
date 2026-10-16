@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { X, Sparkles, ArrowRight } from 'lucide-react';
 import { useSettings } from '../../contexts/SettingsContext';
 
@@ -7,6 +7,7 @@ const DISMISSED_KEY = 'workshophub_announcement_dismissed_v1';
 
 export default function AnnouncementBar({ nextWorkshop }) {
   const { settings } = useSettings();
+  const location = useLocation();
   const [dismissed, setDismissed] = useState(true); // default hidden until checked
 
   useEffect(() => {
@@ -26,6 +27,9 @@ export default function AnnouncementBar({ nextWorkshop }) {
       // ignore
     }
   };
+
+  // Do not show announcement bar when opening any workshop / event page
+  if (location.pathname.startsWith('/w/')) return null;
 
   // If explicitly disabled in settings
   const config = settings?.announcementBar || {};

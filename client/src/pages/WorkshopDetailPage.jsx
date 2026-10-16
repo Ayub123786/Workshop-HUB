@@ -133,7 +133,6 @@ export default function WorkshopDetailPage() {
   const [error, setError] = useState(null);
 
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('overview');
   const [currentTimezone, setCurrentTimezone] = useState(getSavedTimezone);
 
   // Notify rerun state for completed sessions
@@ -198,24 +197,7 @@ export default function WorkshopDetailPage() {
     };
   }, [slug]);
 
-  // Scroll-spy observer for sticky subnav
-  useEffect(() => {
-    const handleScroll = () => {
-      const anchors = ['overview', 'agenda', 'speaker', 'reviews', 'faq'];
-      const scrollY = window.scrollY + 140;
 
-      for (let i = anchors.length - 1; i >= 0; i--) {
-        const el = document.getElementById(anchors[i]);
-        if (el && el.offsetTop <= scrollY) {
-          setActiveSection(anchors[i]);
-          break;
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const handleTimezoneChange = (e) => {
     const tz = e.target.value;
@@ -332,21 +314,7 @@ export default function WorkshopDetailPage() {
     .filter((s) => s.visible !== false)
     .sort((a, b) => (a.order || 0) - (b.order || 0));
 
-  const navAnchors = [
-    { id: 'overview', label: 'Overview' },
-    { id: 'agenda', label: 'Curriculum & Agenda' },
-    { id: 'speaker', label: 'Trainer' },
-    { id: 'reviews', label: 'Testimonials' },
-    { id: 'faq', label: 'FAQ' },
-  ];
 
-  const scrollToAnchor = (id) => {
-    const el = document.getElementById(id);
-    if (el) {
-      const top = el.getBoundingClientRect().top + window.pageYOffset - 120;
-      window.scrollTo({ top, behavior: 'smooth' });
-    }
-  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -362,54 +330,7 @@ export default function WorkshopDetailPage() {
         <script type="application/ld+json">{JSON.stringify(eventSchema)}</script>
       </Helmet>
 
-      {/* ─── Sticky Sub-Navigation with Scroll-Spy Highlighting ─── */}
-      <div className="sticky top-16 z-30 bg-white/95 backdrop-blur-md border-b border-[#E8E8E8] py-2.5 px-4 sm:px-6 shadow-2xs transition-all">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
-          {/* Breadcrumb back */}
-          <Link
-            to="/workshops"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted hover:text-navy transition-colors shrink-0"
-          >
-            <ArrowLeft size={13} />
-            <span className="hidden sm:inline">All Master Classes</span>
-          </Link>
 
-          {/* Anchor Links with Scroll-Spy Gold Underline */}
-          <div className="hidden md:flex items-center gap-1 overflow-x-auto whitespace-nowrap">
-            {navAnchors.map((item) => {
-              const isActive = activeSection === item.id;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToAnchor(item.id)}
-                  className={`text-xs px-3 py-1.5 rounded-lg transition-colors relative ${
-                    isActive
-                      ? 'text-navy font-bold'
-                      : 'text-muted hover:text-navy hover:bg-cream'
-                  }`}
-                >
-                  {item.label}
-                  {isActive && (
-                    <span className="absolute bottom-0 left-3 right-3 h-[2px] bg-gold rounded-full" />
-                  )}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Right Action: Share & CTA */}
-          <div className="flex items-center gap-2">
-            <ShareBar title={workshop.title} url={currentUrl} />
-
-            <button
-              onClick={() => setIsRegisterOpen(true)}
-              className="btn-primary text-xs py-1.5 px-4 font-semibold shrink-0"
-            >
-              {isPast ? 'Get Resources' : isSoldOut ? 'Join Waitlist' : 'Reserve Spot'}
-            </button>
-          </div>
-        </div>
-      </div>
 
       {/* ─── Full-Screen Main Content Flow (Original Mode) ─── */}
       <main className="w-full">

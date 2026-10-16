@@ -32,6 +32,13 @@ export default function Navbar({ onReserveSpot, onOpenSearch }) {
       // Blur trigger
       setScrolled(currentScrollY > 20);
 
+      // On workshop detail pages, keep navbar fixed at top without hiding on scroll
+      if (location.pathname.startsWith('/w/')) {
+        setHidden(false);
+        lastScrollY.current = currentScrollY;
+        return;
+      }
+
       // Hide on scroll down, reveal on scroll up
       if (currentScrollY > 120 && currentScrollY > lastScrollY.current + 8) {
         setHidden(true);
@@ -44,7 +51,7 @@ export default function Navbar({ onReserveSpot, onOpenSearch }) {
 
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  }, [location.pathname]);
 
   // Fetch next upcoming workshop for "Reserve a Spot" button
   useEffect(() => {
@@ -61,9 +68,12 @@ export default function Navbar({ onReserveSpot, onOpenSearch }) {
     loadNextWorkshop();
   }, []);
 
-  // Close mobile menu on route change
+  // Close mobile menu and ensure navbar is visible on route change
   useEffect(() => {
     setMobileOpen(false);
+    if (location.pathname.startsWith('/w/')) {
+      setHidden(false);
+    }
   }, [location.pathname, location.search]);
 
   const navLinks = [
@@ -93,6 +103,11 @@ export default function Navbar({ onReserveSpot, onOpenSearch }) {
       onReserveSpot(nextWorkshop);
       return;
     }
+    // If currently on any workshop page (/w/:slug), trigger register modal on current page!
+    if (location.pathname.startsWith('/w/')) {
+      window.dispatchEvent(new CustomEvent('open-register-modal'));
+      return;
+    }
     if (nextWorkshop) {
       if (location.pathname === `/w/${nextWorkshop.slug}`) {
         window.dispatchEvent(new CustomEvent('open-register-modal', { detail: nextWorkshop }));
@@ -118,9 +133,9 @@ export default function Navbar({ onReserveSpot, onOpenSearch }) {
 
   return (
     <motion.header
-      animate={{ y: hidden ? '-100%' : '0%' }}
+      animate={{ y: hidden && !location.pathname.startsWith('/w/') ? '-100%' : '0%' }}
       transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-      className={`sticky top-0 left-0 right-0 z-40 transition-colors duration-300 ${
+      className={`sticky top-0 left-0 right-0 z-50 transition-colors duration-300 ${
         scrolled
           ? 'bg-white/80 backdrop-blur-[16px] border-b border-[#E8E8E8] shadow-[0_4px_24px_rgba(0,0,0,0.04)]'
           : 'bg-white/95 md:bg-white/70 backdrop-blur-sm border-b border-[#E8E8E8]/60'

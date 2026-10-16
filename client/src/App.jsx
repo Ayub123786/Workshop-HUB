@@ -117,7 +117,7 @@ function PublicLayout() {
     <SmoothScrollManager>
       <div className="flex flex-col min-h-screen bg-white relative">
         <div className="noise-overlay" aria-hidden="true" />
-        <AnnouncementBar />
+        {!location.pathname.startsWith('/w/') && <AnnouncementBar />}
         <Navbar onOpenSearch={() => setIsSearchOpen(true)} />
         <main className="flex-1">
           <AnimatePresence mode="wait">
