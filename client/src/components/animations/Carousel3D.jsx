@@ -18,24 +18,25 @@ const AVATARS = [
  * Features: 3.5s auto-rotation, hover-pause, drag/swipe, progress dots, mobile stacked deck
  */
 export default function Carousel3D({ testimonials = [], autoRotateInterval = 3500 }) {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [step, setStep] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [progress, setProgress] = useState(0);
   const containerRef = useRef(null);
 
   const total = testimonials.length;
+  const activeIndex = ((step % total) + total) % total;
 
   const nextSlide = useCallback(() => {
-    setActiveIndex((prev) => (prev + 1) % total);
+    setStep((prev) => prev + 1);
     setProgress(0);
-  }, [total]);
+  }, []);
 
   const prevSlide = useCallback(() => {
-    setActiveIndex((prev) => (prev - 1 + total) % total);
+    setStep((prev) => prev - 1);
     setProgress(0);
-  }, [total]);
+  }, []);
 
-  // Auto-rotate timer with visual progress fill
+  // Auto-rotate timer with visual progress fill - moves strictly in one direction (forward)
   useEffect(() => {
     if (total <= 1 || isPaused || isReducedMotion()) return;
 
@@ -57,20 +58,12 @@ export default function Carousel3D({ testimonials = [], autoRotateInterval = 350
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (!isPaused) return;
-      if (e.key === 'ArrowRight') nextSlide();
-      if (e.key === 'ArrowLeft') prevSlide();
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide();
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prevSlide();
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isPaused, nextSlide, prevSlide]);
-
-  // Calculate circular relative offset (-2, -1, 0, 1, 2)
-  const getOffset = (index) => {
-    let diff = index - activeIndex;
-    if (diff > total / 2) diff -= total;
-    if (diff < -total / 2) diff += total;
-    return diff;
-  };
 
   // Drag handler for desktop and touch
   const handleDragEnd = (e, { offset, velocity }) => {
@@ -83,6 +76,10 @@ export default function Carousel3D({ testimonials = [], autoRotateInterval = 350
   };
 
   if (!testimonials || testimonials.length === 0) return null;
+
+  // 5 Relative slots for pure unidirectional flow:
+  // -2 (exit left), -1 (left), 0 (center), 1 (right), 2 (entry right)
+  const SLOTS = [-2, -1, 0, 1, 2];
 
   return (
     <div
@@ -99,39 +96,38 @@ export default function Carousel3D({ testimonials = [], autoRotateInterval = 350
         }}
       />
 
-      {/* ─── DESKTOP 3D CYLINDRICAL CAROUSEL (calibrated height & perspective) ─── */}
+      {/* ─── DESKTOP 3D CYLINDRICAL CAROUSEL (Pure Unidirectional Flow) ─── */}
       <div
         className="hidden md:flex relative h-[450px] items-center justify-center"
         style={{ perspective: 1200, transformStyle: 'preserve-3d' }}
       >
-        {testimonials.map((item, idx) => {
-          const offset = getOffset(idx);
-          const isCenter = offset === 0;
+        {SLOTS.map((k) => {
+          const virtualIndex = step + k;
+          const itemIndex = ((virtualIndex % total) + total) % total;
+          const item = testimonials[itemIndex];
+          const isCenter = k === 0;
 
-          // Render only cards within 2 steps from center for 60fps performance
-          if (Math.abs(offset) > 2) return null;
-
-          // Calibrated 3D transforms preventing screen-edge slicing
-          const distance = Math.abs(offset);
+          // Calibrated slot positions - strictly decrementing as step increments (moving left)
+          const distance = Math.abs(k);
           let translateX = 0;
-          if (distance === 1) {
-            translateX = offset * 270;
-          } else if (distance === 2) {
-            translateX = offset * 450;
-          }
+          if (k === -1) translateX = -270;
+          else if (k === 1) translateX = 270;
+          else if (k === -2) translateX = -500;
+          else if (k === 2) translateX = 500;
 
           let translateZ = -distance * 130;
-          let rotateY = -offset * 18;
-          let scale = distance === 0 ? 1 : distance === 1 ? 0.88 : 0.74;
-          let opacity = distance === 0 ? 1 : distance === 1 ? 0.68 : 0.3;
+          let rotateY = -k * 18;
+          let scale = distance === 0 ? 1 : distance === 1 ? 0.88 : 0.72;
+          let opacity = distance === 0 ? 1 : distance === 1 ? 0.68 : 0;
           let blur = distance === 0 ? 0 : distance * 2;
           let zIndex = 30 - distance * 10;
 
-          const avatarUrl = item.avatar || AVATARS[idx % AVATARS.length];
+          const avatarUrl = item.avatar || AVATARS[itemIndex % AVATARS.length];
 
           return (
             <motion.div
-              key={item.id || idx}
+              key={`slot-item-${item.id || itemIndex}-${virtualIndex}`}
+              initial={false}
               animate={{
                 x: translateX,
                 z: translateZ,
@@ -148,12 +144,16 @@ export default function Carousel3D({ testimonials = [], autoRotateInterval = 350
                 position: 'absolute',
                 zIndex: zIndex,
                 transformStyle: 'preserve-3d',
+                pointerEvents: isCenter || distance === 1 ? 'auto' : 'none',
               }}
               drag="x"
               dragConstraints={{ left: 0, right: 0 }}
               onDragEnd={handleDragEnd}
               onClick={() => {
-                if (!isCenter) setActiveIndex(idx);
+                if (!isCenter) {
+                  setStep((prev) => prev + k);
+                  setProgress(0);
+                }
               }}
               className={`w-[360px] sm:w-[380px] h-[310px] flex flex-col justify-between cursor-grab active:cursor-grabbing rounded-2xl p-6 bg-white border transition-shadow duration-300 ${
                 isCenter
@@ -239,7 +239,7 @@ export default function Carousel3D({ testimonials = [], autoRotateInterval = 350
         })}
       </div>
 
-      {/* ─── MOBILE STACKED SWIPE DECK (<768px) ─── */}
+      {/* ─── MOBILE STACKED SWIPE DECK (<768px - Unidirectional) ─── */}
       <div className="md:hidden relative h-[330px] px-4 flex items-center justify-center">
         <AnimatePresence mode="popLayout">
           {testimonials.map((item, idx) => {
@@ -249,9 +249,9 @@ export default function Carousel3D({ testimonials = [], autoRotateInterval = 350
             return (
               <motion.div
                 key={item.id || idx}
-                initial={{ scale: 0.94, opacity: 0, y: 20 }}
-                animate={{ scale: 1, opacity: 1, y: 0 }}
-                exit={{ scale: 0.9, opacity: 0, x: -180, rotate: -8 }}
+                initial={{ scale: 0.94, opacity: 0, x: 180, rotate: 6 }}
+                animate={{ scale: 1, opacity: 1, x: 0, rotate: 0 }}
+                exit={{ scale: 0.9, opacity: 0, x: -180, rotate: -6 }}
                 transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                 drag="x"
                 dragConstraints={{ left: 0, right: 0 }}
@@ -306,7 +306,7 @@ export default function Carousel3D({ testimonials = [], autoRotateInterval = 350
         {/* Left Arrow Button */}
         <button
           onClick={prevSlide}
-          className="w-8 h-8 rounded-full border border-[#E8E8E8] bg-white flex items-center justify-center text-navy hover:border-gold hover:text-gold transition-colors shadow-2xs"
+          className="w-8 h-8 rounded-full border border-[#E8E8E8] bg-white flex items-center justify-center text-navy hover:border-gold hover:text-gold transition-colors shadow-2xs cursor-pointer"
           aria-label="Previous testimonial"
         >
           <ChevronLeft size={16} />
@@ -320,10 +320,14 @@ export default function Carousel3D({ testimonials = [], autoRotateInterval = 350
               <button
                 key={i}
                 onClick={() => {
-                  setActiveIndex(i);
-                  setProgress(0);
+                  // Advance forward in the unified direction to target slide
+                  const diff = (i - activeIndex + total) % total;
+                  if (diff !== 0) {
+                    setStep((prev) => prev + diff);
+                    setProgress(0);
+                  }
                 }}
-                className="relative h-2 rounded-full overflow-hidden transition-all duration-300"
+                className="relative h-2 rounded-full overflow-hidden transition-all duration-300 cursor-pointer"
                 style={{
                   width: isActive ? 28 : 8,
                   backgroundColor: isActive ? '#FAF9F6' : '#E8E8E8',
@@ -346,7 +350,7 @@ export default function Carousel3D({ testimonials = [], autoRotateInterval = 350
         {/* Right Arrow Button */}
         <button
           onClick={nextSlide}
-          className="w-8 h-8 rounded-full border border-[#E8E8E8] bg-white flex items-center justify-center text-navy hover:border-gold hover:text-gold transition-colors shadow-2xs"
+          className="w-8 h-8 rounded-full border border-[#E8E8E8] bg-white flex items-center justify-center text-navy hover:border-gold hover:text-gold transition-colors shadow-2xs cursor-pointer"
           aria-label="Next testimonial"
         >
           <ChevronRight size={16} />

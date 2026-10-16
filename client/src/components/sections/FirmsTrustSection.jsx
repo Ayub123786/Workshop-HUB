@@ -148,7 +148,7 @@ export default function FirmsTrustSection({ settings }) {
           </div>
         </Reveal>
 
-        {/* Two Infinite Marquee Rows Moving in Opposite Directions */}
+        {/* Two Infinite Marquee Rows Moving in One Direction (Left) */}
         <div className="space-y-3 mb-20">
           {/* Row 1: Left */}
           <Marquee direction="left" speed={38}>
@@ -165,8 +165,8 @@ export default function FirmsTrustSection({ settings }) {
             ))}
           </Marquee>
 
-          {/* Row 2: Right */}
-          <Marquee direction="right" speed={42}>
+          {/* Row 2: Left (Unified Direction) */}
+          <Marquee direction="left" speed={44}>
             {row2.map((firm, idx) => (
               <div
                 key={`r2-${idx}`}
