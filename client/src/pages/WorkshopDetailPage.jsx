@@ -42,7 +42,6 @@ import PlatformFaqSection from '../components/sections/PlatformFaqSection';
 // Modals & Calendar
 import RegistrationModal from '../components/workshop/RegistrationModal';
 import AddToCalendarMenu from '../components/calendar/AddToCalendarMenu';
-import WorkshopCard from '../components/workshop/WorkshopCard';
 import { getWorkshopStatus, getStatusBadgeConfig } from '../lib/workshopStatus';
 import {
   TIMEZONE_OPTIONS,
@@ -128,7 +127,6 @@ export default function WorkshopDetailPage() {
   const [workshop, setWorkshop] = useState(null);
   const [sections, setSections] = useState([]);
   const [form, setForm] = useState(null);
-  const [relatedWorkshops, setRelatedWorkshops] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -169,21 +167,14 @@ export default function WorkshopDetailPage() {
     setLoading(true);
     setError(null);
 
-    Promise.all([
-      api.get(`/workshops/${slug}`),
-      api.get('/workshops?limit=6').catch(() => ({ data: { workshops: [] } })),
-    ])
-      .then(([res, relatedRes]) => {
+    api.get(`/workshops/${slug}`)
+      .then((res) => {
         if (!isMounted) return;
         const wData = res.data.workshop;
         setWorkshop(wData);
         if (wData) recordRecentlyViewed(wData);
         setSections(res.data.sections || []);
         setForm(res.data.form || null);
-        const related = (relatedRes.data?.workshops || []).filter(
-          (w) => w.slug !== slug && getWorkshopStatus(w) !== 'completed'
-        );
-        setRelatedWorkshops(related);
         setLoading(false);
       })
       .catch((err) => {
@@ -566,36 +557,6 @@ export default function WorkshopDetailPage() {
           </section>
         )}
 
-        {/* Related Workshops Carousel at the Bottom */}
-        {relatedWorkshops.length > 0 && (
-          <section className="py-20 bg-white border-t border-[#E8E8E8]">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex items-center justify-between mb-8">
-                <div>
-                  <span className="text-[11px] font-bold text-gold uppercase tracking-widest block mb-1 font-mono">
-                    MORE IN THIS SERIES
-                  </span>
-                  <h3 className="text-xl sm:text-2xl font-bold text-navy tracking-tight">
-                    Related Master Classes & Labs
-                  </h3>
-                </div>
-                <Link
-                  to="/workshops"
-                  className="text-xs font-semibold text-navy hover:text-gold transition-colors flex items-center gap-1"
-                >
-                  <span>View all ({relatedWorkshops.length + 1})</span>
-                  <ArrowRight size={13} />
-                </Link>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {relatedWorkshops.slice(0, 3).map((w) => (
-                  <WorkshopCard key={w._id || w.id} workshop={w} />
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
       </main>
 
       {/* ─── Mobile Sticky Bottom CTA Bar ─── */}
