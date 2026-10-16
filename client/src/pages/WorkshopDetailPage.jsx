@@ -40,6 +40,7 @@ import StagesSection from '../components/sections/StagesSection';
 import AudienceSection from '../components/sections/AudienceSection';
 import TrainerSection from '../components/sections/TrainerSection';
 import WorkshopFooter from '../components/sections/WorkshopFooter';
+import PlatformFaqSection from '../components/sections/PlatformFaqSection';
 
 // Modals & Calendar
 import RegistrationModal from '../components/workshop/RegistrationModal';
@@ -749,7 +750,7 @@ export default function WorkshopDetailPage() {
 
             {/* FAQ Section Anchor */}
             <div id="faq" className="scroll-mt-32">
-              <PlatformFaqSection />
+              <PlatformFaqSection faqs={workshop?.faqs?.length > 0 ? workshop.faqs : null} />
             </div>
 
             {/* Completed Workshop State: Resources & Rerun Notification Form */}
