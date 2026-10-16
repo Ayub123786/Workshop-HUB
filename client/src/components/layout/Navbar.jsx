@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, Calendar as CalendarIcon, Sparkles, Search } from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
@@ -9,13 +9,11 @@ import MagneticButton from '../animations/MagneticButton';
 export default function Navbar({ onReserveSpot, onOpenSearch }) {
   const { settings } = useSettings();
   const [scrolled, setScrolled] = useState(false);
-  const [hidden, setHidden] = useState(false);
   const [hoveredLink, setHoveredLink] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [nextWorkshop, setNextWorkshop] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
-  const lastScrollY = useRef(0);
 
   // Scroll progress bar directly bound to navbar bottom edge
   const { scrollYProgress } = useScroll();
@@ -27,31 +25,13 @@ export default function Navbar({ onReserveSpot, onOpenSearch }) {
 
   useEffect(() => {
     const onScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      // Blur trigger
-      setScrolled(currentScrollY > 20);
-
-      // On workshop detail pages, keep navbar fixed at top without hiding on scroll
-      if (location.pathname.startsWith('/w/')) {
-        setHidden(false);
-        lastScrollY.current = currentScrollY;
-        return;
-      }
-
-      // Hide on scroll down, reveal on scroll up
-      if (currentScrollY > 120 && currentScrollY > lastScrollY.current + 8) {
-        setHidden(true);
-      } else if (currentScrollY < lastScrollY.current - 8 || currentScrollY <= 100) {
-        setHidden(false);
-      }
-
-      lastScrollY.current = currentScrollY;
+      // Blur trigger when scrolling past top
+      setScrolled(window.scrollY > 20);
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, [location.pathname]);
+  }, []);
 
   // Fetch next upcoming workshop for "Reserve a Spot" button
   useEffect(() => {
@@ -68,12 +48,9 @@ export default function Navbar({ onReserveSpot, onOpenSearch }) {
     loadNextWorkshop();
   }, []);
 
-  // Close mobile menu and ensure navbar is visible on route change
+  // Close mobile menu on route change
   useEffect(() => {
     setMobileOpen(false);
-    if (location.pathname.startsWith('/w/')) {
-      setHidden(false);
-    }
   }, [location.pathname, location.search]);
 
   const navLinks = [
@@ -133,7 +110,7 @@ export default function Navbar({ onReserveSpot, onOpenSearch }) {
 
   return (
     <motion.header
-      animate={{ y: hidden && !location.pathname.startsWith('/w/') ? '-100%' : '0%' }}
+      animate={{ y: '0%' }}
       transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
       className={`sticky top-0 left-0 right-0 z-50 transition-colors duration-300 ${
         scrolled
