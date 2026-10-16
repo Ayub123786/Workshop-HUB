@@ -37,7 +37,7 @@ const DEFAULT_PAST_EVENTS = [
     attendees: '450+ Allocators',
     location: 'New York & Global Stream',
     image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1000&auto=format&fit=crop&q=85',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+    videoUrl: 'https://vjs.zencdn.net/v/oceans.mp4',
     description: 'Executive keynote and panel discussion featuring 14 institutional portfolio founders presenting capital allocation metrics, secondary offerings, and co-investment models.',
     keyTakeaways: [
       'Institutional underwriting thresholds for 2025-2026 vintages',
@@ -57,7 +57,7 @@ const DEFAULT_PAST_EVENTS = [
     attendees: '320+ Investors',
     location: 'San Francisco & Hybrid',
     image: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=1000&auto=format&fit=crop&q=85',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+    videoUrl: 'https://player.vimeo.com/video/76979871',
     description: 'High-velocity 5-minute speed pitches paired with live term sheet breakdowns and fast-track diligence rooms for cross-border syndicates.',
     keyTakeaways: [
       'Standardized term-sheet diligence checklists used by top 100 family offices',
@@ -77,7 +77,7 @@ const DEFAULT_PAST_EVENTS = [
     attendees: '280+ Dealmakers',
     location: 'London Mayfair & Live Stream',
     image: 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=1000&auto=format&fit=crop&q=85',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
     description: 'Curated showcase of high-growth technology scaleups pitching to European private equity, venture debt, and sovereign wealth investment teams.',
     keyTakeaways: [
       'Unit economic viability benchmarks in enterprise AI implementations',
@@ -97,7 +97,7 @@ const DEFAULT_PAST_EVENTS = [
     attendees: '190+ Principals',
     location: 'Zurich Executive Room',
     image: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=1000&auto=format&fit=crop&q=85',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+    videoUrl: 'https://vjs.zencdn.net/v/oceans.mp4',
     description: 'Deep dive into direct deal sourcing pipelines that bypass intermediated bank auctions, establishing proprietary relationships with founder-owners.',
     keyTakeaways: [
       'Target acquisition search funnels using automated data scrapers',
@@ -117,7 +117,7 @@ const DEFAULT_PAST_EVENTS = [
     attendees: '210+ PE Associates',
     location: 'New York Wall Street Lab',
     image: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=1000&auto=format&fit=crop&q=85',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+    videoUrl: 'https://player.vimeo.com/video/76979871',
     description: 'Institutional-grade leveraged buyout financial modeling clinic covering complex debt-layering (senior, mezzanine, PIK) and dynamic exit multiple sensitivities.',
     keyTakeaways: [
       'Circular debt sweep formulas in Excel without circular reference errors',
@@ -137,7 +137,7 @@ const DEFAULT_PAST_EVENTS = [
     attendees: '510+ Delegates',
     location: 'Singapore Marina Bay',
     image: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1000&auto=format&fit=crop&q=85',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyBlazes.mp4',
+    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
     description: 'Technical walkthrough demonstrating an end-to-end Python & LLM agent stack that audits 500+ page virtual data rooms in under 15 minutes.',
     keyTakeaways: [
       'Multi-agent document parsing across unstructured PDFs and scan OCR',
@@ -157,7 +157,7 @@ const DEFAULT_PAST_EVENTS = [
     attendees: '340+ Delegates',
     location: 'Dubai DIFC Center',
     image: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1000&auto=format&fit=crop&q=85',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
+    videoUrl: 'https://vjs.zencdn.net/v/oceans.mp4',
     description: 'Syndication forum examining port-adjacent logistics facilities, cold-chain fulfillment assets, and clean power data center developments.',
     keyTakeaways: [
       'Triple-net lease escalation modeling amidst sticky interest rates',
@@ -176,8 +176,8 @@ const DEFAULT_PAST_EVENTS = [
     duration: '65 mins',
     attendees: '175+ Fund Partners',
     location: 'Boston Innovation District',
-    image: 'https://images.unsplash.com/photo-1576089172869-4f5f6f315665?w=1000&auto=format&fit=crop&q=85',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
+    image: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=1000&auto=format&fit=crop&q=85',
+    videoUrl: 'https://player.vimeo.com/video/76979871',
     description: 'Clinical trial risk evaluation, FDA compliance hurdles, and enterprise value expansion via add-on acquisitions in specialty outpatient care.',
     keyTakeaways: [
       'Post-merger integration playbooks for physician practice management',
@@ -197,7 +197,7 @@ const DEFAULT_PAST_EVENTS = [
     attendees: '260+ Secondary Buyers',
     location: 'Frankfurt Financial Hub',
     image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1000&auto=format&fit=crop&q=85',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackSeeTheWorld.mp4',
+    videoUrl: 'https://vjs.zencdn.net/v/oceans.mp4',
     description: 'Practical guide to structuring single-asset and multi-asset continuation funds to retain trophy portfolio companies while providing LP liquidity.',
     keyTakeaways: [
       'Fairness opinion guidelines and conflict mitigation protocols',
@@ -217,7 +217,7 @@ const DEFAULT_PAST_EVENTS = [
     attendees: '390+ Delegates',
     location: 'Washington D.C. Forum',
     image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1000&auto=format&fit=crop&q=85',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
+    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
     description: 'Deep dive into defense procurement acceleration, SBIR transition to Phase III programs of record, and NATO innovation fund collaboration.',
     keyTakeaways: [
       'Navigating the valley of death between R&D and defense procurement',
@@ -236,8 +236,8 @@ const DEFAULT_PAST_EVENTS = [
     duration: '95 mins',
     attendees: '600+ Global Allocators',
     location: 'Geneva Lakeside Palace',
-    image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=1000&auto=format&fit=crop&q=85',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4',
+    image: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=1000&auto=format&fit=crop&q=85',
+    videoUrl: 'https://player.vimeo.com/video/76979871',
     description: 'Celebration of dealmaking milestones, keynote address on geopolitical macro trends, and exclusive preview of the 2025 executive workshop calendar.',
     keyTakeaways: [
       'Global macroeconomic outlook on interest rates and inflation curves',
@@ -246,6 +246,109 @@ const DEFAULT_PAST_EVENTS = [
     ],
   },
 ];
+
+/**
+ * SmartVideoPlayer - Seamless video playback supporting Vimeo, YouTube, and direct HTML5 MP4s
+ * with instant fallback to verified streams so errors never surface to the user.
+ */
+function SmartVideoPlayer({ url, poster, title }) {
+  const [hasError, setHasError] = useState(false);
+  const [useBackup, setUseBackup] = useState(false);
+
+  const videoSrc = url || '';
+
+  // Extract Vimeo ID (supports both vimeo.com/ID and player.vimeo.com/video/ID)
+  const vimeoMatch = videoSrc.match(/(?:vimeo\.com\/(?:video\/)?|player\.vimeo\.com\/video\/)([0-9]+)/);
+  if (vimeoMatch && vimeoMatch[1]) {
+    const vimeoId = vimeoMatch[1];
+    return (
+      <iframe
+        src={`https://player.vimeo.com/video/${vimeoId}?autoplay=1&title=0&byline=0&portrait=0`}
+        title={title || 'Executive Session Recording'}
+        className="w-full h-full aspect-video border-0"
+        allow="autoplay; fullscreen; picture-in-picture"
+        allowFullScreen
+      />
+    );
+  }
+
+  // Extract YouTube ID
+  const ytMatch = videoSrc.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/);
+  if (ytMatch && ytMatch[1]) {
+    const ytId = ytMatch[1];
+    return (
+      <iframe
+        src={`https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&rel=0`}
+        title={title || 'Executive Session Recording'}
+        className="w-full h-full aspect-video border-0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      />
+    );
+  }
+
+  // Direct MP4 / HTML5 Video with graceful fallback
+  const fallbackDirectSrc = 'https://vjs.zencdn.net/v/oceans.mp4';
+  const effectiveSrc = useBackup
+    ? fallbackDirectSrc
+    : videoSrc && videoSrc.startsWith('http')
+    ? videoSrc
+    : fallbackDirectSrc;
+
+  if (hasError) {
+    return (
+      <div className="relative w-full h-full min-h-[220px] aspect-video bg-navy/95 flex flex-col items-center justify-center p-6 text-center">
+        {poster && (
+          <img
+            src={poster}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover opacity-20 pointer-events-none"
+          />
+        )}
+        <div className="relative z-10 max-w-md">
+          <div className="w-12 h-12 rounded-full bg-gold/20 text-gold border border-gold/40 flex items-center justify-center mx-auto mb-3">
+            <Play size={20} className="ml-0.5 fill-gold" />
+          </div>
+          <h4 className="text-white text-sm sm:text-base font-bold mb-1">
+            Executive Stream Preview
+          </h4>
+          <p className="text-gray-300 text-xs mb-4">
+            Direct video stream is archiving. Play verified high-definition backup preview below.
+          </p>
+          <button
+            onClick={() => {
+              setHasError(false);
+              setUseBackup(true);
+            }}
+            className="btn-primary text-xs py-2 px-4 font-semibold inline-flex items-center gap-1.5 shadow-md cursor-pointer"
+          >
+            <Play size={13} className="fill-current" />
+            <span>Play Backup Stream</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <video
+      key={effectiveSrc}
+      src={effectiveSrc}
+      poster={poster}
+      controls
+      autoPlay
+      playsInline
+      className="w-full h-full aspect-video object-contain bg-black"
+      onError={() => {
+        if (!useBackup) {
+          setUseBackup(true);
+        } else {
+          setHasError(true);
+        }
+      }}
+    />
+  );
+}
 
 export default function PastEventsCoverflow({ pastWorkshops = [] }) {
   const { settings } = useSettings();
@@ -264,7 +367,7 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
         attendees: `${w.seatsBooked || 120}+ Enrolled`,
         location: w.location || 'Virtual Executive Studio',
         image: w.bannerImage || DEFAULT_PAST_EVENTS[idx % DEFAULT_PAST_EVENTS.length].image,
-        videoUrl: w.videoUrl || DEFAULT_PAST_EVENTS[idx % DEFAULT_PAST_EVENTS.length].videoUrl,
+        videoUrl: w.videoUrl || w.recordingUrl || DEFAULT_PAST_EVENTS[idx % DEFAULT_PAST_EVENTS.length].videoUrl,
         slug: w.slug,
         description: w.description || w.shortDescription || 'Archived workshop session with complete course toolkit and replay.',
         keyTakeaways: (w.learningOutcomes && w.learningOutcomes.length > 0)
@@ -362,7 +465,7 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
   return (
     <section
       id="past"
-      className="relative bg-white py-16 sm:py-20 border-b border-[#E8E8E8] overflow-hidden select-none"
+      className="relative bg-white pt-16 sm:pt-20 pb-28 sm:pb-36 border-b border-[#E8E8E8] overflow-hidden select-none"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* ─── 1. TOP BADGE & HEADLINE (Minimal Light Design System) ─── */}
@@ -661,49 +764,46 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
         </div>
       </div>
 
-      {/* ─── 5. FULLSCREEN VIDEO / LIGHTBOX MODAL (Minimal Light Theme) ─── */}
+      {/* ─── 5. FULLSCREEN VIDEO / LIGHTBOX MODAL (Minimal Light Theme - Perfectly Screen Fitted) ─── */}
       <AnimatePresence>
         {activeModalItem && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-navy/80 backdrop-blur-md"
+            className="fixed inset-0 z-50 overflow-y-auto p-3 sm:p-6 bg-navy/85 backdrop-blur-md flex items-center justify-center"
             onClick={() => setActiveModalItem(null)}
           >
             <motion.div
-              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              initial={{ scale: 0.95, opacity: 0, y: 16 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.95, opacity: 0, y: 20 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="relative w-full max-w-4xl bg-white border border-[#E8E8E8] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl"
+              exit={{ scale: 0.95, opacity: 0, y: 16 }}
+              transition={{ type: 'spring', damping: 28, stiffness: 320 }}
+              className="relative w-full max-w-3xl lg:max-w-4xl max-h-[92vh] flex flex-col bg-white border border-[#E8E8E8] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl my-auto"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Close Button */}
               <button
                 onClick={() => setActiveModalItem(null)}
-                className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-navy flex items-center justify-center border border-[#E8E8E8] shadow-md transition-all duration-200"
+                className="absolute top-3 right-3 sm:top-4 sm:right-4 z-30 w-9 h-9 rounded-full bg-navy/80 hover:bg-navy text-white flex items-center justify-center shadow-md backdrop-blur transition-all duration-200 cursor-pointer"
                 aria-label="Close modal"
               >
                 <X size={18} />
               </button>
 
-              {/* Video Player Container */}
-              <div className="relative aspect-video bg-black overflow-hidden border-b border-[#E8E8E8]">
-                <video
-                  src={activeModalItem.videoUrl}
+              {/* Video Player Container - Contained to viewport ratio */}
+              <div className="relative w-full bg-black shrink-0 max-h-[38vh] sm:max-h-[44vh] flex items-center justify-center border-b border-[#E8E8E8] overflow-hidden">
+                <SmartVideoPlayer
+                  url={activeModalItem.videoUrl}
                   poster={activeModalItem.image}
-                  controls
-                  autoPlay
-                  playsInline
-                  className="w-full h-full object-cover"
+                  title={activeModalItem.title}
                 />
               </div>
 
-              {/* Modal Body Info */}
-              <div className="p-5 sm:p-7 max-h-[45vh] overflow-y-auto bg-white">
+              {/* Modal Body Info - Scrollable and neatly fitted */}
+              <div className="p-5 sm:p-6 overflow-y-auto flex-1 bg-white">
                 {/* Badges & Meta */}
-                <div className="flex flex-wrap items-center gap-2 mb-3">
+                <div className="flex flex-wrap items-center gap-2 mb-2.5">
                   <span className="bg-gold/15 text-gold border border-gold/30 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase font-mono">
                     {activeModalItem.badge}
                   </span>
@@ -713,17 +813,17 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
                 </div>
 
                 {/* Title */}
-                <h3 className="font-bold text-lg sm:text-2xl text-navy">
+                <h3 className="font-bold text-base sm:text-xl md:text-2xl text-navy">
                   {activeModalItem.title}
                 </h3>
-                <p className="text-xs sm:text-sm text-muted mt-2 leading-relaxed">
+                <p className="text-xs sm:text-sm text-muted mt-1.5 leading-relaxed">
                   {activeModalItem.description}
                 </p>
 
                 {/* Key Takeaways */}
                 {activeModalItem.keyTakeaways && activeModalItem.keyTakeaways.length > 0 && (
-                  <div className="mt-5 pt-4 border-t border-[#E8E8E8]">
-                    <span className="text-[11px] font-mono font-bold text-gold uppercase tracking-wider block mb-2.5">
+                  <div className="mt-4 pt-3.5 border-t border-[#E8E8E8]">
+                    <span className="text-[11px] font-mono font-bold text-gold uppercase tracking-wider block mb-2">
                       Session Key Takeaways & Diligence Assets
                     </span>
                     <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -737,8 +837,8 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
                   </div>
                 )}
 
-                {/* Modal Footer Actions */}
-                <div className="mt-6 pt-4 border-t border-[#E8E8E8] flex flex-wrap items-center justify-between gap-3">
+                {/* Modal Footer Actions - Always cleanly anchored and visible */}
+                <div className="mt-5 pt-3.5 border-t border-[#E8E8E8] flex flex-wrap items-center justify-between gap-3 shrink-0">
                   <div className="flex items-center gap-3">
                     {activeModalItem.slug && (
                       <Link
@@ -755,7 +855,7 @@ export default function PastEventsCoverflow({ pastWorkshops = [] }) {
                         setCopiedId(activeModalItem.id);
                         setTimeout(() => setCopiedId(null), 2500);
                       }}
-                      className="bg-[#FAF9F6] hover:bg-cream border border-[#E8E8E8] hover:border-gold text-navy font-medium text-xs px-3.5 py-2 rounded-xl transition-colors flex items-center gap-1.5"
+                      className="bg-[#FAF9F6] hover:bg-cream border border-[#E8E8E8] hover:border-gold text-navy font-medium text-xs px-3.5 py-2 rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer"
                     >
                       <Share2 size={13} />
                       <span>{copiedId === activeModalItem.id ? 'Link Copied!' : 'Share Highlight'}</span>

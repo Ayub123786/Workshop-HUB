@@ -10,12 +10,24 @@ export default function NextSessionStrip({ workshop }) {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Show sticky strip once user scrolls past the hero section (>450px)
-      if (window.scrollY > 450) {
-        setVisible(true);
-      } else {
+      // Check if user is scrolled past hero section (>450px)
+      if (window.scrollY <= 450) {
         setVisible(false);
+        return;
       }
+
+      // Hide sticky strip when user is browsing the Past Events coverflow section
+      // to prevent obscuring the cards
+      const pastEl = document.getElementById('past');
+      if (pastEl) {
+        const rect = pastEl.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 80 && rect.bottom > 140) {
+          setVisible(false);
+          return;
+        }
+      }
+
+      setVisible(true);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });

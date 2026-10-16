@@ -3,14 +3,14 @@ import { motion, AnimatePresence, useSpring } from 'framer-motion';
 import { Star, CheckCircle2, ChevronLeft, ChevronRight, Building2, Quote } from 'lucide-react';
 import { isReducedMotion } from '../../lib/motion';
 
-// High-fidelity executive portraits for testimonials
+// High-fidelity executive portraits for testimonials matching executive profiles
 const AVATARS = [
-  'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300&auto=format&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80', // Mauricio (analyst/associate)
+  'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&auto=format&fit=crop&q=80', // Lucia (investor)
+  'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&auto=format&fit=crop&q=80', // Geoff (family office partner)
+  'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&auto=format&fit=crop&q=80', // Saloni (director)
+  'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300&auto=format&fit=crop&q=80', // Executive lead
+  'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80', // Partner
 ];
 
 /**
@@ -89,7 +89,7 @@ export default function Carousel3D({ testimonials = [], autoRotateInterval = 350
       ref={containerRef}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
-      className="relative w-full py-10 select-none overflow-hidden"
+      className="relative w-full py-6 select-none overflow-hidden"
     >
       {/* ─── Ambient Shifting Gold Radial Glow Behind Active Card ─── */}
       <div
@@ -99,9 +99,9 @@ export default function Carousel3D({ testimonials = [], autoRotateInterval = 350
         }}
       />
 
-      {/* ─── DESKTOP 3D CYLINDRICAL CAROUSEL (hidden on small mobile) ─── */}
+      {/* ─── DESKTOP 3D CYLINDRICAL CAROUSEL (calibrated height & perspective) ─── */}
       <div
-        className="hidden md:flex relative h-[380px] items-center justify-center"
+        className="hidden md:flex relative h-[450px] items-center justify-center"
         style={{ perspective: 1200, transformStyle: 'preserve-3d' }}
       >
         {testimonials.map((item, idx) => {
@@ -111,14 +111,21 @@ export default function Carousel3D({ testimonials = [], autoRotateInterval = 350
           // Render only cards within 2 steps from center for 60fps performance
           if (Math.abs(offset) > 2) return null;
 
-          // Cylindrical 3D transforms
-          let translateX = offset * 320;
-          let translateZ = -Math.abs(offset) * 140;
-          let rotateY = -offset * 25;
-          let scale = 1 - Math.abs(offset) * 0.14;
-          let opacity = 1 - Math.abs(offset) * 0.38;
-          let blur = Math.abs(offset) * 2;
-          let zIndex = 30 - Math.abs(offset) * 10;
+          // Calibrated 3D transforms preventing screen-edge slicing
+          const distance = Math.abs(offset);
+          let translateX = 0;
+          if (distance === 1) {
+            translateX = offset * 270;
+          } else if (distance === 2) {
+            translateX = offset * 450;
+          }
+
+          let translateZ = -distance * 130;
+          let rotateY = -offset * 18;
+          let scale = distance === 0 ? 1 : distance === 1 ? 0.88 : 0.74;
+          let opacity = distance === 0 ? 1 : distance === 1 ? 0.68 : 0.3;
+          let blur = distance === 0 ? 0 : distance * 2;
+          let zIndex = 30 - distance * 10;
 
           const avatarUrl = item.avatar || AVATARS[idx % AVATARS.length];
 
@@ -148,32 +155,31 @@ export default function Carousel3D({ testimonials = [], autoRotateInterval = 350
               onClick={() => {
                 if (!isCenter) setActiveIndex(idx);
               }}
-              className={`w-[360px] cursor-grab active:cursor-grabbing rounded-2xl p-6.5 bg-white border transition-shadow duration-300 ${
+              className={`w-[360px] sm:w-[380px] h-[310px] flex flex-col justify-between cursor-grab active:cursor-grabbing rounded-2xl p-6 bg-white border transition-shadow duration-300 ${
                 isCenter
-                  ? 'border-gold shadow-[0_16px_40px_rgba(201,162,77,0.18)]'
+                  ? 'border-gold shadow-[0_16px_40px_rgba(201,162,77,0.18)] ring-1 ring-gold/30'
                   : 'border-[#E8E8E8] shadow-[0_8px_24px_rgba(0,0,0,0.04)]'
               }`}
             >
               {/* Card Header: Avatar + Executive Info + Verified Badge */}
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="relative">
+              <div className="flex items-center justify-between mb-2 shrink-0">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="relative shrink-0">
                     <img
                       src={avatarUrl}
                       alt={item.name}
-                      className="w-13 h-13 rounded-full object-cover border-2 border-gold/40 shadow-xs"
+                      className="w-12 h-12 rounded-full object-cover shrink-0 border-2 border-gold/40 shadow-xs"
                     />
                     {/* Animated Pulsing Verified Badge */}
-                    <span className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center ring-2 ring-white">
-                      <CheckCircle2 size={11} className="stroke-[2.5]" />
-                      <span className="absolute inset-0 rounded-full bg-emerald-500 animate-ping opacity-40" />
+                    <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center ring-2 ring-white">
+                      <CheckCircle2 size={10} className="stroke-[2.5]" />
                     </span>
                   </div>
 
-                  <div>
-                    <h4 className="font-bold text-navy text-sm tracking-tight">{item.name}</h4>
+                  <div className="min-w-0">
+                    <h4 className="font-bold text-navy text-sm tracking-tight truncate">{item.name}</h4>
                     <div className="flex items-center gap-1.5 mt-0.5">
-                      <span className="text-[11px] font-semibold text-muted truncate max-w-[170px]">
+                      <span className="text-[11px] font-semibold text-muted truncate max-w-[160px]">
                         {item.role || 'Executive Participant'}
                       </span>
                     </div>
@@ -182,37 +188,39 @@ export default function Carousel3D({ testimonials = [], autoRotateInterval = 350
 
                 {/* Firm chip badge */}
                 {item.company && (
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FAF9F6] border border-[#E8E8E8] text-[10px] font-mono font-bold text-navy shrink-0 shadow-2xs">
-                    <Building2 size={10} className="text-gold" />
-                    {item.company}
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FAF9F6] border border-[#E8E8E8] text-[10px] font-mono font-bold text-navy shrink-0 shadow-2xs max-w-[125px] truncate">
+                    <Building2 size={10} className="text-gold shrink-0" />
+                    <span className="truncate">{item.company}</span>
                   </span>
                 )}
               </div>
 
               {/* 5-Star Rating Row */}
-              <div className="flex items-center gap-1 mb-3.5">
+              <div className="flex items-center gap-1 mb-2 shrink-0">
                 {[...Array(item.rating || 5)].map((_, i) => (
                   <Star
                     key={i}
-                    size={13}
-                    className="fill-gold text-gold transition-transform hover:scale-110"
+                    size={12}
+                    className="fill-gold text-gold"
                   />
                 ))}
                 <span className="text-[11px] font-mono font-bold text-gold ml-1">5.0</span>
               </div>
 
-              {/* Graphic One-Line Punchy Quote (Max ~15 words) */}
-              <p className="text-sm font-medium text-navy leading-relaxed line-clamp-3 relative">
-                <Quote size={16} className="inline text-gold/40 mr-1.5 -mt-1" />
-                "{item.quote}"
-              </p>
+              {/* Graphic One-Line Punchy Quote */}
+              <div className="flex-1 flex items-center my-1 overflow-hidden">
+                <p className="text-sm font-medium text-navy leading-relaxed line-clamp-3 relative">
+                  <Quote size={15} className="inline text-gold/40 mr-1.5 -mt-1 shrink-0" />
+                  "{item.quote}"
+                </p>
+              </div>
 
               {/* Bottom Cohort Pill */}
-              <div className="mt-4 pt-3 border-t border-[#F0F0F0] flex items-center justify-between text-[11px] text-muted">
-                <span className="font-mono text-[10px] text-muted/80">
+              <div className="pt-3 border-t border-[#F0F0F0] flex items-center justify-between text-[11px] text-muted shrink-0">
+                <span className="font-mono text-[10px] text-muted/80 truncate">
                   {item.cohort || 'Executive Deal Lab'}
                 </span>
-                <span className="font-semibold text-gold text-[11px]">
+                <span className="font-semibold text-gold text-[11px] shrink-0">
                   Verified Dealmaker
                 </span>
               </div>
@@ -248,14 +256,14 @@ export default function Carousel3D({ testimonials = [], autoRotateInterval = 350
                 drag="x"
                 dragConstraints={{ left: 0, right: 0 }}
                 onDragEnd={handleDragEnd}
-                className="w-full max-w-sm rounded-2xl p-5 bg-white border border-gold shadow-[0_12px_32px_rgba(201,162,77,0.16)]"
+                className="w-full max-w-sm rounded-2xl p-5 bg-white border border-gold shadow-[0_12px_32px_rgba(201,162,77,0.16)] flex flex-col justify-between min-h-[260px]"
               >
                 <div className="flex items-center justify-between mb-3.5">
                   <div className="flex items-center gap-2.5">
                     <img
                       src={avatarUrl}
                       alt={item.name}
-                      className="w-11 h-11 rounded-full object-cover border-2 border-gold/40"
+                      className="w-12 h-12 rounded-full object-cover shrink-0 border-2 border-gold/40"
                     />
                     <div>
                       <h4 className="font-bold text-navy text-xs sm:text-sm">{item.name}</h4>
