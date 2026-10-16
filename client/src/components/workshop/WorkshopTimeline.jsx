@@ -149,7 +149,7 @@ export default function WorkshopTimeline({ workshops = [], onQuickView }) {
                           </Link>
                         ) : (
                           <Link
-                            to={`/w/${w.slug}`}
+                            to={`/w/${w.slug}?reserve=true`}
                             className="btn-primary text-xs py-1.5 px-3 font-semibold flex items-center gap-1"
                           >
                             <span>Reserve</span>

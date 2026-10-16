@@ -76,7 +76,7 @@ export default function NextSessionStrip({ workshop }) {
             <div className="flex items-center gap-2 shrink-0">
               <MagneticButton
                 as={Link}
-                to={`/w/${workshop.slug}`}
+                to={`/w/${workshop.slug}?reserve=true`}
                 className="btn-primary text-xs py-1.5 px-3.5 shadow-2xs font-semibold flex items-center gap-1 rounded-full"
               >
                 <span>Reserve</span>

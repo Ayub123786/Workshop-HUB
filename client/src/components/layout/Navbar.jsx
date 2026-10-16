@@ -93,9 +93,12 @@ export default function Navbar({ onReserveSpot, onOpenSearch }) {
       onReserveSpot(nextWorkshop);
       return;
     }
-    // Dispatch global reserve event for HubPage or detail pages
     if (nextWorkshop) {
-      window.dispatchEvent(new CustomEvent('open-register-modal', { detail: nextWorkshop }));
+      if (location.pathname === `/w/${nextWorkshop.slug}`) {
+        window.dispatchEvent(new CustomEvent('open-register-modal', { detail: nextWorkshop }));
+      } else {
+        navigate(`/w/${nextWorkshop.slug}?reserve=true`);
+      }
     } else {
       navigate('/workshops');
       const el = document.getElementById('workshops') || document.getElementById('explore');

@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useSearchParams, useLocation, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import {
   ArrowLeft,
@@ -16,16 +16,13 @@ import {
   ChevronDown,
   Globe,
   ArrowRight,
-  ExternalLink,
   Check,
   Copy,
   MessageCircle,
   Bookmark,
-  Edit3,
   Video,
 } from 'lucide-react';
 import api from '../lib/api';
-import { useAuth } from '../contexts/AuthContext';
 import { useSettings } from '../contexts/SettingsContext';
 import { useBookmarks } from '../lib/bookmarks';
 import { recordRecentlyViewed } from '../lib/recentlyViewed';
@@ -124,9 +121,9 @@ function ShareBar({ title, url }) {
 
 export default function WorkshopDetailPage() {
   const { slug } = useParams();
+  const [searchParams] = useSearchParams();
+  const location = useLocation();
   const { settings } = useSettings();
-  const { user } = useAuth();
-  const [updatingStatus, setUpdatingStatus] = useState(false);
 
   const [workshop, setWorkshop] = useState(null);
   const [sections, setSections] = useState([]);
@@ -146,19 +143,27 @@ export default function WorkshopDetailPage() {
 
   const { isBookmarked, toggle: toggleBookmark } = useBookmarks();
 
-  const handleQuickStatusChange = async (e) => {
-    const newStatus = e.target.value;
-    if (!workshop?._id) return;
-    setUpdatingStatus(true);
-    try {
-      await api.put(`/workshops/${workshop._id}`, { status: newStatus });
-      setWorkshop((prev) => ({ ...prev, status: newStatus }));
-    } catch {
-      alert('Failed to update workshop status');
-    } finally {
-      setUpdatingStatus(false);
+  // Auto-open registration modal if requested via URL (?reserve=true) or hash (#reserve / #register)
+  useEffect(() => {
+    const shouldReserve =
+      searchParams.get('reserve') === 'true' ||
+      searchParams.get('reserve') === '1' ||
+      location.hash === '#reserve' ||
+      location.hash === '#register';
+
+    if (shouldReserve && workshop && !loading) {
+      setIsRegisterOpen(true);
     }
-  };
+  }, [searchParams, location.hash, workshop, loading]);
+
+  // Global listener for navbar or card trigger events
+  useEffect(() => {
+    const handleOpenModal = () => {
+      setIsRegisterOpen(true);
+    };
+    window.addEventListener('open-register-modal', handleOpenModal);
+    return () => window.removeEventListener('open-register-modal', handleOpenModal);
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -356,75 +361,8 @@ export default function WorkshopDetailPage() {
         <script type="application/ld+json">{JSON.stringify(eventSchema)}</script>
       </Helmet>
 
-      {/* ─── ADMIN FLOATING/TOP CONTROL STRIP (When Admin Logged In) ─── */}
-      {user && (
-        <div className="bg-navy text-white px-4 py-2 text-xs border-b border-navy-soft sticky top-16 z-40 shadow-md">
-          <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-gold animate-pulse" />
-              <span className="font-bold text-white font-mono tracking-wider uppercase text-[11px]">
-                ADMIN EDIT MODE
-              </span>
-              <span className="text-gray-400 text-[11px] hidden sm:inline truncate max-w-xs">
-                ({workshop.title})
-              </span>
-            </div>
-
-            <div className="flex items-center gap-2 flex-wrap">
-              {/* Quick Status Changer */}
-              <div className="flex items-center gap-1.5 bg-white/10 px-2.5 py-1 rounded-lg">
-                <span className="text-[10px] text-gray-300 font-mono">Status:</span>
-                <select
-                  value={workshop.status}
-                  onChange={handleQuickStatusChange}
-                  disabled={updatingStatus}
-                  className="bg-transparent text-white font-bold text-xs focus:outline-none cursor-pointer"
-                >
-                  <option value="draft" className="text-black">Draft</option>
-                  <option value="published" className="text-black">Published</option>
-                  <option value="completed" className="text-black">Completed</option>
-                </select>
-                {updatingStatus && <Loader2 size={10} className="animate-spin text-gold" />}
-              </div>
-
-              <Link
-                to={`/admin/workshops/${workshop._id || workshop.id}/edit`}
-                className="bg-gold hover:bg-gold-light text-navy font-bold text-xs px-3 py-1 rounded-lg flex items-center gap-1.5 transition-all shadow-xs"
-              >
-                <Edit3 size={12} />
-                <span>Edit This Event</span>
-              </Link>
-
-              <Link
-                to={`/admin/workshops/${workshop._id || workshop.id}/edit?tab=curriculum`}
-                className="bg-white/10 hover:bg-white/20 text-white text-xs px-2.5 py-1 rounded-lg transition-colors flex items-center gap-1"
-              >
-                <Clock size={12} />
-                <span>Curriculum & Agenda</span>
-              </Link>
-
-              <Link
-                to={`/admin/workshops/${workshop._id || workshop.id}/form`}
-                className="bg-white/10 hover:bg-white/20 text-white text-xs px-2.5 py-1 rounded-lg transition-colors flex items-center gap-1"
-              >
-                <ExternalLink size={12} />
-                <span>Form Builder</span>
-              </Link>
-
-              <Link
-                to={`/admin/submissions?workshop=${workshop.slug}`}
-                className="bg-white/10 hover:bg-white/20 text-white text-xs px-2.5 py-1 rounded-lg transition-colors flex items-center gap-1"
-              >
-                <Users size={12} />
-                <span>Submissions</span>
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* ─── Sticky Sub-Navigation with Scroll-Spy Highlighting ─── */}
-      <div className={`sticky ${user ? 'top-26 sm:top-24' : 'top-16'} z-30 bg-white/95 backdrop-blur-md border-b border-[#E8E8E8] py-2.5 px-4 sm:px-6 shadow-2xs transition-all`}>
+      <div className="sticky top-16 z-30 bg-white/95 backdrop-blur-md border-b border-[#E8E8E8] py-2.5 px-4 sm:px-6 shadow-2xs transition-all">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
           {/* Breadcrumb back */}
           <Link
@@ -513,24 +451,13 @@ export default function WorkshopDetailPage() {
               {/* Dynamic Curriculum / Agenda Timetable */}
               {workshop.agenda && workshop.agenda.length > 0 && (
                 <div className="mt-8 bg-white border border-[#E8E8E8] rounded-2xl p-6 sm:p-8 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="text-[10px] font-bold text-gold uppercase tracking-widest block mb-1">
-                        TIMETABLE & MODULE BREAKDOWN
-                      </span>
-                      <h3 className="text-lg font-bold text-navy">
-                        Detailed Curriculum Schedule
-                      </h3>
-                    </div>
-                    {user && (
-                      <Link
-                        to={`/admin/workshops/${workshop._id || workshop.id}/edit?tab=curriculum`}
-                        className="text-xs text-navy hover:text-gold flex items-center gap-1 font-semibold bg-[#FAF9F6] border border-[#E8E8E8] px-2.5 py-1 rounded-lg shadow-2xs"
-                      >
-                        <Edit3 size={12} />
-                        <span>Edit Agenda</span>
-                      </Link>
-                    )}
+                  <div>
+                    <span className="text-[10px] font-bold text-gold uppercase tracking-widest block mb-1">
+                      TIMETABLE & MODULE BREAKDOWN
+                    </span>
+                    <h3 className="text-lg font-bold text-navy">
+                      Detailed Curriculum Schedule
+                    </h3>
                   </div>
 
                   <div className="divide-y divide-[#E8E8E8]">
@@ -552,24 +479,13 @@ export default function WorkshopDetailPage() {
               {/* Dynamic Learning Outcomes Checklist */}
               {workshop.learningOutcomes && workshop.learningOutcomes.length > 0 && (
                 <div className="mt-8 bg-[#FAF9F6] border border-[#E8E8E8] rounded-2xl p-6 sm:p-8 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="text-[10px] font-bold text-gold uppercase tracking-widest block mb-1">
-                        WHAT YOU WILL MASTER
-                      </span>
-                      <h3 className="text-lg font-bold text-navy">
-                        Core Learning Outcomes
-                      </h3>
-                    </div>
-                    {user && (
-                      <Link
-                        to={`/admin/workshops/${workshop._id || workshop.id}/edit?tab=curriculum`}
-                        className="text-xs text-navy hover:text-gold flex items-center gap-1 font-semibold bg-white border border-[#E8E8E8] px-2.5 py-1 rounded-lg shadow-2xs"
-                      >
-                        <Edit3 size={12} />
-                        <span>Edit Outcomes</span>
-                      </Link>
-                    )}
+                  <div>
+                    <span className="text-[10px] font-bold text-gold uppercase tracking-widest block mb-1">
+                      WHAT YOU WILL MASTER
+                    </span>
+                    <h3 className="text-lg font-bold text-navy">
+                      Core Learning Outcomes
+                    </h3>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -585,24 +501,13 @@ export default function WorkshopDetailPage() {
 
               {/* Prerequisites & Requirements Block (Fully Editable) */}
               <div className="mt-8 bg-[#FAF9F6] border border-[#E8E8E8] rounded-2xl p-6 sm:p-8">
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <span className="text-[10px] font-bold text-gold uppercase tracking-widest block mb-1">
-                      EXECUTIVE LAB PREREQUISITES
-                    </span>
-                    <h3 className="text-lg font-bold text-navy">
-                      Who Should Attend & Requirements
-                    </h3>
-                  </div>
-                  {user && (
-                    <Link
-                      to={`/admin/workshops/${workshop._id || workshop.id}/edit?tab=curriculum`}
-                      className="text-xs text-navy hover:text-gold flex items-center gap-1 font-semibold bg-white border border-[#E8E8E8] px-2.5 py-1 rounded-lg shadow-2xs"
-                    >
-                      <Edit3 size={12} />
-                      <span>Edit Prerequisites</span>
-                    </Link>
-                  )}
+                <div className="mb-4">
+                  <span className="text-[10px] font-bold text-gold uppercase tracking-widest block mb-1">
+                    EXECUTIVE LAB PREREQUISITES
+                  </span>
+                  <h3 className="text-lg font-bold text-navy">
+                    Who Should Attend & Requirements
+                  </h3>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs text-muted">
@@ -636,24 +541,13 @@ export default function WorkshopDetailPage() {
               {/* Dynamic Speakers / Instructors (If configured on workshop) */}
               {workshop.speakers && workshop.speakers.length > 0 && (
                 <div className="mt-8 bg-white border border-[#E8E8E8] rounded-2xl p-6 sm:p-8 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="text-[10px] font-bold text-gold uppercase tracking-widest block mb-1">
-                        FACULTY & INSTRUCTORS
-                      </span>
-                      <h3 className="text-lg font-bold text-navy">
-                        Featured Instructors
-                      </h3>
-                    </div>
-                    {user && (
-                      <Link
-                        to={`/admin/workshops/${workshop._id || workshop.id}/edit?tab=curriculum`}
-                        className="text-xs text-navy hover:text-gold flex items-center gap-1 font-semibold bg-[#FAF9F6] border border-[#E8E8E8] px-2.5 py-1 rounded-lg shadow-2xs"
-                      >
-                        <Edit3 size={12} />
-                        <span>Edit Faculty</span>
-                      </Link>
-                    )}
+                  <div>
+                    <span className="text-[10px] font-bold text-gold uppercase tracking-widest block mb-1">
+                      FACULTY & INSTRUCTORS
+                    </span>
+                    <h3 className="text-lg font-bold text-navy">
+                      Featured Instructors
+                    </h3>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -684,22 +578,11 @@ export default function WorkshopDetailPage() {
               {/* Session Video / Recording Player for Past Cohorts */}
               {(workshop.videoUrl || workshop.recordingUrl) && (
                 <div className="mt-8 bg-white border border-gold/40 rounded-2xl p-6 sm:p-8 space-y-4 shadow-sm">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="w-2.5 h-2.5 rounded-full bg-gold animate-pulse" />
-                      <span className="text-[10px] font-bold text-gold uppercase tracking-widest font-mono">
-                        {isPast ? 'FULL SESSION RECORDING' : 'EXECUTIVE PREVIEW REEL'}
-                      </span>
-                    </div>
-                    {user && (
-                      <Link
-                        to={`/admin/workshops/${workshop._id || workshop.id}/edit?tab=curriculum`}
-                        className="text-xs text-navy hover:text-gold flex items-center gap-1 font-semibold"
-                      >
-                        <Edit3 size={12} />
-                        <span>Edit Video</span>
-                      </Link>
-                    )}
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-gold animate-pulse" />
+                    <span className="text-[10px] font-bold text-gold uppercase tracking-widest font-mono">
+                      {isPast ? 'FULL SESSION RECORDING' : 'EXECUTIVE PREVIEW REEL'}
+                    </span>
                   </div>
 
                   <h3 className="text-lg font-bold text-navy">

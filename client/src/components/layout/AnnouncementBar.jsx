@@ -38,7 +38,7 @@ export default function AnnouncementBar({ nextWorkshop }) {
       : 'Institutional Due Diligence Masterclasses · Q4 Executive Cohorts Now Open.'
   );
 
-  const targetLink = config.link || (nextWorkshop ? `/w/${nextWorkshop.slug}` : '/workshops');
+  const targetLink = config.link || (nextWorkshop ? `/w/${nextWorkshop.slug}?reserve=true` : '/workshops');
   const badgeText = config.badge || 'NEXT COHORT';
 
   return (

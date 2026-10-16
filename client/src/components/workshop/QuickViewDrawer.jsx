@@ -254,7 +254,7 @@ export default function QuickViewDrawer({ workshop, isOpen, onClose, onReserve }
                   </button>
 
                   <Link
-                    to={`/w/${workshop.slug}`}
+                    to={`/w/${workshop.slug}${isPast ? '' : '?reserve=true'}`}
                     onClick={onClose}
                     className="flex-1 btn-primary text-xs py-2.5 px-3 text-center justify-center font-semibold flex items-center gap-1"
                   >

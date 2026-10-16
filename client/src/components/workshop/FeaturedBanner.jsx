@@ -154,7 +154,7 @@ export default function FeaturedBanner({ workshops = [] }) {
             <div className="pt-4 border-t border-[#E8E8E8] flex items-center gap-3 flex-wrap">
               <MagneticButton
                 as={Link}
-                to={`/w/${current.slug}`}
+                to={`/w/${current.slug}?reserve=true`}
                 className="btn-primary text-xs sm:text-sm py-2.5 px-6 shadow-xs font-semibold flex items-center gap-1.5 rounded-full"
               >
                 <span>Reserve a Spot</span>

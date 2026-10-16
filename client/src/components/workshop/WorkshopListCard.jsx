@@ -158,7 +158,7 @@ export default function WorkshopListCard({ workshop, onQuickView }) {
             </Link>
           ) : (
             <Link
-              to={`/w/${workshop.slug}`}
+              to={`/w/${workshop.slug}?reserve=true`}
               className="btn-primary text-xs py-2 px-4 whitespace-nowrap font-semibold flex items-center gap-1"
             >
               <span>Reserve</span>

@@ -206,7 +206,7 @@ export default function WorkshopCard({ workshop, onQuickView }) {
                   </button>
                 )}
                 <Link
-                  to={`/w/${workshop.slug}`}
+                  to={`/w/${workshop.slug}?reserve=true`}
                   className="flex-1 btn-primary text-xs py-2 px-3 text-center justify-center font-semibold rounded-full group-hover:shadow-xs transition-shadow"
                 >
                   Reserve Spot
