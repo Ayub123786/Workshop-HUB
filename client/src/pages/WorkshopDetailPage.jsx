@@ -278,6 +278,7 @@ export default function WorkshopDetailPage() {
   const badge = getStatusBadgeConfig(status);
   const isPast = status === 'completed';
   const isSoldOut = status === 'sold-out';
+  const ctaLabel = isPast ? 'Get Resources' : isSoldOut ? 'Join Waitlist' : 'Reserve Spot';
 
   const seatsTotal = Number(workshop.seatsTotal ?? 100);
   const seatsBooked = Number(workshop.seatsBooked ?? 0);
@@ -410,414 +411,271 @@ export default function WorkshopDetailPage() {
         </div>
       </div>
 
-      {/* ─── Main Content Container with Desktop Floating Registration Card ─── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-          {/* LEFT COLUMN: Main Dynamic Sections (8 cols) */}
-          <div className="lg:col-span-8 space-y-12 min-w-0">
-            {/* Overview Section */}
-            <div id="overview">
-              {sortedSections.map((section) => {
-                switch (section.type) {
-                  case 'hero':
-                    return (
-                      <HeroSection
-                        key={section._id || 'hero'}
-                        content={section.content}
-                        workshop={workshop}
-                        onRegister={() => setIsRegisterOpen(true)}
-                      />
-                    );
-                  case 'benefits':
-                    return <BenefitsSection key={section._id} content={section.content} />;
-                  case 'logos':
-                    return <LogosSection key={section._id} content={section.content} />;
-                  case 'community':
-                    return <CommunitySection key={section._id} content={section.content} />;
-                  default:
-                    return null;
-                }
-              })}
-            </div>
-
-            {/* Agenda & Curriculum Section Anchor */}
-            <div id="agenda" className="scroll-mt-32">
-              {sortedSections
-                .filter((s) => s.type === 'stages')
-                .map((section) => (
-                  <StagesSection key={section._id} content={section.content} />
-                ))}
-
-              {/* Dynamic Curriculum / Agenda Timetable */}
-              {workshop.agenda && workshop.agenda.length > 0 && (
-                <div className="mt-8 bg-white border border-[#E8E8E8] rounded-2xl p-6 sm:p-8 space-y-4">
-                  <div>
-                    <span className="text-[10px] font-bold text-gold uppercase tracking-widest block mb-1">
-                      TIMETABLE & MODULE BREAKDOWN
-                    </span>
-                    <h3 className="text-lg font-bold text-navy">
-                      Detailed Curriculum Schedule
-                    </h3>
-                  </div>
-
-                  <div className="divide-y divide-[#E8E8E8]">
-                    {workshop.agenda.map((item, idx) => (
-                      <div key={idx} className="py-3.5 first:pt-0 last:pb-0 flex flex-col sm:flex-row sm:items-start gap-3">
-                        <span className="bg-[#FAF9F6] border border-[#E8E8E8] text-navy font-mono text-[11px] font-bold px-2.5 py-1 rounded-lg shrink-0 sm:w-36 text-center">
-                          {item.time || `Module ${idx + 1}`}
-                        </span>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="text-sm font-bold text-navy mb-1">{item.title}</h4>
-                          <p className="text-xs text-muted leading-relaxed">{item.description}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Dynamic Learning Outcomes Checklist */}
-              {workshop.learningOutcomes && workshop.learningOutcomes.length > 0 && (
-                <div className="mt-8 bg-[#FAF9F6] border border-[#E8E8E8] rounded-2xl p-6 sm:p-8 space-y-4">
-                  <div>
-                    <span className="text-[10px] font-bold text-gold uppercase tracking-widest block mb-1">
-                      WHAT YOU WILL MASTER
-                    </span>
-                    <h3 className="text-lg font-bold text-navy">
-                      Core Learning Outcomes
-                    </h3>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {workshop.learningOutcomes.map((outcome, idx) => (
-                      <div key={idx} className="flex items-start gap-2.5 p-3 rounded-xl bg-white border border-[#E8E8E8] text-xs text-navy font-medium shadow-2xs">
-                        <CheckCircle2 size={16} className="text-gold shrink-0 mt-0.5" />
-                        <span>{outcome}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Prerequisites & Requirements Block (Fully Editable) */}
-              <div className="mt-8 bg-[#FAF9F6] border border-[#E8E8E8] rounded-2xl p-6 sm:p-8">
-                <div className="mb-4">
-                  <span className="text-[10px] font-bold text-gold uppercase tracking-widest block mb-1">
-                    EXECUTIVE LAB PREREQUISITES
-                  </span>
-                  <h3 className="text-lg font-bold text-navy">
-                    Who Should Attend & Requirements
-                  </h3>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs text-muted">
-                  <div className="bg-white border border-[#E8E8E8] rounded-xl p-4">
-                    <strong className="text-navy block mb-1">Who It's For</strong>
-                    <span>
-                      {workshop.prerequisites?.whoItsFor ||
-                        workshop.whoItsFor ||
-                        'Private Equity partners, Principals, VC deal sponsors, and senior investment analysts.'}
-                    </span>
-                  </div>
-                  <div className="bg-white border border-[#E8E8E8] rounded-xl p-4">
-                    <strong className="text-navy block mb-1">Technical Level</strong>
-                    <span>
-                      {workshop.prerequisites?.technicalLevel ||
-                        workshop.technicalLevel ||
-                        'No engineering or deep programming background required; focuses on agent stacks & prompt orchestration.'}
-                    </span>
-                  </div>
-                  <div className="bg-white border border-[#E8E8E8] rounded-xl p-4">
-                    <strong className="text-navy block mb-1">Take-Home Deliverables</strong>
-                    <span>
-                      {workshop.prerequisites?.deliverables ||
-                        workshop.deliverables ||
-                        'Production agent architectures, prompt harness blueprints, and permanent session video archives.'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Dynamic Speakers / Instructors (If configured on workshop) */}
-              {workshop.speakers && workshop.speakers.length > 0 && (
-                <div className="mt-8 bg-white border border-[#E8E8E8] rounded-2xl p-6 sm:p-8 space-y-4">
-                  <div>
-                    <span className="text-[10px] font-bold text-gold uppercase tracking-widest block mb-1">
-                      FACULTY & INSTRUCTORS
-                    </span>
-                    <h3 className="text-lg font-bold text-navy">
-                      Featured Instructors
-                    </h3>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {workshop.speakers.map((spk, idx) => (
-                      <div key={idx} className="bg-[#FAF9F6] border border-[#E8E8E8] rounded-xl p-4 flex gap-3.5 items-start">
-                        {spk.photoUrl ? (
-                          <img
-                            src={spk.photoUrl}
-                            alt={spk.name}
-                            className="w-14 h-14 rounded-full object-cover border border-[#E8E8E8] shrink-0"
-                          />
-                        ) : (
-                          <div className="w-14 h-14 rounded-full bg-cream border border-[#E8E8E8] flex items-center justify-center text-gold font-bold shrink-0">
-                            {spk.name?.charAt(0) || 'I'}
-                          </div>
-                        )}
-                        <div className="min-w-0 flex-1">
-                          <h4 className="text-sm font-bold text-navy truncate">{spk.name}</h4>
-                          <p className="text-[11px] font-semibold text-gold truncate">{spk.title}</p>
-                          <p className="text-xs text-muted mt-1 leading-relaxed line-clamp-3">{spk.bio}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Session Video / Recording Player for Past Cohorts */}
-              {(workshop.videoUrl || workshop.recordingUrl) && (
-                <div className="mt-8 bg-white border border-gold/40 rounded-2xl p-6 sm:p-8 space-y-4 shadow-sm">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-gold animate-pulse" />
-                    <span className="text-[10px] font-bold text-gold uppercase tracking-widest font-mono">
-                      {isPast ? 'FULL SESSION RECORDING' : 'EXECUTIVE PREVIEW REEL'}
-                    </span>
-                  </div>
-
-                  <h3 className="text-lg font-bold text-navy">
-                    {isPast ? 'Watch On-Demand Lab Recording' : 'Executive Master Class Walkthrough'}
-                  </h3>
-
-                  <div className="aspect-video bg-black rounded-xl overflow-hidden shadow-inner">
-                    <video
-                      src={workshop.videoUrl || workshop.recordingUrl}
-                      poster={workshop.bannerImage}
-                      controls
-                      playsInline
-                      className="w-full h-full object-cover"
+      {/* ─── Full-Screen Main Content Flow (Original Mode) ─── */}
+      <main className="w-full">
+        {/* Dynamic CMS Sections */}
+        {sortedSections
+          .filter((section) => section.type !== 'footer')
+          .map((section) => {
+            switch (section.type) {
+              case 'hero':
+                return (
+                  <div key={section._id || 'hero'} id="overview" className="scroll-mt-32">
+                    <HeroSection
+                      content={{
+                        ...section.content,
+                        ctaLabel: isSoldOut ? 'Join Waitlist' : isPast ? 'Get Resources' : section.content?.ctaLabel || ctaLabel,
+                      }}
+                      workshop={workshop}
+                      onRegister={() => setIsRegisterOpen(true)}
                     />
                   </div>
-                </div>
-              )}
-            </div>
+                );
 
-            {/* Trainer Section Anchor */}
-            <div id="speaker" className="scroll-mt-32">
-              {sortedSections
-                .filter((s) => s.type === 'trainer')
-                .map((section) => (
-                  <TrainerSection key={section._id} content={section.content} />
-                ))}
-            </div>
+              case 'benefits':
+                return (
+                  <BenefitsSection
+                    key={section._id || 'benefits'}
+                    content={section.content}
+                  />
+                );
 
-            {/* Reviews Section Anchor */}
-            <div id="reviews" className="scroll-mt-32">
-              {sortedSections
-                .filter((s) => s.type === 'testimonials')
-                .map((section) => (
-                  <TestimonialsSection key={section._id} content={section.content} />
-                ))}
-            </div>
+              case 'logos':
+                return (
+                  <LogosSection
+                    key={section._id || 'logos'}
+                    content={section.content}
+                  />
+                );
 
-            {/* Audience Section */}
-            {sortedSections
-              .filter((s) => s.type === 'audience')
-              .map((section) => (
-                <AudienceSection
-                  key={section._id}
-                  content={section.content}
-                  onRegister={() => setIsRegisterOpen(true)}
-                />
-              ))}
+              case 'community':
+                return (
+                  <CommunitySection
+                    key={section._id || 'community'}
+                    content={section.content}
+                  />
+                );
 
-            {/* FAQ Section Anchor */}
-            <div id="faq" className="scroll-mt-32">
-              <PlatformFaqSection faqs={workshop?.faqs?.length > 0 ? workshop.faqs : null} />
-            </div>
-
-            {/* Completed Workshop State: Resources & Rerun Notification Form */}
-            {isPast && (
-              <div className="bg-[#FAF9F6] border border-[#E8E8E8] rounded-2xl p-8 text-center space-y-4">
-                <span className="text-[10px] font-bold text-gold uppercase tracking-widest block">
-                  ARCHIVED MASTER CLASS
-                </span>
-                <h3 className="text-xl font-bold text-navy">
-                  Looking to catch the next run of this session?
-                </h3>
-                <p className="text-xs text-muted max-w-md mx-auto leading-relaxed">
-                  Enter your email below. Our team notifies alumni and verified sponsors as soon as a new cohort date is scheduled.
-                </p>
-
-                {notifySuccess ? (
-                  <div className="bg-emerald-50 border border-emerald-200/80 rounded-xl p-3 text-xs text-emerald-800 font-semibold max-w-sm mx-auto">
-                    ✓ You're on the priority notify list!
+              case 'stages':
+                return (
+                  <div key={section._id || 'stages'} id="agenda" className="scroll-mt-32">
+                    <StagesSection content={section.content} />
                   </div>
-                ) : (
-                  <form onSubmit={handleNotifySubmit} className="max-w-sm mx-auto flex gap-2">
-                    <input
-                      type="email"
-                      value={notifyEmail}
-                      onChange={(e) => setNotifyEmail(e.target.value)}
-                      placeholder="your@firm.com"
-                      required
-                      className="flex-1 px-3 py-2 rounded-xl border border-[#E8E8E8] bg-white text-xs text-navy focus:outline-none focus:border-gold"
-                    />
-                    <button
-                      type="submit"
-                      disabled={notifySubmitting}
-                      className="btn-primary text-xs py-2 px-4 font-semibold shrink-0"
-                    >
-                      {notifySubmitting ? 'Submitting...' : 'Notify Me'}
-                    </button>
-                  </form>
-                )}
-              </div>
-            )}
-          </div>
+                );
 
-          {/* RIGHT COLUMN: Desktop Floating Registration Card (4 cols) */}
-          <div className="hidden lg:block lg:col-span-4 sticky top-28 space-y-4">
-            <div className="bg-white border border-[#E8E8E8] rounded-2xl p-6 shadow-card space-y-5">
-              {/* Badge & Category */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className={`text-[10px] px-2.5 py-0.5 rounded-full ${badge.className}`}>
-                    {badge.label}
-                  </span>
-                  <button
-                    onClick={() => toggleBookmark(workshop.slug)}
-                    className={`w-6 h-6 rounded-full border flex items-center justify-center transition-colors shadow-2xs ${
-                      isBookmarked(workshop.slug)
-                        ? 'bg-gold text-white border-gold'
-                        : 'border-[#E8E8E8] text-muted hover:text-gold bg-[#FAFAFA]'
-                    }`}
-                    title={isBookmarked(workshop.slug) ? 'Remove bookmark' : 'Save to bookmarks'}
-                    aria-label="Save workshop"
-                  >
-                    <Bookmark size={11} className={isBookmarked(workshop.slug) ? 'fill-current' : ''} />
-                  </button>
-                </div>
-                <span className="text-xs font-semibold text-gold font-mono">
-                  {workshop.price && workshop.price > 0 ? `$${workshop.price}` : 'Executive Access (Free)'}
-                </span>
-              </div>
+              case 'trainer':
+                return (
+                  <div key={section._id || 'trainer'} id="speaker" className="scroll-mt-32">
+                    <TrainerSection content={section.content} />
+                  </div>
+                );
 
-              {/* Date & Timezone with Converter Dropdown */}
-              <div className="space-y-2 pt-2 border-t border-[#E8E8E8]">
-                <div className="flex items-start gap-2">
-                  <Calendar size={14} className="text-gold mt-0.5 shrink-0" />
-                  <div className="text-xs">
-                    <strong className="text-navy block leading-snug">{startDateFormatted}</strong>
-                    <div className="flex items-center gap-1 mt-1 text-muted">
-                      <Globe size={11} className="text-gold shrink-0" />
-                      <select
-                        value={currentTimezone}
-                        onChange={handleTimezoneChange}
-                        className="bg-transparent border-none text-[11px] font-medium text-navy cursor-pointer focus:outline-none p-0"
-                      >
-                        {TIMEZONE_OPTIONS.map((opt) => (
-                          <option key={opt.id} value={opt.tz}>
-                            {opt.label}
-                          </option>
-                        ))}
-                      </select>
+              case 'testimonials':
+                return (
+                  <div key={section._id || 'testimonials'} id="reviews" className="scroll-mt-32">
+                    <TestimonialsSection content={section.content} />
+                  </div>
+                );
+
+              case 'audience':
+                return (
+                  <AudienceSection
+                    key={section._id || 'audience'}
+                    content={{
+                      ...section.content,
+                      ctaLabel: isSoldOut ? 'Join Waitlist' : isPast ? 'Get Resources' : section.content?.ctaLabel || ctaLabel,
+                    }}
+                    onRegister={() => setIsRegisterOpen(true)}
+                  />
+                );
+
+              default:
+                return null;
+            }
+          })}
+
+        {/* Dynamic Curriculum / Agenda Timetable (if configured on workshop) */}
+        {workshop.agenda && workshop.agenda.length > 0 && !sortedSections.some((s) => s.type === 'stages') && (
+          <section id="agenda" className="py-20 bg-[#FAF9F6] border-y border-[#E8E8E8] scroll-mt-32">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6">
+              <span className="text-[10px] font-bold text-gold uppercase tracking-widest block mb-2 font-mono">
+                TIMETABLE & MODULE BREAKDOWN
+              </span>
+              <h3 className="text-2xl sm:text-3xl font-bold text-navy mb-8">
+                Detailed Curriculum Schedule
+              </h3>
+              <div className="divide-y divide-[#E8E8E8] bg-white border border-[#E8E8E8] rounded-2xl p-6 sm:p-8 shadow-2xs">
+                {workshop.agenda.map((item, idx) => (
+                  <div key={idx} className="py-4 first:pt-0 last:pb-0 flex flex-col sm:flex-row sm:items-start gap-4">
+                    <span className="bg-[#FAF9F6] border border-[#E8E8E8] text-navy font-mono text-xs font-bold px-3 py-1.5 rounded-lg shrink-0 sm:w-36 text-center">
+                      {item.time || `Module ${idx + 1}`}
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-sm font-bold text-navy mb-1">{item.title}</h4>
+                      <p className="text-xs text-muted leading-relaxed">{item.description}</p>
                     </div>
                   </div>
-                </div>
-
-                {workshop.timezones?.length > 0 && (
-                  <div className="flex items-center gap-1.5 text-[11px] text-muted pl-6">
-                    <Clock size={11} className="text-navy/60 shrink-0" />
-                    <span>{workshop.timezones.map((t) => `${t.city} ${t.time}`).join(' · ')}</span>
-                  </div>
-                )}
+                ))}
               </div>
+            </div>
+          </section>
+        )}
 
-              {/* Seats Progress */}
-              {!isPast && (
-                <div className="pt-2 border-t border-[#E8E8E8]">
-                  <div className="flex items-center justify-between text-xs mb-1.5">
-                    <span className="text-muted flex items-center gap-1">
-                      <Users size={12} className="text-navy/70" />
-                      <span>Capacity</span>
-                    </span>
-                    <span className="font-mono text-xs">
-                      {isSoldOut ? (
-                        <strong className="text-navy">Sold Out</strong>
-                      ) : (
-                        <span>
-                          <strong className="text-navy">{seatsLeft}</strong> spots remaining
-                        </span>
-                      )}
-                    </span>
+        {/* Dynamic Learning Outcomes Checklist */}
+        {workshop.learningOutcomes && workshop.learningOutcomes.length > 0 && (
+          <section className="py-20 bg-white border-b border-[#E8E8E8]">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6">
+              <span className="text-[10px] font-bold text-gold uppercase tracking-widest block mb-2 font-mono">
+                WHAT YOU WILL MASTER
+              </span>
+              <h3 className="text-2xl sm:text-3xl font-bold text-navy mb-8">
+                Core Learning Outcomes
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {workshop.learningOutcomes.map((outcome, idx) => (
+                  <div key={idx} className="flex items-start gap-3 p-4 rounded-xl bg-[#FAF9F6] border border-[#E8E8E8] text-sm text-navy font-medium shadow-2xs">
+                    <CheckCircle2 size={18} className="text-gold shrink-0 mt-0.5" />
+                    <span>{outcome}</span>
                   </div>
-                  <div className="w-full h-2 bg-[#F0F0F0] rounded-full overflow-hidden">
-                    <div
-                      className={`h-full rounded-full ${
-                        isSoldOut ? 'bg-navy' : fillPercentage >= 80 ? 'bg-amber-500' : 'bg-gold'
-                      }`}
-                      style={{ width: `${fillPercentage}%` }}
-                    />
-                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Prerequisites & Requirements */}
+        {workshop.prerequisites && (workshop.prerequisites.whoItsFor || workshop.whoItsFor) && (
+          <section className="py-16 bg-[#FAF9F6] border-b border-[#E8E8E8]">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6">
+              <span className="text-[10px] font-bold text-gold uppercase tracking-widest block mb-2 font-mono">
+                EXECUTIVE LAB PREREQUISITES
+              </span>
+              <h3 className="text-2xl font-bold text-navy mb-6">
+                Who Should Attend & Requirements
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs text-muted">
+                <div className="bg-white border border-[#E8E8E8] rounded-xl p-5 shadow-2xs">
+                  <strong className="text-navy block mb-1 text-sm font-bold">Who It's For</strong>
+                  <span>{workshop.prerequisites?.whoItsFor || workshop.whoItsFor}</span>
                 </div>
-              )}
-
-              {/* Main CTA */}
-              <div className="space-y-2 pt-2">
-                <button
-                  onClick={() => setIsRegisterOpen(true)}
-                  className="w-full btn-primary text-sm py-3 justify-center font-semibold shadow-xs"
-                >
-                  {isPast ? 'Request Recording' : isSoldOut ? 'Join Verified Waitlist' : 'Reserve Your Spot'}
-                </button>
-
-                <div className="flex items-center justify-between pt-1">
-                  <AddToCalendarMenu workshop={workshop} buttonClassName="text-xs text-navy hover:text-gold flex items-center gap-1 font-semibold" />
-                  <span className="text-[11px] text-muted">No credit card required</span>
+                <div className="bg-white border border-[#E8E8E8] rounded-xl p-5 shadow-2xs">
+                  <strong className="text-navy block mb-1 text-sm font-bold">Technical Level</strong>
+                  <span>{workshop.prerequisites?.technicalLevel || workshop.technicalLevel || 'No deep engineering background required.'}</span>
+                </div>
+                <div className="bg-white border border-[#E8E8E8] rounded-xl p-5 shadow-2xs">
+                  <strong className="text-navy block mb-1 text-sm font-bold">Take-Home Deliverables</strong>
+                  <span>{workshop.prerequisites?.deliverables || workshop.deliverables || 'Production agent blueprints & code templates.'}</span>
                 </div>
               </div>
+            </div>
+          </section>
+        )}
 
-              {/* Share Box */}
-              <div className="pt-3 border-t border-[#E8E8E8]">
-                <span className="text-[10px] font-bold text-muted uppercase tracking-wider block mb-2">
-                  Share with Deal Team
+        {/* Video Player for Past Cohorts / Preview Reel */}
+        {(workshop.videoUrl || workshop.recordingUrl) && (
+          <section className="py-20 bg-white border-b border-[#E8E8E8]">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-4">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-gold animate-pulse" />
+                <span className="text-[10px] font-bold text-gold uppercase tracking-widest font-mono">
+                  {isPast ? 'FULL SESSION RECORDING' : 'EXECUTIVE PREVIEW REEL'}
                 </span>
-                <ShareBar title={workshop.title} url={currentUrl} />
+              </div>
+              <h3 className="text-2xl sm:text-3xl font-bold text-navy">
+                {isPast ? 'Watch On-Demand Lab Recording' : 'Executive Master Class Walkthrough'}
+              </h3>
+              <div className="aspect-video bg-black rounded-2xl overflow-hidden shadow-card border border-[#E8E8E8]">
+                <video
+                  src={workshop.videoUrl || workshop.recordingUrl}
+                  poster={workshop.bannerImage}
+                  controls
+                  playsInline
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
-          </div>
-        </div>
+          </section>
+        )}
 
-        {/* ─── Related Workshops Carousel at the Bottom ─── */}
-        {relatedWorkshops.length > 0 && (
-          <div className="mt-20 pt-12 border-t border-[#E8E8E8]">
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <span className="text-[11px] font-bold text-gold uppercase tracking-widest block mb-1">
-                  MORE IN THIS SERIES
-                </span>
-                <h3 className="text-xl sm:text-2xl font-bold text-navy tracking-tight">
-                  Related Master Classes & Labs
-                </h3>
-              </div>
-              <Link
-                to="/workshops"
-                className="text-xs font-semibold text-navy hover:text-gold transition-colors flex items-center gap-1"
-              >
-                <span>View all ({relatedWorkshops.length + 1})</span>
-                <ArrowRight size={13} />
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {relatedWorkshops.slice(0, 3).map((w) => (
-                <WorkshopCard key={w._id || w.id} workshop={w} />
-              ))}
-            </div>
+        {/* Platform FAQ Section */}
+        {!sortedSections.some((s) => s.type === 'faq') && (
+          <div id="faq" className="scroll-mt-32">
+            <PlatformFaqSection faqs={workshop?.faqs?.length > 0 ? workshop.faqs : null} />
           </div>
         )}
-      </div>
+
+        {/* Completed Workshop State: Priority Rerun Notification */}
+        {isPast && (
+          <section className="py-20 bg-[#FAF9F6] border-b border-[#E8E8E8]">
+            <div className="max-w-xl mx-auto px-4 sm:px-6 text-center space-y-4">
+              <span className="text-[10px] font-bold text-gold uppercase tracking-widest block font-mono">
+                ARCHIVED MASTER CLASS
+              </span>
+              <h3 className="text-2xl font-bold text-navy">
+                Looking to catch the next run of this session?
+              </h3>
+              <p className="text-xs text-muted leading-relaxed">
+                Enter your email below. Our team notifies alumni and verified sponsors as soon as a new cohort date is scheduled.
+              </p>
+
+              {notifySuccess ? (
+                <div className="bg-emerald-50 border border-emerald-200/80 rounded-xl p-3 text-xs text-emerald-800 font-semibold max-w-sm mx-auto">
+                  ✓ You're on the priority notify list!
+                </div>
+              ) : (
+                <form onSubmit={handleNotifySubmit} className="max-w-sm mx-auto flex gap-2">
+                  <input
+                    type="email"
+                    value={notifyEmail}
+                    onChange={(e) => setNotifyEmail(e.target.value)}
+                    placeholder="your@firm.com"
+                    required
+                    className="flex-1 px-3 py-2 rounded-xl border border-[#E8E8E8] bg-white text-xs text-navy focus:outline-none focus:border-gold"
+                  />
+                  <button
+                    type="submit"
+                    disabled={notifySubmitting}
+                    className="btn-primary text-xs py-2 px-4 font-semibold shrink-0"
+                  >
+                    {notifySubmitting ? 'Submitting...' : 'Notify Me'}
+                  </button>
+                </form>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* Related Workshops Carousel at the Bottom */}
+        {relatedWorkshops.length > 0 && (
+          <section className="py-20 bg-white border-t border-[#E8E8E8]">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center justify-between mb-8">
+                <div>
+                  <span className="text-[11px] font-bold text-gold uppercase tracking-widest block mb-1 font-mono">
+                    MORE IN THIS SERIES
+                  </span>
+                  <h3 className="text-xl sm:text-2xl font-bold text-navy tracking-tight">
+                    Related Master Classes & Labs
+                  </h3>
+                </div>
+                <Link
+                  to="/workshops"
+                  className="text-xs font-semibold text-navy hover:text-gold transition-colors flex items-center gap-1"
+                >
+                  <span>View all ({relatedWorkshops.length + 1})</span>
+                  <ArrowRight size={13} />
+                </Link>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {relatedWorkshops.slice(0, 3).map((w) => (
+                  <WorkshopCard key={w._id || w.id} workshop={w} />
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+      </main>
 
       {/* ─── Mobile Sticky Bottom CTA Bar ─── */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-[#E8E8E8] p-3 shadow-card-hover flex items-center justify-between gap-3">

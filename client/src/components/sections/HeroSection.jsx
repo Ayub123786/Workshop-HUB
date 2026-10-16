@@ -7,7 +7,7 @@ export default function HeroSection({ content, onRegister, workshop }) {
 
   return (
     <section className="bg-white min-h-[90vh] flex flex-col justify-center py-16">
-      <div className="container">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         {/* Badge */}
         <FadeUp delay={0}>
           <div className="flex justify-center mb-6">
