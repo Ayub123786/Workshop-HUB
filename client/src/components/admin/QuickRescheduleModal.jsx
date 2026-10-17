@@ -72,7 +72,7 @@ export default function QuickRescheduleModal({ isOpen, onClose, workshop, onUpda
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="fixed inset-0 bg-navy/50 backdrop-blur-xs"
+          className="fixed inset-0 bg-black/80 backdrop-blur-md"
         />
 
         {/* Modal Box */}
@@ -80,22 +80,22 @@ export default function QuickRescheduleModal({ isOpen, onClose, workshop, onUpda
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
-          className="relative w-full max-w-md bg-white border border-border rounded-2xl shadow-xl overflow-hidden z-10"
+          className="relative w-full max-w-md bg-[#121218] border border-white/10 rounded-3xl shadow-2xl overflow-hidden z-10 text-white"
         >
           {/* Header */}
-          <div className="p-4 sm:p-5 border-b border-border flex items-center justify-between bg-[#FAFAFA]">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-cream border border-border flex items-center justify-center text-gold">
+          <div className="p-5 border-b border-white/10 flex items-center justify-between bg-[#161622]">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center text-gold shadow-sm">
                 <Calendar size={16} />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-navy">Reschedule Master Class</h3>
-                <p className="text-[11px] text-muted truncate max-w-xs">{workshop.title}</p>
+                <h3 className="text-base font-display uppercase tracking-wider text-white">Reschedule Master Class</h3>
+                <p className="text-[11px] font-mono text-[#8A8A85] truncate max-w-xs">{workshop.title}</p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="p-1 rounded-lg text-muted hover:text-navy hover:bg-cream"
+              className="p-1.5 rounded-full text-[#8A8A85] hover:text-white hover:bg-white/10 transition-colors"
             >
               <X size={16} />
             </button>
@@ -103,48 +103,48 @@ export default function QuickRescheduleModal({ isOpen, onClose, workshop, onUpda
 
           <form onSubmit={handleSave} className="p-5 space-y-4">
             {error && (
-              <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
-                <AlertCircle size={14} className="shrink-0" />
+              <div className="p-3 rounded-xl bg-red-950/40 border border-red-500/30 text-red-300 text-xs flex items-center gap-2">
+                <AlertCircle size={14} className="shrink-0 text-red-400" />
                 <span>{error}</span>
               </div>
             )}
 
             {/* Start Date & Time */}
             <div>
-              <label className="block text-xs font-semibold text-navy mb-1">
+              <label className="block text-[11px] font-mono uppercase tracking-wider text-[#A0A09A] mb-1">
                 Start Date & Time
               </label>
               <input
                 type="datetime-local"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="w-full px-3 py-2 border border-border rounded-xl text-xs text-navy focus:outline-none focus:border-gold bg-[#FAFAFA]"
+                className="w-full px-3.5 py-2.5 border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-gold bg-[#161622]"
               />
             </div>
 
             {/* End Date & Time */}
             <div>
-              <label className="block text-xs font-semibold text-navy mb-1">
+              <label className="block text-[11px] font-mono uppercase tracking-wider text-[#A0A09A] mb-1">
                 End Date & Time
               </label>
               <input
                 type="datetime-local"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="w-full px-3 py-2 border border-border rounded-xl text-xs text-navy focus:outline-none focus:border-gold bg-[#FAFAFA]"
+                className="w-full px-3.5 py-2.5 border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-gold bg-[#161622]"
               />
             </div>
 
             {/* Status & Capacity */}
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-navy mb-1">
+                <label className="block text-[11px] font-mono uppercase tracking-wider text-[#A0A09A] mb-1">
                   Status
                 </label>
                 <select
                   value={status}
                   onChange={(e) => setStatus(e.target.value)}
-                  className="w-full px-3 py-2 border border-border rounded-xl text-xs text-navy focus:outline-none focus:border-gold bg-[#FAFAFA] font-medium"
+                  className="w-full px-3.5 py-2.5 border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-gold bg-[#161622] font-mono uppercase font-medium"
                 >
                   <option value="published">Published</option>
                   <option value="draft">Draft</option>
@@ -153,7 +153,7 @@ export default function QuickRescheduleModal({ isOpen, onClose, workshop, onUpda
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-navy mb-1">
+                <label className="block text-[11px] font-mono uppercase tracking-wider text-[#A0A09A] mb-1">
                   Total Capacity
                 </label>
                 <input
@@ -161,24 +161,24 @@ export default function QuickRescheduleModal({ isOpen, onClose, workshop, onUpda
                   min="1"
                   value={seatsTotal}
                   onChange={(e) => setSeatsTotal(e.target.value)}
-                  className="w-full px-3 py-2 border border-border rounded-xl text-xs text-navy focus:outline-none focus:border-gold bg-[#FAFAFA]"
+                  className="w-full px-3.5 py-2.5 border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-gold bg-[#161622]"
                 />
               </div>
             </div>
 
             {/* Actions */}
-            <div className="pt-2 flex items-center justify-end gap-2 border-t border-border">
+            <div className="pt-3 flex items-center justify-end gap-2.5 border-t border-white/10">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 rounded-xl border border-border text-xs text-muted hover:text-navy"
+                className="px-4 py-2 rounded-xl border border-white/10 text-xs font-mono uppercase tracking-wider text-[#8A8A85] hover:text-white hover:border-white/20 transition-colors"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={saving}
-                className="btn-primary text-xs py-2 px-5 flex items-center gap-1.5 font-semibold"
+                className="btn-primary text-xs py-2 px-5 flex items-center gap-1.5 font-mono uppercase tracking-wider font-bold shadow-md shadow-gold/20"
               >
                 {saving ? <Loader2 size={13} className="animate-spin" /> : <Check size={13} />}
                 <span>{saving ? 'Updating...' : 'Update Schedule'}</span>

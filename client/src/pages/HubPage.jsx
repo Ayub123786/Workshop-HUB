@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import {
   Search,
@@ -9,48 +9,34 @@ import {
   Calendar as CalendarIcon,
   GitCommit,
   X,
-  Filter,
-  CheckCircle2,
-  Mail,
-  Loader2,
   Sparkles,
-  ArrowRight,
   Bookmark,
-  History,
-  Play,
-  BookOpen,
-  Globe,
-  TrendingUp,
-  Users,
+  Orbit,
+  ArrowRight,
 } from 'lucide-react';
-import CountUp from 'react-countup';
 import api from '../lib/api';
 import { useSettings } from '../contexts/SettingsContext';
+import { getWorkshopStatus } from '../lib/workshopStatus';
+import { useBookmarks } from '../lib/bookmarks';
 
-// Animation Components
-import MagneticButton from '../components/animations/MagneticButton';
-import Reveal from '../components/animations/Reveal';
-import { wordRevealContainer, wordRevealItem } from '../lib/motion';
-import { motion } from 'framer-motion';
-
-// Components
+// High-Energy Gen Z Sections
+import HeroGenZ from '../components/home/HeroGenZ';
+import FeaturedBanner from '../components/workshop/FeaturedBanner';
+import NextSessionStrip from '../components/workshop/NextSessionStrip';
+import WorkshopOrbitView from '../components/workshop/WorkshopOrbitView';
 import WorkshopCard from '../components/workshop/WorkshopCard';
 import WorkshopListCard from '../components/workshop/WorkshopListCard';
 import WorkshopTimeline from '../components/workshop/WorkshopTimeline';
 import WorkshopCalendar from '../components/calendar/WorkshopCalendar';
-import FeaturedBanner from '../components/workshop/FeaturedBanner';
-import NextSessionStrip from '../components/workshop/NextSessionStrip';
-import QuickViewDrawer from '../components/workshop/QuickViewDrawer';
-import PastEventsCoverflow from '../components/home/PastEventsCoverflow';
+import VerifiedAttendeesCarousel from '../components/home/VerifiedAttendeesCarousel';
 import FirmsTrustSection from '../components/sections/FirmsTrustSection';
+import PastEventsCoverflow from '../components/home/PastEventsCoverflow';
 import PlatformFaqSection from '../components/sections/PlatformFaqSection';
-import NewsletterSection from '../components/sections/NewsletterSection';
-import { WorkshopCardSkeleton, WorkshopListSkeleton } from '../components/workshop/WorkshopCardSkeleton';
+import FinalCtaSection from '../components/home/FinalCtaSection';
+import QuickViewDrawer from '../components/workshop/QuickViewDrawer';
 import EmptyState from '../components/workshop/EmptyState';
-import { FadeUp, StaggerContainer, StaggerItem } from '../components/motion/index.jsx';
-import { getWorkshopStatus } from '../lib/workshopStatus';
-import { useBookmarks } from '../lib/bookmarks';
-import { getRecentlyViewed } from '../lib/recentlyViewed';
+import { WorkshopCardSkeleton, WorkshopListSkeleton } from '../components/workshop/WorkshopCardSkeleton';
+import { StaggerContainer, StaggerItem } from '../components/motion/index.jsx';
 
 const CATEGORIES = [
   'All',
@@ -58,67 +44,40 @@ const CATEGORIES = [
   'Venture Capital',
   'Family Office',
   'Investment Banking',
-  'AI & FinTech',
 ];
 
 export default function HubPage() {
-  const { settings } = useSettings();
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const { settings } = useSettings();
 
-  const [workshops, setWorkshops] = useState(() => {
-    try {
-      const cached = sessionStorage.getItem('hub_workshops_cache');
-      return cached ? JSON.parse(cached) : [];
-    } catch {
-      return [];
-    }
-  });
-  const [hubStats, setHubStats] = useState(() => {
-    try {
-      const cached = sessionStorage.getItem('hub_stats_cache');
-      return cached ? JSON.parse(cached) : null;
-    } catch {
-      return null;
-    }
-  });
-  const [loading, setLoading] = useState(() => {
-    try {
-      return !sessionStorage.getItem('hub_workshops_cache');
-    } catch {
-      return true;
-    }
-  });
-  const [error, setError] = useState('');
-
-  // Quick View Drawer state
+  const [workshops, setWorkshops] = useState([]);
+  const [hubStats, setHubStats] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [quickViewWorkshop, setQuickViewWorkshop] = useState(null);
 
-  // Bookmarks & Recently Viewed
-  const { bookmarkedSlugs, count: bookmarkedCount } = useBookmarks();
-  const [recentItems, setRecentItems] = useState(getRecentlyViewed());
+  const { isBookmarked, bookmarkedSlugs } = useBookmarks();
+  const bookmarkedCount = bookmarkedSlugs?.length || 0;
 
-  useEffect(() => {
-    const handleRecentUpdate = (e) => setRecentItems(e.detail?.items || getRecentlyViewed());
-    window.addEventListener('recently_viewed_updated', handleRecentUpdate);
-    return () => window.removeEventListener('recently_viewed_updated', handleRecentUpdate);
-  }, []);
-
-  // Past session email notify state
-  const [pastNotifyEmail, setPastNotifyEmail] = useState('');
-  const [pastNotifySuccess, setPastNotifySuccess] = useState(false);
-  const [pastNotifySubmitting, setPastNotifySubmitting] = useState(false);
-
-  // Filters from URL query params (with defaults)
-  const view = searchParams.get('view') || 'grid'; // 'grid' | 'list' | 'calendar' | 'timeline'
-  const search = searchParams.get('q') || '';
+  // Active filter state from URL
+  const view = searchParams.get('view') || 'grid';
   const category = searchParams.get('category') || 'All';
-  const statusFilter = searchParams.get('status') || 'all'; // 'all' | 'upcoming' | 'live' | 'past'
-  const dateRange = searchParams.get('range') || 'all'; // 'all' | 'this-month' | 'next-month'
-  const priceFilter = searchParams.get('price') || 'all'; // 'all' | 'free' | 'paid'
-  const sortBy = searchParams.get('sort') || 'soonest'; // 'soonest' | 'newest' | 'popular'
+  const search = searchParams.get('q') || '';
+  const statusFilter = searchParams.get('status') || 'all';
+  const dateRange = searchParams.get('range') || 'all';
+  const priceFilter = searchParams.get('price') || 'all';
+  const sortBy = searchParams.get('sort') || 'soonest';
   const onlySaved = searchParams.get('saved') === 'true';
 
-  // Helper to update specific search params while preserving others
+  const hasActiveFilters =
+    category !== 'All' ||
+    search !== '' ||
+    statusFilter !== 'all' ||
+    dateRange !== 'all' ||
+    priceFilter !== 'all' ||
+    onlySaved;
+
   const updateFilter = (key, val) => {
     const next = new URLSearchParams(searchParams);
     if (!val || val === 'all' || val === 'All' || (key === 'view' && val === 'grid') || (key === 'sort' && val === 'soonest')) {
@@ -168,7 +127,7 @@ export default function HubPage() {
     }
   };
 
-  // Next upcoming workshop
+  // Next upcoming flagship workshop
   const nextWorkshop = useMemo(() => {
     const upcoming = workshops.filter(
       (w) => w.startDate && new Date(w.startDate) > new Date() && getWorkshopStatus(w) !== 'completed'
@@ -177,14 +136,25 @@ export default function HubPage() {
     return upcoming[0] || null;
   }, [workshops]);
 
-  // Featured workshops list
+  // Featured workshops list (guaranteed 2-4 cohorts for automatic rotation)
   const featuredList = useMemo(() => {
     const feat = workshops.filter((w) => w.featured && getWorkshopStatus(w) !== 'completed');
-    if (feat.length > 0) return feat;
-    return nextWorkshop ? [nextWorkshop] : workshops.slice(0, 1);
+    if (feat.length >= 2) return feat;
+    
+    // If fewer than 2 explicitly featured, backfill with upcoming cohorts so carousel has multiple flagship cohorts to auto-switch between
+    const upcoming = workshops.filter((w) => getWorkshopStatus(w) !== 'completed');
+    const combined = [...feat];
+    for (const w of upcoming) {
+      if (!combined.some((c) => (c._id && c._id === w._id) || c.slug === w.slug)) {
+        combined.push(w);
+      }
+      if (combined.length >= 4) break;
+    }
+    if (combined.length > 0) return combined;
+    return nextWorkshop ? [nextWorkshop] : workshops.slice(0, 3);
   }, [workshops, nextWorkshop]);
 
-  // Filtered workshops based on URL search params
+  // Filtered workshops
   const filteredWorkshops = useMemo(() => {
     const now = new Date();
     const thisMonth = now.getMonth();
@@ -246,333 +216,197 @@ export default function HubPage() {
       });
   }, [workshops, search, category, statusFilter, dateRange, priceFilter, sortBy, onlySaved, bookmarkedSlugs]);
 
-  // Past completed workshops for Section 5
+  // Past completed workshops for coverflow
   const pastWorkshops = useMemo(() => {
     return workshops.filter((w) => getWorkshopStatus(w) === 'completed');
   }, [workshops]);
 
-  // Check active filter count
-  const hasActiveFilters =
-    Boolean(search) ||
-    category !== 'All' ||
-    statusFilter !== 'all' ||
-    dateRange !== 'all' ||
-    priceFilter !== 'all' ||
-    sortBy !== 'soonest' ||
-    onlySaved;
-
-  const handlePastNotifySubmit = async (e) => {
-    e.preventDefault();
-    if (!pastNotifyEmail || !pastNotifyEmail.includes('@')) return;
-    setPastNotifySubmitting(true);
-    try {
-      await api.post('/subscribers', {
-        email: pastNotifyEmail.trim(),
-        source: 'hub_past_sessions',
-      });
-      setPastNotifySuccess(true);
-      setPastNotifyEmail('');
-    } catch (e) {
-      // Handled
-    } finally {
-      setPastNotifySubmitting(false);
+  const handleReserveSpot = () => {
+    if (nextWorkshop) {
+      navigate(`/w/${nextWorkshop.slug}?reserve=true`);
+    } else {
+      document.getElementById('explore')?.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
   return (
     <>
       <Helmet>
-        <title>{settings?.platformName || 'Workshop Hub'} — Live Master Classes for PE & VC Deal Teams</title>
+        <title>{settings?.platformName || 'WORKSHOP HUB'} — Live Master Classes for Deal Teams</title>
         <meta
           name="description"
-          content={settings?.hubSubtitle || 'Expert-led live master classes for finance, private equity, and venture capital professionals.'}
+          content="Live, expert-led master classes for private equity and venture capital deal teams."
         />
       </Helmet>
 
-      {/* ─── 1. HERO with Word-by-Word Masked Reveal & Less Text ─── */}
-      <section className="relative bg-white pt-24 pb-14 sm:pt-28 sm:pb-16 border-b border-[#E8E8E8] overflow-hidden">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center relative z-10">
-          <Reveal delay={0.02}>
-            <span className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-[0.18em] uppercase text-navy border border-[#E8E8E8] px-4 py-1.5 rounded-full mb-6 bg-[#FAF9F6] shadow-2xs">
-              <span className="w-2 h-2 rounded-full bg-gold animate-pulse" />
-              LIVE EXECUTIVE MASTER CLASSES
-            </span>
-          </Reveal>
+      {/* ─── 1. HERO SECTION (Full-Screen Giant Typography + Parallax Cluster) ─── */}
+      <HeroGenZ
+        nextWorkshop={nextWorkshop}
+        stats={hubStats || {}}
+        onReserveSpot={handleReserveSpot}
+      />
 
-          {/* Word-by-Word Masked Slide-up Headline with Gold Shimmer on 'Funds' */}
-          <motion.h1
-            variants={wordRevealContainer}
-            initial="hidden"
-            animate="visible"
-            className="text-3xl sm:text-5xl lg:text-6xl font-bold text-navy mb-4 tracking-tight leading-[1.12]"
-          >
-            {(settings?.hubHeadline || 'Build What the Best Funds Already Run')
-              .split(' ')
-              .map((word, index) => {
-                const isFunds = word.toLowerCase().includes('funds');
-                return (
-                  <span key={index} className="overflow-hidden inline-block mr-[0.25em] align-top">
-                    <motion.span
-                      variants={wordRevealItem}
-                      className={`inline-block ${
-                        isFunds ? 'text-gold-shimmer font-extrabold relative' : ''
-                      }`}
-                    >
-                      {word}
-                    </motion.span>
-                  </span>
-                );
-              })}
-          </motion.h1>
-
-          {/* Cut Subtitle to ONE Short Line */}
-          <Reveal delay={0.16}>
-            <p className="text-sm sm:text-base text-muted max-w-lg mx-auto mb-7 leading-relaxed font-normal">
-              {settings?.hubSubtitle || 'Live, production-grade master classes engineered for PE & VC deal teams.'}
-            </p>
-          </Reveal>
-
-          {/* Action Button */}
-          <Reveal delay={0.22}>
-            <div className="flex items-center justify-center gap-3 mb-10">
-              <MagneticButton
-                onClick={() => {
-                  document.getElementById('explore')?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="btn-primary text-xs sm:text-sm py-3 px-8 shadow-xs font-semibold rounded-full hover:shadow-card-hover"
-              >
-                Explore Master Classes ↓
-              </MagneticButton>
-            </div>
-          </Reveal>
-
-          {/* Graphic Stats Row: Icons + Animated CountUp + Shorter Labels */}
-          <Reveal delay={0.28}>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 pt-8 border-t border-[#E8E8E8] max-w-4xl mx-auto">
-              <div className="p-3.5 rounded-xl bg-[#FAF9F6]/80 border border-[#E8E8E8]/70 text-center hover:border-gold/60 transition-colors">
-                <BookOpen size={16} className="text-gold mx-auto mb-1.5 opacity-80" />
-                <p className="text-2xl sm:text-3xl font-extrabold text-navy font-mono">
-                  <CountUp end={settings?.heroStats?.totalWorkshops ?? hubStats?.totalWorkshops ?? 18} duration={2} />+
-                </p>
-                <p className="text-[10px] font-mono font-bold text-muted uppercase tracking-wider mt-0.5">
-                  Workshops
-                </p>
-              </div>
-
-              <div className="p-3.5 rounded-xl bg-[#FAF9F6]/80 border border-[#E8E8E8]/70 text-center hover:border-gold/60 transition-colors">
-                <Users size={16} className="text-gold mx-auto mb-1.5 opacity-80" />
-                <p className="text-2xl sm:text-3xl font-extrabold text-navy font-mono">
-                  <CountUp end={settings?.heroStats?.totalAttendees ?? hubStats?.totalAttendees ?? 1480} duration={2.2} separator="," />+
-                </p>
-                <p className="text-[10px] font-mono font-bold text-muted uppercase tracking-wider mt-0.5">
-                  Pros Trained
-                </p>
-              </div>
-
-              <div className="p-3.5 rounded-xl bg-[#FAF9F6]/80 border border-[#E8E8E8]/70 text-center hover:border-gold/60 transition-colors">
-                <Globe size={16} className="text-gold mx-auto mb-1.5 opacity-80" />
-                <p className="text-2xl sm:text-3xl font-extrabold text-navy font-mono">
-                  <CountUp end={settings?.heroStats?.countries ?? hubStats?.countries ?? 18} duration={1.8} />
-                </p>
-                <p className="text-[10px] font-mono font-bold text-muted uppercase tracking-wider mt-0.5">
-                  Countries
-                </p>
-              </div>
-
-              <div className="p-3.5 rounded-xl bg-[#FAF9F6]/80 border border-[#E8E8E8]/70 text-center hover:border-gold/60 transition-colors">
-                <TrendingUp size={16} className="text-gold mx-auto mb-1.5 opacity-80" />
-                <p className="text-2xl sm:text-3xl font-extrabold text-navy font-mono">
-                  $<CountUp end={settings?.heroStats?.aumTrained ?? (parseFloat(settings?.globalTrust?.aumNumber) || hubStats?.aumTrained || 246)} duration={2.2} />B+
-                </p>
-                <p className="text-[10px] font-mono font-bold text-muted uppercase tracking-wider mt-0.5">
-                  AUM
-                </p>
-              </div>
-            </div>
-          </Reveal>
-
-          {/* Bouncing Scroll Cue */}
-          <motion.div
-            animate={{ y: [0, 5, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-            onClick={() => document.getElementById('explore')?.scrollIntoView({ behavior: 'smooth' })}
-            className="inline-flex flex-col items-center mt-10 text-muted/60 text-[10px] font-mono tracking-widest uppercase cursor-pointer hover:text-navy transition-colors select-none"
-          >
-            <span>Scroll</span>
-            <ChevronDown size={14} className="text-gold mt-0.5" />
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ─── 2. FEATURED WORKSHOP (Split Carousel) ─── */}
+      {/* ─── FLAGSHIP COHORT (Cinematic Bento Card) ─── */}
       {featuredList.length > 0 && (
-        <section className="bg-white py-12 sm:py-16 border-b border-[#E8E8E8]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <FadeUp>
-              <div className="mb-6">
-                <span className="text-[11px] font-bold text-gold uppercase tracking-widest block mb-1">
-                  EXECUTIVE FEATURE
-                </span>
-                <h2 className="text-xl sm:text-2xl font-bold text-navy tracking-tight">
-                  Flagship Master Class
+        <section className="bg-[#0a0a0a] py-16 sm:py-24 border-b border-white/[0.08] relative">
+          <div className="max-w-7xl mx-auto px-4 sm:px-8">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_8px_rgba(201,162,77,0.8)]" />
+                  <span className="font-mono text-xs uppercase tracking-widest text-gold font-bold">
+                    00 / FLAGSHIP
+                  </span>
+                </div>
+                <h2 className="text-3xl sm:text-5xl font-extrabold text-white font-bebas uppercase tracking-tight">
+                  NEXT LIVE COHORT
                 </h2>
               </div>
-            </FadeUp>
+            </div>
             <FeaturedBanner workshops={featuredList} />
           </div>
         </section>
       )}
 
-      {/* ─── 3. NEXT SESSION COUNTDOWN STRIP ─── */}
-      {nextWorkshop && (
-        <NextSessionStrip workshop={nextWorkshop} />
-      )}
+      {/* ─── NEXT SESSION STICKY STRIP ─── */}
+      {nextWorkshop && <NextSessionStrip workshop={nextWorkshop} />}
 
-      {/* ─── 4. EXPLORE WORKSHOPS SECTION (With View Switcher) ─── */}
-      <section id="explore" className="bg-[#FAF9F6] py-16 sm:py-20 border-b border-[#E8E8E8]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Section Header & View Switcher */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+      {/* ─── 01 / EXPLORE MASTER CLASSES (Orbit View / Grid View Toggle) ─── */}
+      <section id="explore" className="bg-[#0a0a0a] py-20 sm:py-28 border-b border-white/[0.08] relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8">
+          {/* Section Header & View Toggle (Orbit / Grid / List / Calendar / Timeline) */}
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
             <div>
-              <span className="text-[11px] font-bold text-muted uppercase tracking-widest block mb-1">
-                DISCOVER COHORTS
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-bold text-navy tracking-tight">
-                Explore Master Classes
+              <div className="flex items-center gap-2 mb-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_8px_rgba(201,162,77,0.8)]" />
+                <span className="font-mono text-xs uppercase tracking-widest text-gold font-bold">
+                  01 / EXPLORE
+                </span>
+              </div>
+              <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white font-bebas uppercase tracking-tight">
+                MASTER CLASSES & LABS
               </h2>
             </div>
 
-            <div className="flex items-center gap-2.5 flex-wrap">
-              {/* Event State Toggle: Upcoming vs Past */}
-              <div className="flex items-center bg-white border border-[#E8E8E8] rounded-xl p-1 text-xs shadow-2xs">
+            {/* Orbit / Grid View Switcher (Bhavya Portfolio Pattern) */}
+            <div className="flex items-center gap-3 flex-wrap">
+              <div className="flex items-center p-1 rounded-2xl glass border border-white/10 shadow-lg">
                 <button
-                  onClick={() => updateFilter('status', 'all')}
-                  className={`px-3 py-1.5 rounded-lg font-semibold transition-all ${
-                    statusFilter !== 'past'
-                      ? 'bg-navy text-white shadow-2xs'
-                      : 'text-muted hover:text-navy hover:bg-cream'
+                  onClick={() => updateFilter('view', 'grid')}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-medium transition-all duration-300 cursor-pointer ${
+                    view === 'grid'
+                      ? 'bg-gold text-[#0a0a0a] font-bold shadow-gold-glow'
+                      : 'text-white/50 hover:text-white'
                   }`}
                 >
-                  Upcoming Cohorts
+                  <LayoutGrid size={14} />
+                  <span>Grid View</span>
                 </button>
+
                 <button
-                  onClick={() => updateFilter('status', 'past')}
-                  className={`px-3 py-1.5 rounded-lg font-semibold transition-all ${
-                    statusFilter === 'past'
-                      ? 'bg-navy text-white shadow-2xs'
-                      : 'text-muted hover:text-navy hover:bg-cream'
+                  onClick={() => updateFilter('view', 'orbit')}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-medium transition-all duration-300 cursor-pointer ${
+                    view === 'orbit'
+                      ? 'bg-gold text-[#0a0a0a] font-bold shadow-gold-glow'
+                      : 'text-white/50 hover:text-white'
                   }`}
                 >
-                  Past Events & Replays
+                  <Orbit size={14} />
+                  <span>3D Orbit</span>
+                </button>
+
+                <button
+                  onClick={() => updateFilter('view', 'list')}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-mono font-medium transition-all duration-300 cursor-pointer ${
+                    view === 'list'
+                      ? 'bg-gold text-[#0a0a0a] font-bold shadow-gold-glow'
+                      : 'text-white/50 hover:text-white'
+                  }`}
+                  title="List View"
+                >
+                  <ListIcon size={14} />
+                </button>
+
+                <button
+                  onClick={() => updateFilter('view', 'calendar')}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-mono font-medium transition-all duration-300 cursor-pointer ${
+                    view === 'calendar'
+                      ? 'bg-gold text-[#0a0a0a] font-bold shadow-gold-glow'
+                      : 'text-white/50 hover:text-white'
+                  }`}
+                  title="Calendar View"
+                >
+                  <CalendarIcon size={14} />
+                </button>
+
+                <button
+                  onClick={() => updateFilter('view', 'timeline')}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-mono font-medium transition-all duration-300 cursor-pointer ${
+                    view === 'timeline'
+                      ? 'bg-gold text-[#0a0a0a] font-bold shadow-gold-glow'
+                      : 'text-white/50 hover:text-white'
+                  }`}
+                  title="Timeline View"
+                >
+                  <GitCommit size={14} />
                 </button>
               </div>
 
-              {/* View Switcher: Grid | List | Calendar | Timeline */}
-              <div className="flex items-center bg-white border border-[#E8E8E8] rounded-xl p-1 text-xs shadow-2xs shrink-0">
-                {[
-                  { id: 'grid', label: 'Grid', icon: LayoutGrid },
-                  { id: 'list', label: 'List', icon: ListIcon },
-                  { id: 'calendar', label: 'Calendar', icon: CalendarIcon },
-                  { id: 'timeline', label: 'Timeline', icon: GitCommit },
-                ].map((item) => {
-                  const Icon = item.icon;
-                  const isActive = view === item.id;
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => updateFilter('view', item.id)}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-all ${
-                        isActive
-                          ? 'bg-navy text-white shadow-2xs'
-                          : 'text-muted hover:text-navy hover:bg-cream'
-                      }`}
-                    >
-                      <Icon size={13} />
-                      <span>{item.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
+              <span className="font-mono text-xs text-white/40 uppercase tracking-wider hidden sm:inline">
+                {filteredWorkshops.length} COHORTS
+              </span>
             </div>
           </div>
 
-          {/* Filters Bar: Search, Category, Status, Date Range, Price, Sort */}
-          <div className="bg-white border border-[#E8E8E8] rounded-2xl p-4 sm:p-5 mb-6 shadow-2xs space-y-4">
+          {/* Dark Glass Filter Bar */}
+          <div className="rounded-3xl glass-strong border border-white/10 p-5 sm:p-6 mb-8 space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3">
-              {/* Search */}
-              <div className="lg:col-span-4 relative">
-                <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted" />
+              {/* Search input */}
+              <div className="lg:col-span-5 relative">
+                <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" />
                 <input
                   type="text"
-                  placeholder="Search by topic, analyst stack..."
+                  placeholder="Filter by title, due diligence topic..."
                   value={search}
                   onChange={(e) => updateFilter('q', e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 bg-cream border border-[#E8E8E8] rounded-xl text-xs text-navy placeholder:text-muted focus:outline-none focus:border-gold transition-colors"
+                  className="w-full pl-10 pr-4 py-2.5 bg-white/[0.04] border border-white/10 rounded-2xl text-xs font-sans text-white placeholder:text-white/40 focus:outline-none focus:border-gold/60 transition-colors"
                 />
               </div>
 
               {/* Status filter */}
-              <div className="lg:col-span-2 relative">
+              <div className="lg:col-span-3 relative">
                 <select
                   value={statusFilter}
                   onChange={(e) => updateFilter('status', e.target.value)}
-                  className="w-full px-3 py-2 bg-cream border border-[#E8E8E8] rounded-xl text-xs text-navy focus:outline-none focus:border-gold appearance-none pr-8 font-medium cursor-pointer"
+                  className="w-full px-4 py-2.5 bg-[#141418] border border-white/10 rounded-2xl text-xs font-mono uppercase text-white/80 focus:outline-none focus:border-gold appearance-none pr-8 cursor-pointer"
                 >
                   <option value="all">Status: All</option>
                   <option value="upcoming">Upcoming</option>
                   <option value="live">Live Now</option>
                   <option value="past">Completed</option>
                 </select>
-                <ChevronDown size={13} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted pointer-events-none" />
-              </div>
-
-              {/* Date Range filter */}
-              <div className="lg:col-span-2 relative">
-                <select
-                  value={dateRange}
-                  onChange={(e) => updateFilter('range', e.target.value)}
-                  className="w-full px-3 py-2 bg-cream border border-[#E8E8E8] rounded-xl text-xs text-navy focus:outline-none focus:border-gold appearance-none pr-8 font-medium cursor-pointer"
-                >
-                  <option value="all">Date: Any Time</option>
-                  <option value="this-month">This Month</option>
-                  <option value="next-month">Next Month</option>
-                </select>
-                <ChevronDown size={13} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted pointer-events-none" />
-              </div>
-
-              {/* Price filter */}
-              <div className="lg:col-span-2 relative">
-                <select
-                  value={priceFilter}
-                  onChange={(e) => updateFilter('price', e.target.value)}
-                  className="w-full px-3 py-2 bg-cream border border-[#E8E8E8] rounded-xl text-xs text-navy focus:outline-none focus:border-gold appearance-none pr-8 font-medium cursor-pointer"
-                >
-                  <option value="all">Access: All</option>
-                  <option value="free">Free Access</option>
-                  <option value="paid">Executive Pass</option>
-                </select>
-                <ChevronDown size={13} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted pointer-events-none" />
+                <ChevronDown size={13} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none" />
               </div>
 
               {/* Sort filter */}
-              <div className="lg:col-span-2 relative">
+              <div className="lg:col-span-4 relative">
                 <select
                   value={sortBy}
                   onChange={(e) => updateFilter('sort', e.target.value)}
-                  className="w-full px-3 py-2 bg-cream border border-[#E8E8E8] rounded-xl text-xs text-navy focus:outline-none focus:border-gold appearance-none pr-8 font-medium cursor-pointer"
+                  className="w-full px-4 py-2.5 bg-[#141418] border border-white/10 rounded-2xl text-xs font-mono uppercase text-white/80 focus:outline-none focus:border-gold appearance-none pr-8 cursor-pointer"
                 >
-                  <option value="soonest">Sort: Soonest</option>
-                  <option value="newest">Sort: Newest</option>
-                  <option value="popular">Sort: Most Popular</option>
+                  <option value="soonest">Sort: Soonest Live</option>
+                  <option value="newest">Sort: Newly Listed</option>
+                  <option value="popular">Sort: Most Booked</option>
                 </select>
-                <ChevronDown size={13} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted pointer-events-none" />
+                <ChevronDown size={13} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none" />
               </div>
             </div>
 
-            {/* Category Chips Bar */}
-            <div className="flex items-center gap-1.5 overflow-x-auto whitespace-nowrap pt-1 no-scrollbar">
-              <span className="text-[11px] font-bold text-muted uppercase tracking-wider mr-1 shrink-0">
-                Category:
+            {/* Category Chips Bar with Active Gold Glow */}
+            <div className="flex items-center gap-2 overflow-x-auto whitespace-nowrap pt-2 no-scrollbar">
+              <span className="text-[11px] font-mono text-white/40 uppercase tracking-widest mr-1 shrink-0">
+                CATEGORY:
               </span>
               {CATEGORIES.map((cat) => {
                 const isSelected = category === cat;
@@ -580,10 +414,10 @@ export default function HubPage() {
                   <button
                     key={cat}
                     onClick={() => updateFilter('category', cat)}
-                    className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${
+                    className={`px-3.5 py-1.5 rounded-full text-xs font-mono uppercase tracking-wider transition-all cursor-pointer ${
                       isSelected
-                        ? 'bg-navy text-white border-navy shadow-2xs'
-                        : 'bg-white border-[#E8E8E8] text-muted hover:text-navy hover:bg-cream'
+                        ? 'bg-gold text-[#0a0a0a] font-bold shadow-gold-glow'
+                        : 'bg-white/[0.03] border border-white/10 text-white/60 hover:text-white hover:border-white/20'
                     }`}
                   >
                     {cat}
@@ -591,88 +425,58 @@ export default function HubPage() {
                 );
               })}
 
-              <div className="h-4 w-[1px] bg-[#E8E8E8] shrink-0 mx-1" />
+              <div className="h-4 w-[1px] bg-white/10 shrink-0 mx-2" />
 
               <button
                 onClick={() => updateFilter('saved', onlySaved ? null : 'true')}
-                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border transition-all shrink-0 ${
+                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono uppercase tracking-wider transition-all shrink-0 cursor-pointer ${
                   onlySaved
-                    ? 'bg-gold text-white border-gold shadow-2xs'
-                    : 'bg-white border-[#E8E8E8] text-navy hover:border-gold hover:text-gold'
+                    ? 'bg-gold text-[#0a0a0a] font-bold shadow-gold-glow'
+                    : 'bg-white/[0.03] border border-white/10 text-white/60 hover:text-white'
                 }`}
-                title="Filter bookmarked master classes"
               >
                 <Bookmark size={11} className={onlySaved ? 'fill-current' : ''} />
                 <span>Saved ({bookmarkedCount})</span>
               </button>
             </div>
 
-            {/* Active Filter Chips & Results Count */}
+            {/* Active Filter Chips & Clear */}
             {hasActiveFilters && (
-              <div className="flex items-center justify-between gap-2 pt-3 border-t border-[#E8E8E8] flex-wrap text-xs">
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="text-muted font-medium">Active:</span>
-
+              <div className="flex items-center justify-between gap-3 pt-3 border-t border-white/10 flex-wrap text-xs font-mono">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-white/40">Active:</span>
                   {search && (
-                    <span className="inline-flex items-center gap-1 bg-[#FAF9F6] border border-[#E8E8E8] px-2.5 py-0.5 rounded-full text-navy">
+                    <span className="sticker sticker-gold text-[10px]">
                       <span>"{search}"</span>
-                      <X size={11} className="cursor-pointer hover:text-gold" onClick={() => updateFilter('q', '')} />
+                      <X size={10} className="cursor-pointer hover:text-white" onClick={() => updateFilter('q', '')} />
                     </span>
                   )}
-
                   {category !== 'All' && (
-                    <span className="inline-flex items-center gap-1 bg-[#FAF9F6] border border-[#E8E8E8] px-2.5 py-0.5 rounded-full text-navy">
+                    <span className="sticker sticker-gold text-[10px]">
                       <span>{category}</span>
-                      <X size={11} className="cursor-pointer hover:text-gold" onClick={() => updateFilter('category', 'All')} />
+                      <X size={10} className="cursor-pointer hover:text-white" onClick={() => updateFilter('category', 'All')} />
                     </span>
                   )}
-
-                  {statusFilter !== 'all' && (
-                    <span className="inline-flex items-center gap-1 bg-[#FAF9F6] border border-[#E8E8E8] px-2.5 py-0.5 rounded-full text-navy capitalize">
-                      <span>{statusFilter}</span>
-                      <X size={11} className="cursor-pointer hover:text-gold" onClick={() => updateFilter('status', 'all')} />
-                    </span>
-                  )}
-
-                  {onlySaved && (
-                    <span className="inline-flex items-center gap-1 bg-[#FAF9F6] border border-gold/40 px-2.5 py-0.5 rounded-full text-navy font-semibold">
-                      <Bookmark size={10} className="text-gold fill-current" />
-                      <span>Saved only</span>
-                      <X size={11} className="cursor-pointer hover:text-gold" onClick={() => updateFilter('saved', null)} />
-                    </span>
-                  )}
-
                   <button
                     onClick={clearAllFilters}
-                    className="text-xs text-gold font-bold hover:underline pl-1"
+                    className="text-xs text-gold font-bold hover:underline pl-1 cursor-pointer"
                   >
-                    Clear all filters
+                    Reset all filters
                   </button>
                 </div>
-
-                <span className="text-xs font-mono text-muted">
-                  Showing <strong>{filteredWorkshops.length}</strong> of {workshops.length} workshops
+                <span className="text-white/40">
+                  Showing <strong>{filteredWorkshops.length}</strong> cohorts
                 </span>
               </div>
             )}
           </div>
 
-          {/* Error Banner */}
-          {error && (
-            <div className="bg-red-50 border border-red-100 rounded-2xl p-6 text-center max-w-md mx-auto mb-10">
-              <p className="text-red-700 text-xs font-semibold mb-2">⚠️ {error}</p>
-              <button onClick={loadData} className="btn-primary text-xs py-2 px-4">
-                Retry
-              </button>
-            </div>
-          )}
-
-          {/* ─── Render View Mode ─── */}
+          {/* ─── Render View Modes ─── */}
           {loading ? (
             view === 'list' ? (
               <WorkshopListSkeleton count={4} />
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <WorkshopCardSkeleton count={6} />
               </div>
             )
@@ -682,8 +486,14 @@ export default function HubPage() {
               categories={CATEGORIES.slice(1)}
               onCategorySelect={(c) => updateFilter('category', c)}
             />
+          ) : view === 'orbit' ? (
+            /* 3D ORBIT VIEW (Matching Bhavya Portfolio Pattern) */
+            <WorkshopOrbitView
+              workshops={filteredWorkshops}
+              onSelectWorkshop={(w) => navigate(`/w/${w.slug}`)}
+            />
           ) : view === 'grid' ? (
-            /* GRID VIEW */
+            /* BENTO GRID VIEW */
             <StaggerContainer
               stagger={0.06}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch"
@@ -696,7 +506,7 @@ export default function HubPage() {
             </StaggerContainer>
           ) : view === 'list' ? (
             /* LIST VIEW */
-            <div className="space-y-3">
+            <div className="space-y-4">
               {filteredWorkshops.map((w) => (
                 <WorkshopListCard
                   key={w._id || w.id}
@@ -721,70 +531,20 @@ export default function HubPage() {
         </div>
       </section>
 
-      {/* ─── RECENTLY VIEWED BY YOU ─── */}
-      {recentItems.length >= 2 && (
-        <section className="bg-white py-12 border-b border-[#E8E8E8]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-2">
-                <History size={16} className="text-gold" />
-                <h3 className="text-base sm:text-lg font-bold text-navy tracking-tight">
-                  Recently Viewed by You
-                </h3>
-              </div>
-              <span className="text-[11px] font-mono text-muted">
-                From your recent session
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {recentItems.slice(0, 4).map((item) => (
-                <Link
-                  key={item.slug}
-                  to={`/w/${item.slug}`}
-                  className="group bg-[#FAF9F6] border border-[#E8E8E8] rounded-xl p-3.5 hover:border-gold transition-colors flex items-center gap-3 shadow-2xs"
-                >
-                  {item.bannerImage ? (
-                    <img
-                      src={item.bannerImage}
-                      alt={item.title}
-                      className="w-12 h-12 rounded-lg object-cover border border-[#E8E8E8] shrink-0"
-                    />
-                  ) : (
-                    <div className="w-12 h-12 rounded-lg bg-white border border-[#E8E8E8] flex items-center justify-center text-gold shrink-0 font-bold text-xs">
-                      DD
-                    </div>
-                  )}
-                  <div className="min-w-0 flex-1">
-                    <span className="text-[10px] font-bold text-gold uppercase tracking-wider block truncate">
-                      {item.category || 'Masterclass'}
-                    </span>
-                    <p className="text-xs font-semibold text-navy truncate group-hover:text-gold transition-colors">
-                      {item.title}
-                    </p>
-                    <span className="text-[10px] text-muted flex items-center gap-1 mt-0.5">
-                      <span>Resume</span>
-                      <ArrowRight size={10} className="group-hover:translate-x-0.5 transition-transform" />
-                    </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* ─── 5. PAST EVENTS COVERFLOW & ARCHIVED PREVIEWS ─── */}
+      {/* ─── 02 / VAULT (Cinematic Coverflow Past Events Reel) ─── */}
       <PastEventsCoverflow pastWorkshops={pastWorkshops} />
 
-      {/* ─── 6. FIRMS WE'VE TRAINED & TESTIMONIALS ─── */}
+      {/* ─── 03 / VERIFIED ATTENDEE EXPERIENCES (3D Trading Card Carousel) ─── */}
+      <VerifiedAttendeesCarousel />
+
+      {/* ─── 04 / CAPITAL ALLOCATORS ($246B+ Counter & Opposing Infinite Marquees) ─── */}
       <FirmsTrustSection settings={settings} />
 
-      {/* ─── 7. PLATFORM FAQ ACCORDION ─── */}
+      {/* ─── 05 / CLARITY (Numbered FAQ Accordion with Rotating +) ─── */}
       <PlatformFaqSection />
 
-      {/* ─── 8. NEWSLETTER / GET NOTIFIED FORM ─── */}
-      <NewsletterSection />
+      {/* ─── FINAL CTA: "SEE YOU IN THE ROOM." ─── */}
+      <FinalCtaSection onReserveSpot={handleReserveSpot} />
 
       {/* Quick View Drawer */}
       <QuickViewDrawer

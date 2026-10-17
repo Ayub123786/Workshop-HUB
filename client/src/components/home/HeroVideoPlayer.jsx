@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function HeroVideoPlayer({
   videoUrl,
   posterUrl = '/uploads/hero-banner-1791990336348-dda05cba.webp',
-  fallbackPoster = '/ayub-founder-full.jpg',
+  fallbackPoster = '/ayub-founder-full.png',
   title = 'PE Deal Flow Automation Master Class Walkthrough',
   subtitle = 'Watch Ayub build the end-to-end Due Diligence AI Agent stack in 90 minutes',
   duration = '01:45',

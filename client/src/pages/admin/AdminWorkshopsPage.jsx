@@ -223,18 +223,22 @@ export default function AdminWorkshopsPage() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-navy">Manage Workshops</h1>
-          <p className="text-xs text-muted mt-1">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-gold/10 border border-gold/30 text-gold font-mono text-[10px] uppercase tracking-wider mb-2">
+            <Sparkles className="w-3 h-3 text-gold" />
+            <span>Master Class Management · Live Ops</span>
+          </div>
+          <h1 className="text-2xl font-display uppercase tracking-wider text-white">Manage Workshops</h1>
+          <p className="text-xs text-[#8A8A85] mt-1 font-sans">
             Create, edit, duplicate, reorder, and configure landing page content.
           </p>
         </div>
         <div className="flex items-center gap-3">
           {/* View Switcher */}
-          <div className="flex items-center bg-cream rounded-xl p-1 border border-border text-xs">
+          <div className="flex items-center bg-[#161622] rounded-xl p-1 border border-white/10 text-xs">
             <button
               onClick={() => setViewMode('table')}
-              className={`px-3 py-1.5 rounded-lg font-semibold transition-all flex items-center gap-1.5 ${
-                viewMode === 'table' ? 'bg-white text-navy shadow-2xs' : 'text-muted hover:text-navy'
+              className={`px-3 py-1.5 rounded-lg font-mono text-[11px] uppercase tracking-wider font-semibold transition-all flex items-center gap-1.5 ${
+                viewMode === 'table' ? 'bg-gold text-black font-bold shadow-md shadow-gold/20' : 'text-[#8A8A85] hover:text-white'
               }`}
             >
               <TableIcon size={13} />
@@ -242,8 +246,8 @@ export default function AdminWorkshopsPage() {
             </button>
             <button
               onClick={() => setViewMode('calendar')}
-              className={`px-3 py-1.5 rounded-lg font-semibold transition-all flex items-center gap-1.5 ${
-                viewMode === 'calendar' ? 'bg-white text-navy shadow-2xs' : 'text-muted hover:text-navy'
+              className={`px-3 py-1.5 rounded-lg font-mono text-[11px] uppercase tracking-wider font-semibold transition-all flex items-center gap-1.5 ${
+                viewMode === 'calendar' ? 'bg-gold text-black font-bold shadow-md shadow-gold/20' : 'text-[#8A8A85] hover:text-white'
               }`}
             >
               <Calendar size={13} />
@@ -253,7 +257,7 @@ export default function AdminWorkshopsPage() {
 
           <button
             onClick={() => setIsCreateOpen(true)}
-            className="btn-primary text-xs py-2 px-4 flex items-center gap-1.5"
+            className="btn-primary text-xs py-2 px-4 flex items-center gap-1.5 uppercase font-mono tracking-wider font-bold shadow-md shadow-gold/20"
           >
             <Plus className="w-3.5 h-3.5" /> Create Workshop
           </button>
@@ -261,24 +265,24 @@ export default function AdminWorkshopsPage() {
       </div>
 
       {/* Filter & Search Bar */}
-      <div className="bg-white rounded-2xl border border-border p-4 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div className="bg-[#121218] rounded-2xl border border-white/10 p-4 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-3">
         <div className="relative w-full sm:w-80">
-          <Search className="w-4 h-4 text-muted absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-[#8A8A85] absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search by title, slug or category..."
-            className="w-full pl-9 pr-3 py-2 rounded-xl border border-border bg-cream text-navy text-xs focus:outline-none focus:border-gold"
+            className="w-full pl-9 pr-3 py-2 rounded-xl border border-white/10 bg-[#161622] text-white text-xs placeholder:text-white/30 focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all"
           />
         </div>
 
         <div className="flex items-center gap-2 self-start sm:self-auto">
-          <span className="text-xs text-muted">Status:</span>
+          <span className="text-xs font-mono uppercase tracking-wider text-[#8A8A85]">Status:</span>
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl border border-border bg-cream text-navy text-xs font-semibold focus:outline-none"
+            className="px-3 py-2 rounded-xl border border-white/10 bg-[#161622] text-white text-xs font-mono uppercase tracking-wider font-semibold focus:outline-none focus:border-gold"
           >
             <option value="all">All Statuses</option>
             <option value="published">Published</option>
@@ -473,13 +477,18 @@ export default function AdminWorkshopsPage() {
 
       {/* Create Modal */}
       {isCreateOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy/60 backdrop-blur-sm overflow-y-auto">
-          <div className="bg-white rounded-2xl shadow-xl border border-border w-full max-w-md p-6 max-h-[90vh] overflow-y-auto my-auto">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-base font-bold text-navy">Create New Workshop</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
+          <div className="bg-[#121218] rounded-3xl shadow-2xl border border-white/10 w-full max-w-md p-6 max-h-[90vh] overflow-y-auto my-auto text-white">
+            <div className="flex items-center justify-between mb-5 pb-3 border-b border-white/10">
+              <div>
+                <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-gold/10 border border-gold/30 text-gold font-mono text-[9px] uppercase tracking-wider mb-1">
+                  NEW COHORT
+                </div>
+                <h3 className="text-base font-display uppercase tracking-wider text-white">Create New Workshop</h3>
+              </div>
               <button
                 onClick={() => setIsCreateOpen(false)}
-                className="p-1 rounded-full text-muted hover:bg-cream"
+                className="p-1.5 rounded-full text-[#8A8A85] hover:text-white hover:bg-white/10 transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -487,7 +496,7 @@ export default function AdminWorkshopsPage() {
 
             <form onSubmit={handleCreate} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-navy uppercase tracking-wider mb-1">
+                <label className="block text-[11px] font-mono uppercase tracking-wider text-[#A0A09A] mb-1">
                   Workshop Title *
                 </label>
                 <input
@@ -496,20 +505,20 @@ export default function AdminWorkshopsPage() {
                   onChange={(e) => setNewTitle(e.target.value)}
                   placeholder="e.g. M&A Deal Flow Automation Master Class"
                   required
-                  className="w-full px-3 py-2 rounded-lg border border-border bg-white text-navy text-xs focus:outline-none focus:border-gold"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-white/10 bg-[#161622] text-white text-xs placeholder:text-white/25 focus:outline-none focus:border-gold"
                 />
               </div>
 
               {/* Template Source Selection */}
               <div>
-                <label className="block text-xs font-semibold text-navy uppercase tracking-wider mb-1 flex items-center justify-between">
+                <label className="block text-[11px] font-mono uppercase tracking-wider text-[#A0A09A] mb-1 flex items-center justify-between">
                   <span>Template Source (Copy From)</span>
-                  <span className="text-[10px] text-gold font-normal">reusable sections</span>
+                  <span className="text-[10px] text-gold font-mono">reusable sections</span>
                 </label>
                 <select
                   value={templateWorkshopId}
                   onChange={(e) => setTemplateWorkshopId(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-border bg-white text-navy text-xs focus:outline-none focus:border-gold font-medium"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-white/10 bg-[#161622] text-white text-xs focus:outline-none focus:border-gold font-medium"
                 >
                   {workshops.map((w) => (
                     <option key={w._id} value={w._id}>
@@ -520,7 +529,7 @@ export default function AdminWorkshopsPage() {
                   ))}
                   <option value="none">Blank Sections (No template copy)</option>
                 </select>
-                <p className="text-[11px] text-muted mt-1">
+                <p className="text-[11px] text-[#8A8A85] mt-1 font-sans">
                   All landing page sections (Ayub trainer card, curriculum, logos, benefits, and form) will be copied from this template for you to edit.
                 </p>
               </div>
@@ -537,13 +546,13 @@ export default function AdminWorkshopsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-navy uppercase tracking-wider mb-1">
+                <label className="block text-[11px] font-mono uppercase tracking-wider text-[#A0A09A] mb-1">
                   Category
                 </label>
                 <select
                   value={newCategory}
                   onChange={(e) => setNewCategory(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-border bg-white text-navy text-xs focus:outline-none focus:border-gold"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-white/10 bg-[#161622] text-white text-xs focus:outline-none focus:border-gold"
                 >
                   <option value="Private Equity">Private Equity</option>
                   <option value="Venture Capital">Venture Capital</option>
@@ -554,7 +563,7 @@ export default function AdminWorkshopsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-navy uppercase tracking-wider mb-1">
+                <label className="block text-[11px] font-mono uppercase tracking-wider text-[#A0A09A] mb-1">
                   Short Description
                 </label>
                 <textarea
@@ -562,12 +571,12 @@ export default function AdminWorkshopsPage() {
                   value={newDesc}
                   onChange={(e) => setNewDesc(e.target.value)}
                   placeholder="Brief summary for cards and search..."
-                  className="w-full px-3 py-2 rounded-lg border border-border bg-white text-navy text-xs focus:outline-none focus:border-gold resize-none"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-white/10 bg-[#161622] text-white text-xs placeholder:text-white/25 focus:outline-none focus:border-gold resize-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-navy uppercase tracking-wider mb-1">
+                <label className="block text-[11px] font-mono uppercase tracking-wider text-[#A0A09A] mb-1">
                   Total Seats Capacity
                 </label>
                 <input
@@ -576,22 +585,22 @@ export default function AdminWorkshopsPage() {
                   onChange={(e) => setNewSeats(e.target.value)}
                   min={1}
                   max={1000}
-                  className="w-full px-3 py-2 rounded-lg border border-border bg-white text-navy text-xs focus:outline-none focus:border-gold"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-white/10 bg-[#161622] text-white text-xs focus:outline-none focus:border-gold"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-2">
+              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-white/10">
                 <button
                   type="button"
                   onClick={() => setIsCreateOpen(false)}
-                  className="px-4 py-2 rounded-lg border border-border text-xs font-semibold text-muted hover:text-navy"
+                  className="px-4 py-2 rounded-xl border border-white/10 text-xs font-mono uppercase tracking-wider text-[#8A8A85] hover:text-white hover:border-white/20 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={creating}
-                  className="btn-primary text-xs py-2 px-4 shadow-xs"
+                  className="btn-primary text-xs py-2 px-5 font-mono uppercase tracking-wider font-bold shadow-md shadow-gold/20"
                 >
                   {creating ? 'Creating...' : 'Create & Edit'}
                 </button>

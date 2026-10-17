@@ -5,22 +5,29 @@ import { useSettings } from '../../contexts/SettingsContext';
 
 const DISMISSED_KEY = 'workshophub_announcement_dismissed_v1';
 
-export default function AnnouncementBar({ nextWorkshop }) {
+export default function AnnouncementBar({ nextWorkshop, onVisibilityChange }) {
   const { settings } = useSettings();
   const location = useLocation();
-  const [dismissed, setDismissed] = useState(true); // default hidden until checked
+  const [dismissed, setDismissed] = useState(() => {
+    try {
+      return sessionStorage.getItem(DISMISSED_KEY) === 'true';
+    } catch (e) {
+      return false;
+    }
+  });
+
+  const config = settings?.announcementBar || {};
+  const isHiddenByPath = location.pathname.startsWith('/w/');
+  const isEnabled = config.enabled !== false;
+  const isVisible = !isHiddenByPath && isEnabled && !dismissed;
 
   useEffect(() => {
-    try {
-      const isDismissed = sessionStorage.getItem(DISMISSED_KEY) === 'true';
-      setDismissed(isDismissed);
-    } catch (e) {
-      setDismissed(false);
-    }
-  }, []);
+    onVisibilityChange?.(isVisible);
+  }, [isVisible, onVisibilityChange]);
 
   const handleDismiss = () => {
     setDismissed(true);
+    onVisibilityChange?.(false);
     try {
       sessionStorage.setItem(DISMISSED_KEY, 'true');
     } catch (e) {
@@ -28,42 +35,36 @@ export default function AnnouncementBar({ nextWorkshop }) {
     }
   };
 
-  // Do not show announcement bar when opening any workshop / event page
-  if (location.pathname.startsWith('/w/')) return null;
-
-  // If explicitly disabled in settings
-  const config = settings?.announcementBar || {};
-  if (config.enabled === false) return null;
-  if (dismissed) return null;
+  if (!isVisible) return null;
 
   const message = config.text || (
     nextWorkshop
-      ? `Next Live Cohort: ${nextWorkshop.title} · Final seats remaining.`
-      : 'Institutional Due Diligence Masterclasses · Q4 Executive Cohorts Now Open.'
+      ? `Next Cohort: ${nextWorkshop.title} · Final seats available.`
+      : 'Institutional Due Diligence Masterclasses · Q4 Cohorts Open.'
   );
 
   const targetLink = config.link || (nextWorkshop ? `/w/${nextWorkshop.slug}?reserve=true` : '/workshops');
-  const badgeText = config.badge || 'NEXT COHORT';
+  const badgeText = config.badge || 'LIVE ✦ Q4';
 
   return (
     <aside
       aria-label="Announcement"
-      className="bg-white border-b border-[#E8E8E8] relative z-50 text-xs py-2 px-4 transition-all"
+      className="bg-[#0a0a0a] border-b border-white/[0.08] relative z-40 text-xs py-2 px-4 transition-all"
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5 overflow-hidden flex-1 justify-center sm:justify-start">
-          <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider bg-cream border border-[#E8E8E8] text-gold px-2 py-0.5 rounded-full shrink-0">
+        <div className="flex items-center gap-3 overflow-hidden flex-1 justify-center sm:justify-start">
+          <span className="sticker sticker-gold text-[9px] py-0.5 px-2.5 shrink-0">
             <Sparkles size={10} className="text-gold" />
             <span>{badgeText}</span>
           </span>
 
-          <p className="text-navy font-medium truncate text-xs">
+          <p className="text-white/80 font-mono text-[11px] uppercase tracking-wider truncate">
             {message}
           </p>
 
           <Link
             to={targetLink}
-            className="hidden sm:inline-flex items-center gap-1 text-gold font-semibold hover:underline shrink-0 text-xs ml-1"
+            className="hidden sm:inline-flex items-center gap-1 text-gold font-mono text-[11px] font-bold uppercase tracking-wider hover:text-gold-light shrink-0 ml-1 transition-colors"
           >
             <span>Reserve spot</span>
             <ArrowRight size={12} />
@@ -73,7 +74,7 @@ export default function AnnouncementBar({ nextWorkshop }) {
         <button
           onClick={handleDismiss}
           aria-label="Dismiss announcement"
-          className="text-muted hover:text-navy p-1 rounded-md transition-colors shrink-0"
+          className="text-white/40 hover:text-white p-1 rounded-md transition-colors shrink-0"
         >
           <X size={14} />
         </button>

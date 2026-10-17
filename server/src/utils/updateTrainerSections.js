@@ -5,7 +5,7 @@ import Section from '../models/Section.js';
 const defaultAyub = {
   label: 'YOUR TRAINER',
   name: 'Ayub.',
-  portrait: '/ayub-founder-full.jpg',
+  portrait: '/ayub-founder-full.png',
   portraitCaption: "The future isn't firm versus firm. It's firm versus agent stack.",
   bio: [
     'Fifteen years in finance, now building multi model agentic systems for private equity and venture capital firms focused on due diligence.',

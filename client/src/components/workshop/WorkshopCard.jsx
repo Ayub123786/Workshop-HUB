@@ -1,4 +1,4 @@
-import { Calendar, Clock, Users, Bookmark, Sparkles, Flame, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Calendar, Clock, Users, Bookmark, Sparkles, Flame, CheckCircle2, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { getWorkshopStatus, getStatusBadgeConfig } from '../../lib/workshopStatus';
@@ -30,71 +30,61 @@ export default function WorkshopCard({ workshop, onQuickView }) {
       })
     : null;
 
-  // Trim description to max ~12 words as requested by rule
-  const shortDesc = workshop.shortDescription
-    ? workshop.shortDescription.split(' ').slice(0, 12).join(' ') +
-      (workshop.shortDescription.split(' ').length > 12 ? '...' : '')
-    : '';
-
   return (
-    <TiltCard
-      maxTilt={6}
-      cursorText="View"
-      className="h-full"
-    >
-      <div className="h-full flex flex-col bg-white border border-[#E8E8E8] rounded-2xl overflow-hidden hover:border-gold/70 transition-all duration-300 group shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_32px_rgba(201,162,77,0.12)]">
-        {/* Banner Image with Fixed 16:10 Ratio & Hover Zoom */}
-        <div className="relative aspect-[16/10] overflow-hidden bg-[#FAF9F6] shrink-0">
+    <TiltCard maxTilt={5} cursorText="VIEW" className="h-full">
+      <div className="h-full flex flex-col rounded-3xl bg-[#141418] border border-white/[0.08] overflow-hidden hover:border-gold/50 transition-all duration-300 group shadow-[0_10px_30px_rgba(0,0,0,0.6)] hover:shadow-[0_20px_45px_rgba(0,0,0,0.8),0_0_25px_rgba(201,162,77,0.12)]">
+        {/* Banner Image with 16:10 Ratio & Hover Zoom */}
+        <div className="relative aspect-[16/10] overflow-hidden bg-black shrink-0">
           {workshop.bannerImage ? (
             <img
               src={workshop.bannerImage}
               alt={workshop.title}
-              className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 opacity-90 group-hover:opacity-100"
               loading="lazy"
             />
           ) : (
-            <div className="w-full h-full bg-[#FAF9F6] flex items-center justify-center text-muted">
-              <span className="text-xs font-mono tracking-widest text-[#9CA3AF] uppercase">
-                {workshop.category || 'Workshop'}
-              </span>
+            <div className="w-full h-full bg-[#18181e] flex items-center justify-center text-white/30 font-mono text-xs uppercase tracking-widest">
+              {workshop.category || 'WORKSHOP'}
             </div>
           )}
 
-          {/* Subtle gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+          {/* Dark gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#141418] via-transparent to-black/40 pointer-events-none" />
 
           {/* Category Chip (Top-Left) */}
           {workshop.category && (
-            <div className="absolute top-3 left-3 z-10">
-              <span className="inline-flex items-center bg-white/95 backdrop-blur-sm text-navy text-[11px] font-semibold px-2.5 py-0.5 rounded-full border border-[#E8E8E8] shadow-2xs">
+            <div className="absolute top-3.5 left-3.5 z-10">
+              <span className="sticker sticker-gold text-[10px] backdrop-blur-md">
                 {workshop.category}
               </span>
             </div>
           )}
 
           {/* Status Badge & Bookmark (Top-Right) */}
-          <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5">
+          <div className="absolute top-3.5 right-3.5 z-10 flex items-center gap-1.5">
             <span
-              className={`inline-flex items-center gap-1 text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-full shadow-2xs ${
+              className={`sticker text-[10px] ${
                 isFewSpots
-                  ? 'bg-amber-500 text-white animate-pulse'
-                  : badgeConfig.className
+                  ? 'sticker-live animate-pulse'
+                  : isPast
+                  ? 'sticker-muted'
+                  : 'sticker-gold'
               }`}
             >
               {isFewSpots ? (
                 <>
-                  <Flame size={10} className="fill-current" />
-                  Few Spots Left
+                  <Flame size={10} className="fill-current text-red-400" />
+                  <span>FEW LEFT</span>
                 </>
               ) : isPast ? (
                 <>
                   <CheckCircle2 size={10} />
-                  Completed
+                  <span>ARCHIVED</span>
                 </>
               ) : (
                 <>
                   <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
-                  {badgeConfig.label}
+                  <span>LIVE</span>
                 </>
               )}
             </span>
@@ -110,87 +100,83 @@ export default function WorkshopCard({ workshop, onQuickView }) {
                 toggle(workshop.slug);
               }}
               aria-label={saved ? 'Remove bookmark' : 'Bookmark workshop'}
-              className={`w-7 h-7 rounded-full border flex items-center justify-center transition-colors shadow-2xs ${
+              className={`w-7 h-7 rounded-full border flex items-center justify-center transition-colors shadow-md ${
                 saved
-                  ? 'bg-gold text-white border-gold'
-                  : 'bg-white/95 backdrop-blur-sm text-navy/70 border-[#E8E8E8] hover:text-gold hover:border-gold'
+                  ? 'bg-gold text-[#0a0a0a] border-gold shadow-gold-glow'
+                  : 'bg-black/60 backdrop-blur-md text-white/70 border-white/15 hover:text-gold hover:border-gold/50'
               }`}
             >
-              <Bookmark size={12} className={saved ? 'fill-current' : ''} />
+              <Bookmark size={11} className={saved ? 'fill-current' : ''} />
             </motion.button>
           </div>
         </div>
 
-        {/* Card Body - Flex Column with equal height */}
-        <div className="p-5 flex-1 flex flex-col min-h-0">
-          {/* Title */}
-          <Link to={`/w/${workshop.slug}`}>
-            <h3 className="font-bold text-navy text-base leading-snug mb-1.5 line-clamp-2 group-hover:text-gold transition-colors duration-200">
-              {workshop.title}
-            </h3>
-          </Link>
+        {/* Card Body */}
+        <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between">
+          <div>
+            {/* Title */}
+            <Link to={`/w/${workshop.slug}`}>
+              <h3 className="font-sans font-extrabold text-white text-base sm:text-lg leading-snug mb-2 line-clamp-2 group-hover:text-gold transition-colors duration-200">
+                {workshop.title}
+              </h3>
+            </Link>
 
-          {/* Max ~12 words Description */}
-          {shortDesc && (
-            <p className="text-xs text-muted leading-relaxed mb-3 line-clamp-2">
-              {shortDesc}
-            </p>
-          )}
+            {/* Monospace Metadata Row */}
+            <div className="flex items-center gap-2 mb-4 text-xs font-mono text-white/50 flex-wrap">
+              {startDate && (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/[0.04] border border-white/[0.08] text-white/80">
+                  <Calendar size={11} className="text-gold" />
+                  <span>{startDate}</span>
+                </span>
+              )}
+              {workshop.timezones?.[0] && (
+                <span className="inline-flex items-center gap-1 truncate text-white/40">
+                  <Clock size={11} className="text-gold/70" />
+                  <span>{workshop.timezones[0].city} · {workshop.timezones[0].time}</span>
+                </span>
+              )}
+            </div>
 
-          {/* Date & Location / Time Chips */}
-          <div className="flex items-center gap-2 mb-3.5 text-xs text-muted flex-wrap">
-            {startDate && (
-              <span className="inline-flex items-center gap-1 font-mono text-[11px] bg-[#FAF9F6] border border-[#E8E8E8] px-2 py-0.5 rounded-md text-navy font-semibold">
-                <Calendar size={11} className="text-gold" />
-                {startDate}
-              </span>
-            )}
-            {workshop.timezones?.[0] && (
-              <span className="inline-flex items-center gap-1 font-mono text-[11px] text-muted truncate">
-                <Clock size={11} className="text-navy/60" />
-                {workshop.timezones[0].city} {workshop.timezones[0].time}
-              </span>
+            {/* Spots Left Progress Bar */}
+            {!isPast && (
+              <div className="mb-4">
+                <div className="flex items-center justify-between text-[11px] font-mono text-white/40 mb-1.5">
+                  <span className="flex items-center gap-1.5 font-bold text-white/80">
+                    <Users size={11} className="text-gold" />
+                    <span>{isSoldOut ? 'CAPACITY REACHED' : `${seatsLeft} SPOTS LEFT`}</span>
+                  </span>
+                  <span>{seatsBooked}/{seatsTotal}</span>
+                </div>
+                <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full rounded-full transition-all duration-700 ${
+                      isSoldOut
+                        ? 'bg-white/40'
+                        : fillPercentage >= 80
+                        ? 'bg-amber-400'
+                        : 'bg-gradient-to-r from-gold to-amber-300'
+                    }`}
+                    style={{ width: `${fillPercentage}%` }}
+                  />
+                </div>
+              </div>
             )}
           </div>
 
-          {/* Animated Spots Bar */}
-          {!isPast && (
-            <div className="mb-4 pt-1">
-              <div className="flex items-center justify-between text-[11px] text-muted mb-1 font-mono">
-                <span className="flex items-center gap-1 font-semibold text-navy">
-                  <Users size={11} className="text-gold" />
-                  {isSoldOut ? 'Sold Out' : `${seatsLeft} spots left`}
-                </span>
-                <span className="text-[10px]">{seatsBooked}/{seatsTotal}</span>
-              </div>
-              <div className="w-full h-1.5 bg-[#F0F0F0] rounded-full overflow-hidden">
-                <div
-                  className={`h-full rounded-full transition-all duration-700 ${
-                    isSoldOut
-                      ? 'bg-navy'
-                      : fillPercentage >= 80
-                      ? 'bg-amber-500'
-                      : 'bg-gold'
-                  }`}
-                  style={{ width: `${fillPercentage}%` }}
-                />
-              </div>
-            </div>
-          )}
-
-          {/* Card CTA Footer - Pinned to bottom with hover slide-up */}
-          <div className="mt-auto pt-3.5 border-t border-[#E8E8E8] flex items-center justify-between gap-2">
+          {/* Card CTA Footer */}
+          <div className="pt-4 border-t border-white/[0.08] flex items-center justify-between gap-2.5">
             {isPast ? (
               <Link
                 to={`/w/${workshop.slug}`}
-                className="w-full text-center py-2 px-3 rounded-full border border-[#E8E8E8] text-xs font-semibold text-navy hover:border-gold hover:text-gold hover:bg-[#FAF9F6] transition-colors"
+                className="w-full text-center py-2.5 px-4 rounded-full border border-white/10 text-xs font-mono font-bold uppercase tracking-wider text-white/70 hover:text-white hover:border-gold/50 hover:bg-white/[0.04] transition-all flex items-center justify-center gap-1.5"
               >
-                View Resources & Replay →
+                <span>View Recording & Lab</span>
+                <ArrowUpRight size={13} />
               </Link>
             ) : isSoldOut ? (
               <Link
                 to={`/w/${workshop.slug}#waitlist`}
-                className="w-full text-center py-2 px-3 rounded-full border border-navy bg-navy text-white text-xs font-semibold hover:bg-black transition-colors"
+                className="w-full text-center py-2.5 px-4 rounded-full border border-white/20 bg-white/10 text-white text-xs font-mono font-bold uppercase tracking-wider hover:bg-white/20 transition-all"
               >
                 Join Waitlist →
               </Link>
@@ -200,16 +186,17 @@ export default function WorkshopCard({ workshop, onQuickView }) {
                   <button
                     type="button"
                     onClick={() => onQuickView(workshop)}
-                    className="flex-1 py-2 px-2.5 rounded-full border border-[#E8E8E8] text-xs font-semibold text-navy hover:bg-[#FAF9F6] transition-colors"
+                    className="flex-1 py-2.5 px-3 rounded-full border border-white/10 text-xs font-mono uppercase tracking-wider font-semibold text-white/70 hover:text-white hover:bg-white/[0.05] transition-all"
                   >
                     Quick View
                   </button>
                 )}
                 <Link
                   to={`/w/${workshop.slug}?reserve=true`}
-                  className="flex-1 btn-primary text-xs py-2 px-3 text-center justify-center font-semibold rounded-full group-hover:shadow-xs transition-shadow"
+                  className="flex-1 btn-primary text-xs py-2.5 px-4 text-center justify-center font-mono font-bold uppercase tracking-wider rounded-full shadow-gold-glow flex items-center gap-1 group-hover:scale-[1.02] transition-transform"
                 >
-                  Reserve Spot
+                  <span>Reserve</span>
+                  <ArrowUpRight size={12} />
                 </Link>
               </div>
             )}

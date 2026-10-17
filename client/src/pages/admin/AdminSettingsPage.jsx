@@ -299,8 +299,12 @@ export default function AdminSettingsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-navy">Platform & Site-Wide Content</h1>
-          <p className="text-xs text-muted mt-1">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-gold/10 border border-gold/30 text-gold font-mono text-[10px] uppercase tracking-wider mb-2">
+            <Sparkles className="w-3 h-3 text-gold" />
+            <span>Site-Wide CMS · Global Configuration</span>
+          </div>
+          <h1 className="text-2xl font-display uppercase tracking-wider text-white">Platform & Site-Wide Content</h1>
+          <p className="text-xs text-[#8A8A85] mt-1 font-sans">
             Customize all public hub text, live hero stats, verified firm logos, testimonials, FAQs, and navigation.
           </p>
         </div>
@@ -308,12 +312,12 @@ export default function AdminSettingsPage() {
         <button
           type="submit"
           disabled={saving}
-          className="btn-primary text-xs py-2 px-5 flex items-center gap-2 self-start sm:self-auto shadow-xs"
+          className="btn-primary text-xs py-2 px-5 flex items-center gap-2 self-start sm:self-auto font-mono uppercase tracking-wider font-bold shadow-md shadow-gold/20"
         >
           {saving ? (
             <Loader2 className="w-3.5 h-3.5 animate-spin" />
           ) : saveSuccess ? (
-            <Check className="w-3.5 h-3.5 text-emerald-400" />
+            <Check className="w-3.5 h-3.5 text-black" />
           ) : (
             <Save className="w-3.5 h-3.5" />
           )}
@@ -322,7 +326,7 @@ export default function AdminSettingsPage() {
       </div>
 
       {/* Tabs Strip */}
-      <div className="flex items-center gap-1.5 overflow-x-auto whitespace-nowrap bg-white border border-[#E8E8E8] rounded-xl p-1.5 shadow-2xs scrollbar-none">
+      <div className="flex items-center gap-1.5 overflow-x-auto whitespace-nowrap bg-[#121218] border border-white/10 rounded-2xl p-1.5 shadow-xl scrollbar-none">
         {TABS.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -331,13 +335,13 @@ export default function AdminSettingsPage() {
               key={tab.id}
               type="button"
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold transition-all ${
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-mono uppercase tracking-wider transition-all ${
                 isActive
-                  ? 'bg-navy text-white shadow-2xs font-bold'
-                  : 'text-muted hover:text-navy hover:bg-[#FAF9F6]'
+                  ? 'bg-gold text-black font-bold shadow-md shadow-gold/20'
+                  : 'text-[#8A8A85] hover:text-white hover:bg-white/5 font-medium'
               }`}
             >
-              <Icon size={14} className={isActive ? 'text-gold' : 'text-muted'} />
+              <Icon size={14} className={isActive ? 'text-black' : 'text-gold'} />
               <span>{tab.label}</span>
             </button>
           );

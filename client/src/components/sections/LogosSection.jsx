@@ -9,9 +9,9 @@ function LogoMarquee({ firms = [] }) {
   const doubled = [...firms, ...firms];
   return (
     <div className="overflow-hidden relative marquee-track">
-      <div className="flex gap-8 animate-marquee marquee-inner whitespace-nowrap">
+      <div className="flex gap-4 sm:gap-6 animate-marquee marquee-inner whitespace-nowrap">
         {doubled.map((firm, i) => (
-          <span key={i} className="inline-flex items-center px-4 py-2 bg-white border border-border rounded-lg text-sm font-medium text-navy/60 shrink-0">
+          <span key={i} className="inline-flex items-center px-4 py-2 bg-[#16161c] border border-white/10 rounded-full text-xs font-mono font-bold text-white/70 shrink-0">
             {firm}
           </span>
         ))}
@@ -27,12 +27,14 @@ function AumCounter({ number = '246', prefix = '$', label = 'Billion AUM+' }) {
 
   return (
     <div ref={ref} className="text-center py-8">
-      <p className="text-4xl font-bold text-white mb-1">
+      <p className="font-display text-4xl sm:text-6xl text-gold mb-1 leading-none">
         {prefix}
         {inView ? <CountUp end={num} duration={2.5} decimals={0} /> : '0'}
         {label.includes('B') ? 'B+' : '+'}
       </p>
-      <p className="text-white/70 text-sm">Firms We Trained</p>
+      <p className="text-white/40 text-xs font-mono uppercase tracking-widest mt-2">
+        Institutional Capital Represented
+      </p>
     </div>
   );
 }
@@ -41,29 +43,30 @@ export default function LogosSection({ content }) {
   const { label, heading, image, firms = [], aumNumber = '246', aumLabel = 'Billion AUM+', aumPrefix = '$' } = content || {};
 
   return (
-    <section className="bg-white section">
-      <div className="container">
+    <section className="bg-[#0a0a0a] text-[#F5F5F0] py-20 border-t border-white/[0.08] relative overflow-hidden">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <FadeUp>
           <div className="text-center mb-12">
-            {label && <p className="section-label mb-3">{label}</p>}
-            <h2 className="text-display-sm font-bold text-navy max-w-2xl mx-auto text-balance">
-              {heading}
+            <span className="font-mono text-[11px] uppercase tracking-widest text-gold font-bold px-3 py-1 rounded-full bg-gold/10 border border-gold/20 inline-block mb-3">
+              {label || 'PROVEN RECORD'}
+            </span>
+            <h2 className="font-display text-3xl sm:text-5xl md:text-6xl uppercase tracking-tight text-white max-w-2xl mx-auto text-balance">
+              {heading || 'FUNDS WHO TRUST OUR SYSTEMS.'}
             </h2>
           </div>
         </FadeUp>
 
-        {/* Logo wall image or purple card */}
+        {/* Logo wall image or bento card */}
         <FadeIn delay={0.1}>
           {image ? (
-            <div className="rounded-card overflow-hidden border border-border max-w-4xl mx-auto">
+            <div className="rounded-3xl overflow-hidden border border-white/10 max-w-4xl mx-auto bg-[#141418]">
               <img src={image} alt="Firms" className="w-full object-cover" />
             </div>
           ) : (
-            <div className="rounded-card overflow-hidden max-w-4xl mx-auto"
-                 style={{ background: 'linear-gradient(135deg, #2D1B69 0%, #1a0f40 100%)' }}>
+            <div className="rounded-3xl overflow-hidden max-w-4xl mx-auto glass-strong bg-[#141418] border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.85)]">
               <AumCounter number={aumNumber} prefix={aumPrefix} label={aumLabel} />
-              <div className="px-8 pb-8">
+              <div className="px-6 pb-8">
                 <LogoMarquee firms={firms} />
               </div>
             </div>

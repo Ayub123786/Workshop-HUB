@@ -164,14 +164,18 @@ export default function AdminImagesPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-navy">Image Asset Manager</h1>
-          <p className="text-xs text-muted mt-1">
-            Upload, crop to target aspect ratios, optimize to WebP, and store directly in Supabase Storage.
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-gold/10 border border-gold/30 text-gold font-mono text-[10px] uppercase tracking-wider mb-2">
+            <Sparkles className="w-3 h-3 text-gold" />
+            <span>Digital Assets · WebP Storage</span>
+          </div>
+          <h1 className="text-2xl font-display uppercase tracking-wider text-white">Image Asset Manager</h1>
+          <p className="text-xs text-[#8A8A85] mt-1 font-sans">
+            Upload, crop to target aspect ratios, optimize to WebP, and manage high-resolution assets.
           </p>
         </div>
 
         {/* Upload Trigger */}
-        <label className="btn-primary text-xs py-2.5 px-4 cursor-pointer flex items-center gap-2 self-start sm:self-auto shadow-sm hover:scale-[1.02] transition-transform">
+        <label className="btn-primary text-xs py-2.5 px-4 cursor-pointer flex items-center gap-2 self-start sm:self-auto font-mono uppercase tracking-wider font-bold shadow-md shadow-gold/20 hover:scale-[1.02] transition-transform">
           <Upload className="w-4 h-4" /> Upload & Crop Image
           <input
             ref={fileInputRef}
@@ -184,13 +188,13 @@ export default function AdminImagesPage() {
       </div>
 
       {/* Target Slots Legend & Quick Selector */}
-      <div className="bg-white rounded-2xl border border-border p-5 shadow-sm space-y-3">
+      <div className="bg-[#121218] rounded-2xl border border-white/10 p-5 shadow-xl space-y-3">
         <div className="flex items-center justify-between">
-          <p className="text-xs font-bold text-navy uppercase tracking-wider flex items-center gap-2">
+          <p className="text-xs font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2">
             <Crop className="w-3.5 h-3.5 text-gold" />
             Preset Aspect Ratio Slots
           </p>
-          <span className="text-[11px] text-muted">
+          <span className="text-[11px] font-mono text-[#8A8A85]">
             Click a slot to filter gallery or prepare next upload
           </span>
         </div>
@@ -198,10 +202,10 @@ export default function AdminImagesPage() {
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setFilterSlot('all')}
-            className={`text-xs px-3.5 py-1.5 rounded-xl border transition-all flex items-center gap-1.5 ${
+            className={`text-xs px-3.5 py-1.5 rounded-xl border transition-all flex items-center gap-1.5 font-mono uppercase tracking-wider ${
               filterSlot === 'all'
-                ? 'bg-navy text-white border-navy font-bold shadow-xs'
-                : 'bg-cream text-muted border-border hover:border-gold hover:text-navy'
+                ? 'bg-gold text-black border-gold font-bold shadow-md shadow-gold/20'
+                : 'bg-white/5 text-[#8A8A85] border-white/10 hover:border-gold hover:text-white'
             }`}
           >
             <Filter className="w-3 h-3" />
@@ -219,16 +223,16 @@ export default function AdminImagesPage() {
                   setSelectedSlot(slot);
                   setFilterSlot(slot.id);
                 }}
-                className={`text-xs px-3 py-1.5 rounded-xl border transition-all flex items-center gap-2 ${
+                className={`text-xs px-3 py-1.5 rounded-xl border transition-all flex items-center gap-2 font-mono uppercase tracking-wider ${
                   isFilterActive
-                    ? 'bg-navy text-white border-navy font-bold shadow-xs'
-                    : 'bg-cream text-muted border-border hover:border-gold hover:text-navy'
+                    ? 'bg-gold text-black border-gold font-bold shadow-md shadow-gold/20'
+                    : 'bg-white/5 text-[#8A8A85] border-white/10 hover:border-gold hover:text-white'
                 }`}
               >
                 <span>{slot.label}</span>
                 <span className="text-[10px] opacity-75">({slot.ratioText})</span>
                 {count > 0 && (
-                  <span className="bg-white/20 text-[10px] px-1.5 py-0.2 rounded-full font-semibold">
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-semibold ${isFilterActive ? 'bg-black/20 text-black' : 'bg-white/10 text-white'}`}>
                     {count}
                   </span>
                 )}

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, Clock, ArrowRight, X } from 'lucide-react';
+import { Calendar, ArrowUpRight, X, Flame } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import MagneticButton from '../animations/MagneticButton';
 
@@ -10,14 +10,10 @@ export default function NextSessionStrip({ workshop }) {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Check if user is scrolled past hero section (>450px)
       if (window.scrollY <= 450) {
         setVisible(false);
         return;
       }
-
-      // Hide sticky strip when user is browsing the Past Events coverflow section
-      // to prevent obscuring the cards
       const pastEl = document.getElementById('past');
       if (pastEl) {
         const rect = pastEl.getBoundingClientRect();
@@ -26,7 +22,6 @@ export default function NextSessionStrip({ workshop }) {
           return;
         }
       }
-
       setVisible(true);
     };
 
@@ -51,22 +46,21 @@ export default function NextSessionStrip({ workshop }) {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 80, opacity: 0 }}
           transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed bottom-4 left-4 right-4 z-40 max-w-3xl mx-auto"
+          className="fixed bottom-5 left-4 right-4 z-40 max-w-2xl mx-auto pointer-events-none"
         >
-          <div className="bg-white/95 backdrop-blur-md border border-[#E8E8E8] rounded-full p-2 sm:px-4 sm:py-2.5 shadow-[0_12px_36px_rgba(0,0,0,0.1)] flex items-center justify-between gap-3">
+          <div className="pointer-events-auto bg-[#121216]/90 backdrop-blur-2xl border border-white/15 rounded-full p-2 sm:px-4 sm:py-2.5 shadow-[0_20px_50px_rgba(0,0,0,0.9),0_0_20px_rgba(201,162,77,0.18)] flex items-center justify-between gap-3">
             {/* Meta */}
             <div className="flex items-center gap-2.5 min-w-0">
-              <span className="w-2 h-2 rounded-full bg-gold animate-pulse shrink-0" />
-              <span className="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider text-navy shrink-0">
-                Next Cohort
+              <span className="sticker sticker-live text-[9px] py-0.5 px-2">
+                <Flame size={9} className="text-red-400" />
+                <span>NEXT</span>
               </span>
-              <span className="text-muted/40 hidden sm:inline">|</span>
-              <p className="text-xs font-bold text-navy truncate max-w-[220px] sm:max-w-[320px]">
+              <p className="text-xs font-bold text-white truncate max-w-[180px] sm:max-w-[280px]">
                 {workshop.title}
               </p>
               {dateStr && (
-                <span className="hidden md:inline-flex items-center gap-1 text-[11px] font-mono text-muted bg-[#FAF9F6] border border-[#E8E8E8] px-2 py-0.5 rounded-full shrink-0">
-                  <Calendar size={10} className="text-gold" />
+                <span className="hidden md:inline-flex items-center gap-1 text-[10px] font-mono text-gold bg-gold/10 border border-gold/30 px-2 py-0.5 rounded-full shrink-0">
+                  <Calendar size={10} />
                   {dateStr}
                 </span>
               )}
@@ -77,15 +71,16 @@ export default function NextSessionStrip({ workshop }) {
               <MagneticButton
                 as={Link}
                 to={`/w/${workshop.slug}?reserve=true`}
-                className="btn-primary text-xs py-1.5 px-3.5 shadow-2xs font-semibold flex items-center gap-1 rounded-full"
+                className="btn-primary text-[11px] font-mono font-bold tracking-wider py-1.5 px-4 shadow-gold-glow flex items-center gap-1 rounded-full group"
+                data-cursor="RESERVE"
               >
                 <span>Reserve</span>
-                <ArrowRight size={12} />
+                <ArrowUpRight size={12} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </MagneticButton>
 
               <button
                 onClick={() => setDismissed(true)}
-                className="p-1 rounded-full text-muted hover:text-navy hover:bg-[#FAF9F6] transition-colors"
+                className="p-1 rounded-full text-white/40 hover:text-white hover:bg-white/10 transition-colors"
                 aria-label="Dismiss sticky session bar"
               >
                 <X size={14} />

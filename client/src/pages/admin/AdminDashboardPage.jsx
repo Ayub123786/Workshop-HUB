@@ -97,8 +97,12 @@ export default function AdminDashboardPage() {
       {/* Top Welcome & Actions */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-navy">Platform Overview & Analytics</h1>
-          <p className="text-xs text-muted mt-1">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="w-2 h-2 rounded-full bg-gold shadow-[0_0_8px_rgba(201,162,77,0.8)] animate-pulse" />
+            <span className="text-[11px] font-mono text-gold uppercase tracking-widest font-bold">EXECUTIVE CONSOLE</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-display font-extrabold text-white uppercase tracking-wider">Platform Overview & Analytics</h1>
+          <p className="text-xs text-white/50 font-mono mt-1">
             Real-time cohort demand, conversion rates, traffic channels, and workshop operations.
           </p>
         </div>
@@ -106,7 +110,7 @@ export default function AdminDashboardPage() {
           <button
             onClick={handleCreateFromTemplate}
             disabled={creatingFromTemplate}
-            className="btn-secondary text-xs py-2 px-3.5 flex items-center gap-1.5"
+            className="btn-secondary text-xs py-2.5 px-4 flex items-center gap-2 font-mono uppercase tracking-wider"
           >
             {creatingFromTemplate ? (
               <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -118,7 +122,7 @@ export default function AdminDashboardPage() {
 
           <Link
             to="/admin/workshops/new"
-            className="btn-primary text-xs py-2 px-3.5 flex items-center gap-1.5"
+            className="btn-primary text-xs py-2.5 px-4 flex items-center gap-2 font-mono font-bold uppercase tracking-wider shadow-gold-glow"
           >
             <Plus className="w-3.5 h-3.5" />
             Create Workshop
@@ -128,73 +132,74 @@ export default function AdminDashboardPage() {
 
       {/* Metrics Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white p-5 rounded-2xl border border-border shadow-xs">
-          <div className="flex items-center justify-between text-muted mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider">Total Workshops</span>
-            <div className="w-8 h-8 rounded-lg bg-cream flex items-center justify-center text-navy">
+        <div className="bg-[#121218] p-5 rounded-2xl border border-white/10 shadow-lg hover:border-gold/30 transition-all">
+          <div className="flex items-center justify-between text-white/50 mb-2">
+            <span className="text-[11px] font-mono font-bold uppercase tracking-wider">Total Workshops</span>
+            <div className="w-8 h-8 rounded-lg bg-gold/15 border border-gold/30 flex items-center justify-center text-gold">
               <Layers className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-bold text-navy">{workshops.length}</div>
-          <span className="text-[11px] text-emerald-600 font-medium">
+          <div className="text-3xl font-display font-extrabold text-white tracking-wide">{workshops.length}</div>
+          <span className="text-[11px] font-mono text-emerald-400 font-bold flex items-center gap-1 mt-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
             {publishedCount} published live
           </span>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-border shadow-xs">
-          <div className="flex items-center justify-between text-muted mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider">Total Registrations</span>
-            <div className="w-8 h-8 rounded-lg bg-cream flex items-center justify-center text-gold">
+        <div className="bg-[#121218] p-5 rounded-2xl border border-white/10 shadow-lg hover:border-gold/30 transition-all">
+          <div className="flex items-center justify-between text-white/50 mb-2">
+            <span className="text-[11px] font-mono font-bold uppercase tracking-wider">Total Registrations</span>
+            <div className="w-8 h-8 rounded-lg bg-gold/15 border border-gold/30 flex items-center justify-center text-gold">
               <Users className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-bold text-navy">{submissions.length}</div>
-          <span className="text-[11px] text-muted">
+          <div className="text-3xl font-display font-extrabold text-white tracking-wide">{submissions.length}</div>
+          <span className="text-[11px] font-mono text-white/50 mt-1 block">
             {confirmedCount} confirmed · {waitlistCount} waitlist
           </span>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-border shadow-xs">
-          <div className="flex items-center justify-between text-muted mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider">Capacity Fill Rate</span>
-            <div className="w-8 h-8 rounded-lg bg-cream flex items-center justify-center text-navy">
+        <div className="bg-[#121218] p-5 rounded-2xl border border-white/10 shadow-lg hover:border-gold/30 transition-all">
+          <div className="flex items-center justify-between text-white/50 mb-2">
+            <span className="text-[11px] font-mono font-bold uppercase tracking-wider">Capacity Fill Rate</span>
+            <div className="w-8 h-8 rounded-lg bg-gold/15 border border-gold/30 flex items-center justify-center text-gold">
               <TrendingUp className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-bold text-navy">{fillRate}%</div>
+          <div className="text-3xl font-display font-extrabold text-white tracking-wide">{fillRate}%</div>
           <div className="flex items-center gap-2 mt-1">
-            <div className="h-1.5 flex-1 bg-cream rounded-full overflow-hidden">
-              <div className="h-full bg-gold rounded-full" style={{ width: `${fillRate}%` }} />
+            <div className="h-1.5 flex-1 bg-white/[0.08] rounded-full overflow-hidden">
+              <div className="h-full bg-gradient-to-r from-gold via-gold-light to-gold rounded-full shadow-[0_0_8px_rgba(201,162,77,0.5)]" style={{ width: `${fillRate}%` }} />
             </div>
-            <span className="text-[11px] text-muted font-mono">{totalBooked}/{totalSeats}</span>
+            <span className="text-[11px] text-white/50 font-mono">{totalBooked}/{totalSeats}</span>
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-border shadow-xs">
-          <div className="flex items-center justify-between text-muted mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider">Conversion Rate</span>
-            <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+        <div className="bg-[#121218] p-5 rounded-2xl border border-white/10 shadow-lg hover:border-gold/30 transition-all">
+          <div className="flex items-center justify-between text-white/50 mb-2">
+            <span className="text-[11px] font-mono font-bold uppercase tracking-wider">Conversion Rate</span>
+            <div className="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center">
               <CheckCircle className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-bold text-emerald-600">23.4%</div>
-          <span className="text-[11px] text-muted">Visitor-to-enrollment</span>
+          <div className="text-3xl font-display font-extrabold text-emerald-400 tracking-wide">23.4%</div>
+          <span className="text-[11px] font-mono text-white/50 mt-1 block">Visitor-to-enrollment</span>
         </div>
       </div>
 
       {/* Analytics: Cohort Demand Breakdown & Traffic Sources */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Registrations Breakdown by Workshop */}
-        <div className="bg-white rounded-2xl border border-border p-5 shadow-xs space-y-4">
-          <div className="flex items-center justify-between border-b border-border pb-3">
+        <div className="bg-[#121218] rounded-2xl border border-white/10 p-5 shadow-lg space-y-4">
+          <div className="flex items-center justify-between border-b border-white/10 pb-3">
             <div>
-              <h2 className="text-sm font-bold text-navy flex items-center gap-2">
+              <h2 className="text-sm font-bold text-white flex items-center gap-2 font-display uppercase tracking-wider text-base">
                 <BarChart3 className="w-4 h-4 text-gold" />
                 <span>Registrations Breakdown by Workshop</span>
               </h2>
-              <p className="text-[11px] text-muted">Cohort capacity utilization and booking progress</p>
+              <p className="text-[11px] text-white/50 font-mono">Cohort capacity utilization and booking progress</p>
             </div>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-muted bg-cream border border-border px-2 py-0.5 rounded-full">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-gold bg-gold/10 border border-gold/30 px-2.5 py-0.5 rounded-full font-mono">
               Live Capacity
             </span>
           </div>
@@ -208,25 +213,25 @@ export default function AdminDashboardPage() {
                 const pct = Math.min(100, Math.round((booked / total) * 100));
 
                 return (
-                  <div key={w._id} className="space-y-1.5 p-2.5 rounded-xl bg-cream/50 border border-border">
+                  <div key={w._id} className="space-y-1.5 p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-white/20 transition-all">
                     <div className="flex items-center justify-between text-xs">
                       <div className="flex items-center gap-2 min-w-0">
-                        <span className="font-semibold text-navy truncate max-w-[200px] sm:max-w-xs">{w.title}</span>
-                        <span className="text-[10px] text-muted uppercase font-mono hidden sm:inline">
+                        <span className="font-semibold text-white truncate max-w-[200px] sm:max-w-xs">{w.title}</span>
+                        <span className="text-[10px] text-white/40 uppercase font-mono hidden sm:inline">
                           {w.category}
                         </span>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
-                        <span className="font-mono text-[11px] font-bold text-navy">
+                        <span className="font-mono text-[11px] font-bold text-white">
                           {booked} / {total}
                         </span>
-                        <span className="text-[10px] font-semibold text-gold">({pct}%)</span>
+                        <span className="text-[10px] font-bold text-gold font-mono">({pct}%)</span>
                       </div>
                     </div>
 
-                    <div className="h-1.5 w-full bg-cream rounded-full overflow-hidden">
+                    <div className="h-1.5 w-full bg-white/[0.08] rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gold rounded-full transition-all duration-500"
+                        className="h-full bg-gradient-to-r from-gold via-gold-light to-gold rounded-full transition-all duration-500 shadow-[0_0_8px_rgba(201,162,77,0.4)]"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
@@ -237,16 +242,16 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* Traffic Source Overview */}
-        <div className="bg-white rounded-2xl border border-border p-5 shadow-xs space-y-4">
-          <div className="flex items-center justify-between border-b border-border pb-3">
+        <div className="bg-[#121218] rounded-2xl border border-white/10 p-5 shadow-lg space-y-4">
+          <div className="flex items-center justify-between border-b border-white/10 pb-3">
             <div>
-              <h2 className="text-sm font-bold text-navy flex items-center gap-2">
+              <h2 className="text-sm font-bold text-white flex items-center gap-2 font-display uppercase tracking-wider text-base">
                 <Compass className="w-4 h-4 text-gold" />
                 <span>Traffic Sources & Inbound Channels</span>
               </h2>
-              <p className="text-[11px] text-muted">Attendee acquisition attribution across channels</p>
+              <p className="text-[11px] text-white/50 font-mono">Attendee acquisition attribution across channels</p>
             </div>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-muted bg-cream border border-border px-2 py-0.5 rounded-full">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-white/60 bg-white/[0.04] border border-white/10 px-2.5 py-0.5 rounded-full font-mono">
               Attribution
             </span>
           </div>
@@ -260,15 +265,15 @@ export default function AdminDashboardPage() {
             ].map((item, idx) => (
               <div key={idx} className="space-y-1">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-navy font-medium">{item.source}</span>
+                  <span className="text-white font-medium">{item.source}</span>
                   <div className="flex items-center gap-2 text-[11px] font-mono">
-                    <span className="text-muted">{item.count}</span>
-                    <span className="font-bold text-navy">{item.share}%</span>
+                    <span className="text-white/40">{item.count}</span>
+                    <span className="font-bold text-gold">{item.share}%</span>
                   </div>
                 </div>
-                <div className="h-1.5 w-full bg-cream rounded-full overflow-hidden border border-border/50">
+                <div className="h-1.5 w-full bg-white/[0.08] rounded-full overflow-hidden border border-white/5">
                   <div
-                    className="h-full bg-navy rounded-full transition-all duration-500"
+                    className="h-full bg-gradient-to-r from-gold via-gold-light to-gold rounded-full transition-all duration-500 shadow-[0_0_8px_rgba(201,162,77,0.4)]"
                     style={{ width: `${item.share}%` }}
                   />
                 </div>
@@ -276,35 +281,35 @@ export default function AdminDashboardPage() {
             ))}
           </div>
 
-          <div className="pt-2 border-t border-border grid grid-cols-2 gap-3 text-center text-xs">
-            <div className="p-2 rounded-xl bg-cream border border-border">
-              <span className="block text-[10px] uppercase font-bold text-muted">Avg. Time to Cohort Fill</span>
-              <span className="text-sm font-bold text-navy">12 Days</span>
+          <div className="pt-2 border-t border-white/10 grid grid-cols-2 gap-3 text-center text-xs">
+            <div className="p-3 rounded-xl bg-white/[0.04] border border-white/10">
+              <span className="block text-[10px] uppercase font-bold text-white/40 font-mono">Avg. Time to Cohort Fill</span>
+              <span className="text-sm font-bold text-white font-mono mt-0.5 block">12 Days</span>
             </div>
-            <div className="p-2 rounded-xl bg-cream border border-border">
-              <span className="block text-[10px] uppercase font-bold text-muted">Executive Repeat Rate</span>
-              <span className="text-sm font-bold text-gold">38.2%</span>
+            <div className="p-3 rounded-xl bg-white/[0.04] border border-white/10">
+              <span className="block text-[10px] uppercase font-bold text-white/40 font-mono">Executive Repeat Rate</span>
+              <span className="text-sm font-bold text-gold font-mono mt-0.5 block">38.2%</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Active Workshops Section */}
-      <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
-        <div className="p-5 border-b border-border flex items-center justify-between">
+      <div className="bg-[#121218] rounded-2xl border border-white/10 shadow-lg overflow-hidden">
+        <div className="p-5 border-b border-white/10 flex items-center justify-between">
           <div>
-            <h2 className="text-base font-bold text-navy">Workshops Overview</h2>
-            <p className="text-xs text-muted">Active classes with status, capacity and quick actions</p>
+            <h2 className="text-base font-bold text-white font-display uppercase tracking-wider">Workshops Overview</h2>
+            <p className="text-xs text-white/50 font-mono">Active classes with status, capacity and quick actions</p>
           </div>
           <Link
             to="/admin/workshops"
-            className="text-xs font-semibold text-gold hover:underline flex items-center gap-1"
+            className="text-xs font-mono font-bold uppercase tracking-wider text-gold hover:text-gold-light flex items-center gap-1"
           >
             Manage All ({workshops.length}) →
           </Link>
         </div>
 
-        <div className="divide-y divide-border overflow-x-auto">
+        <div className="divide-y divide-white/10 overflow-x-auto">
           {workshops.slice(0, 6).map((workshop) => {
             const seatsLeft = Math.max(0, (workshop.seatsTotal || 100) - (workshop.seatsBooked || 0));
             const pct = Math.min(100, Math.round(((workshop.seatsBooked || 0) / (workshop.seatsTotal || 100)) * 100));
@@ -312,10 +317,10 @@ export default function AdminDashboardPage() {
             return (
               <div
                 key={workshop._id}
-                className="p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-cream/40 transition-colors"
+                className="p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-white/[0.03] transition-colors"
               >
                 <div className="flex items-start gap-4 min-w-0">
-                  <div className="w-16 h-12 rounded-lg bg-cream-dark overflow-hidden shrink-0 border border-border">
+                  <div className="w-16 h-12 rounded-lg bg-black/40 overflow-hidden shrink-0 border border-white/10">
                     {workshop.bannerImage ? (
                       <img
                         src={workshop.bannerImage}
@@ -323,7 +328,7 @@ export default function AdminDashboardPage() {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-xs text-muted font-bold">
+                      <div className="w-full h-full flex items-center justify-center text-xs text-white/40 font-mono font-bold">
                         WH
                       </div>
                     )}
@@ -334,16 +339,16 @@ export default function AdminDashboardPage() {
                         {workshop.status}
                       </span>
                       {workshop.featured && (
-                        <span className="text-[10px] bg-gold/15 text-gold font-bold px-2 py-0.5 rounded-full border border-gold/30">
+                        <span className="text-[10px] bg-gold/15 text-gold font-bold px-2 py-0.5 rounded-full border border-gold/30 font-mono uppercase tracking-wider">
                           Featured
                         </span>
                       )}
-                      <span className="text-xs text-muted capitalize">
+                      <span className="text-xs text-white/50 capitalize font-mono">
                         {workshop.category || 'General'}
                       </span>
                     </div>
-                    <h3 className="text-sm font-bold text-navy truncate">{workshop.title}</h3>
-                    <p className="text-xs text-muted flex items-center gap-3 mt-1">
+                    <h3 className="text-sm font-bold text-white truncate">{workshop.title}</h3>
+                    <p className="text-xs text-white/40 font-mono flex items-center gap-3 mt-1">
                       <span>Slug: /w/{workshop.slug}</span>
                       {workshop.startDate && (
                         <span className="flex items-center gap-1">
@@ -359,13 +364,13 @@ export default function AdminDashboardPage() {
                 <div className="flex items-center gap-6 self-end md:self-center shrink-0">
                   {/* Seats progress */}
                   <div className="w-32 hidden sm:block">
-                    <div className="flex justify-between text-[11px] mb-1">
-                      <span className="text-muted">Seats</span>
-                      <span className="font-bold text-navy">{workshop.seatsBooked || 0} / {workshop.seatsTotal || 100}</span>
+                    <div className="flex justify-between text-[11px] mb-1 font-mono">
+                      <span className="text-white/40">Seats</span>
+                      <span className="font-bold text-white">{workshop.seatsBooked || 0} / {workshop.seatsTotal || 100}</span>
                     </div>
-                    <div className="h-1.5 w-full bg-cream-dark rounded-full overflow-hidden">
+                    <div className="h-1.5 w-full bg-white/[0.08] rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gold rounded-full"
+                        className="h-full bg-gradient-to-r from-gold via-gold-light to-gold rounded-full shadow-[0_0_8px_rgba(201,162,77,0.4)]"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
@@ -374,7 +379,7 @@ export default function AdminDashboardPage() {
                   <div className="flex items-center gap-2">
                     <Link
                       to={`/admin/workshops/${workshop._id}/edit`}
-                      className="p-2 rounded-lg border border-border hover:bg-cream text-navy transition-colors"
+                      className="p-2 rounded-lg border border-white/10 hover:border-gold hover:bg-white/[0.05] text-white/70 hover:text-white transition-colors"
                       title="Edit Sections & Content"
                     >
                       <Edit className="w-4 h-4" />
@@ -382,7 +387,7 @@ export default function AdminDashboardPage() {
 
                     <Link
                       to={`/admin/workshops/${workshop._id}/form`}
-                      className="p-2 rounded-lg border border-border hover:bg-cream text-navy transition-colors"
+                      className="p-2 rounded-lg border border-white/10 hover:border-gold hover:bg-white/[0.05] text-white/70 hover:text-white transition-colors"
                       title="Form Builder"
                     >
                       <ClipboardList className="w-4 h-4" />
@@ -391,7 +396,7 @@ export default function AdminDashboardPage() {
                     <Link
                       to={`/w/${workshop.slug}`}
                       target="_blank"
-                      className="p-2 rounded-lg border border-border hover:bg-cream text-muted hover:text-navy transition-colors"
+                      className="p-2 rounded-lg border border-white/10 hover:border-gold hover:bg-white/[0.05] text-white/40 hover:text-white transition-colors"
                       title="View Live Page"
                     >
                       <ExternalLink className="w-4 h-4" />
@@ -405,15 +410,15 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Recent Submissions */}
-      <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
-        <div className="p-5 border-b border-border flex items-center justify-between">
+      <div className="bg-[#121218] rounded-2xl border border-white/10 shadow-lg overflow-hidden">
+        <div className="p-5 border-b border-white/10 flex items-center justify-between">
           <div>
-            <h2 className="text-base font-bold text-navy">Recent Registrations</h2>
-            <p className="text-xs text-muted">Latest attendees who reserved their seats</p>
+            <h2 className="text-base font-bold text-white font-display uppercase tracking-wider">Recent Registrations</h2>
+            <p className="text-xs text-white/50 font-mono">Latest attendees who reserved their seats</p>
           </div>
           <Link
             to="/admin/submissions"
-            className="text-xs font-semibold text-gold hover:underline"
+            className="text-xs font-mono font-bold uppercase tracking-wider text-gold hover:text-gold-light"
           >
             All Submissions →
           </Link>

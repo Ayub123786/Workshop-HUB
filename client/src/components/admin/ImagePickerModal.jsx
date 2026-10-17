@@ -171,18 +171,18 @@ export default function ImagePickerModal({
   });
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy/70 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white rounded-2xl shadow-2xl border border-border w-full max-w-2xl overflow-hidden flex flex-col max-h-[92vh]">
+    <div className="admin-dark fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="bg-[#121218] rounded-3xl shadow-2xl border border-white/10 w-full max-w-2xl overflow-hidden flex flex-col max-h-[92vh] text-white">
         {/* Header with Tabs */}
-        <div className="p-4 border-b border-border bg-cream flex items-center justify-between">
-          <div className="flex items-center gap-1 bg-white p-1 rounded-xl border border-border shadow-2xs">
+        <div className="p-4 border-b border-white/10 bg-[#161622] flex items-center justify-between">
+          <div className="flex items-center gap-1 bg-[#121218] p-1 rounded-xl border border-white/10 shadow-md">
             <button
               type="button"
               onClick={() => setActiveTab('upload')}
-              className={`text-xs px-3 py-1.5 rounded-lg font-semibold transition-all flex items-center gap-1.5 ${
+              className={`text-xs px-3 py-1.5 rounded-lg font-mono uppercase tracking-wider font-semibold transition-all flex items-center gap-1.5 ${
                 activeTab === 'upload'
-                  ? 'bg-navy text-white shadow-2xs'
-                  : 'text-muted hover:text-navy'
+                  ? 'bg-gold text-black font-bold shadow-md shadow-gold/20'
+                  : 'text-[#8A8A85] hover:text-white'
               }`}
             >
               <Upload className="w-3.5 h-3.5" /> Upload & Crop
@@ -190,10 +190,10 @@ export default function ImagePickerModal({
             <button
               type="button"
               onClick={() => setActiveTab('library')}
-              className={`text-xs px-3 py-1.5 rounded-lg font-semibold transition-all flex items-center gap-1.5 ${
+              className={`text-xs px-3 py-1.5 rounded-lg font-mono uppercase tracking-wider font-semibold transition-all flex items-center gap-1.5 ${
                 activeTab === 'library'
-                  ? 'bg-navy text-white shadow-2xs'
-                  : 'text-muted hover:text-navy'
+                  ? 'bg-gold text-black font-bold shadow-md shadow-gold/20'
+                  : 'text-[#8A8A85] hover:text-white'
               }`}
             >
               <Layers className="w-3.5 h-3.5" /> Image Library
@@ -201,10 +201,10 @@ export default function ImagePickerModal({
             <button
               type="button"
               onClick={() => setActiveTab('url')}
-              className={`text-xs px-3 py-1.5 rounded-lg font-semibold transition-all flex items-center gap-1.5 ${
+              className={`text-xs px-3 py-1.5 rounded-lg font-mono uppercase tracking-wider font-semibold transition-all flex items-center gap-1.5 ${
                 activeTab === 'url'
-                  ? 'bg-navy text-white shadow-2xs'
-                  : 'text-muted hover:text-navy'
+                  ? 'bg-gold text-black font-bold shadow-md shadow-gold/20'
+                  : 'text-[#8A8A85] hover:text-white'
               }`}
             >
               <LinkIcon className="w-3.5 h-3.5" /> Direct URL
@@ -214,7 +214,7 @@ export default function ImagePickerModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-full text-muted hover:bg-cream-dark transition-colors"
+            className="p-1.5 rounded-full text-[#8A8A85] hover:text-white hover:bg-white/10 transition-colors"
           >
             <X className="w-4 h-4" />
           </button>

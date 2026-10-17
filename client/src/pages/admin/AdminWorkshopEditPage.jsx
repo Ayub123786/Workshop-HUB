@@ -159,22 +159,26 @@ export default function AdminWorkshopEditPage() {
   const currentSection = sections[selectedSectionIndex];
 
   return (
-    <div className="flex-1 flex flex-col h-full min-h-0 bg-[#F8F9FA] overflow-hidden">
+    <div className="flex-1 flex flex-col h-full min-h-0 bg-[#0a0a0a] overflow-hidden">
       {/* Top Header Bar */}
-      <div className="bg-white border-b border-border px-6 py-3 flex items-center justify-between shrink-0 z-20">
+      <div className="bg-[#121218] border-b border-white/10 px-6 py-3 flex items-center justify-between shrink-0 z-20">
         <div className="flex items-center gap-4">
           <Link
             to="/admin/workshops"
-            className="p-1.5 rounded-lg text-muted hover:text-navy hover:bg-cream"
+            className="p-2 rounded-xl border border-white/10 text-[#8A8A85] hover:text-white hover:bg-white/5 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
           </Link>
           <div>
-            <h1 className="text-sm font-bold text-navy truncate max-w-sm md:max-w-md">
+            <h1 className="text-base font-display uppercase tracking-wider text-white truncate max-w-sm md:max-w-md">
               {workshop.title}
             </h1>
-            <p className="text-[11px] text-muted font-mono">
-              /w/{workshop.slug} · <span className="capitalize">{workshop.status}</span>
+            <p className="text-[11px] text-[#8A8A85] font-mono flex items-center gap-2 mt-0.5">
+              <span>/w/{workshop.slug}</span>
+              <span>·</span>
+              <span className="px-2 py-0.5 rounded-full bg-gold/15 text-gold border border-gold/30 uppercase text-[9px] font-bold">
+                {workshop.status}
+              </span>
             </p>
           </div>
         </div>
@@ -182,27 +186,27 @@ export default function AdminWorkshopEditPage() {
         {/* View toggle & Save button */}
         <div className="flex items-center gap-3">
           {/* Preview layout mode buttons */}
-          <div className="hidden lg:flex items-center bg-cream rounded-xl p-1 border border-border text-xs">
+          <div className="hidden lg:flex items-center bg-[#161622] rounded-xl p-1 border border-white/10 text-xs font-mono">
             <button
               onClick={() => setPreviewMode('editor')}
-              className={`px-3 py-1 rounded-lg font-medium transition-all ${
-                previewMode === 'editor' ? 'bg-white text-navy shadow-sm' : 'text-muted'
+              className={`px-3 py-1 rounded-lg font-medium uppercase tracking-wider text-[11px] transition-all ${
+                previewMode === 'editor' ? 'bg-gold text-black font-bold shadow-md shadow-gold/20' : 'text-[#8A8A85] hover:text-white'
               }`}
             >
               Editor Only
             </button>
             <button
               onClick={() => setPreviewMode('split')}
-              className={`px-3 py-1 rounded-lg font-medium transition-all ${
-                previewMode === 'split' ? 'bg-white text-navy shadow-sm' : 'text-muted'
+              className={`px-3 py-1 rounded-lg font-medium uppercase tracking-wider text-[11px] transition-all ${
+                previewMode === 'split' ? 'bg-gold text-black font-bold shadow-md shadow-gold/20' : 'text-[#8A8A85] hover:text-white'
               }`}
             >
               Split View
             </button>
             <button
               onClick={() => setPreviewMode('preview')}
-              className={`px-3 py-1 rounded-lg font-medium transition-all ${
-                previewMode === 'preview' ? 'bg-white text-navy shadow-sm' : 'text-muted'
+              className={`px-3 py-1 rounded-lg font-medium uppercase tracking-wider text-[11px] transition-all ${
+                previewMode === 'preview' ? 'bg-gold text-black font-bold shadow-md shadow-gold/20' : 'text-[#8A8A85] hover:text-white'
               }`}
             >
               Live Preview
@@ -212,7 +216,7 @@ export default function AdminWorkshopEditPage() {
           <Link
             to={`/w/${workshop.slug}`}
             target="_blank"
-            className="p-2 rounded-lg border border-border text-muted hover:text-navy hover:bg-cream"
+            className="p-2 rounded-xl border border-white/10 text-[#8A8A85] hover:text-gold hover:border-gold/40 hover:bg-gold/10 transition-colors"
             title="Open Public Page"
           >
             <ExternalLink className="w-4 h-4" />
@@ -221,12 +225,12 @@ export default function AdminWorkshopEditPage() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="btn-primary text-xs py-2 px-4 flex items-center gap-1.5"
+            className="btn-primary text-xs py-2 px-5 flex items-center gap-1.5 font-mono uppercase tracking-wider font-bold shadow-md shadow-gold/20"
           >
             {saving ? (
               <Loader2 className="w-3.5 h-3.5 animate-spin" />
             ) : saveSuccess ? (
-              <Check className="w-3.5 h-3.5 text-emerald-400" />
+              <Check className="w-3.5 h-3.5 text-black" />
             ) : (
               <Save className="w-3.5 h-3.5" />
             )}
@@ -239,58 +243,58 @@ export default function AdminWorkshopEditPage() {
       <div className="flex-1 flex overflow-hidden min-h-0">
         {/* LEFT PANE: Editor Controls */}
         <div
-          className={`h-full flex flex-col bg-white border-r border-border overflow-y-auto min-h-0 shrink-0 ${
+          className={`h-full flex flex-col bg-[#121218] border-r border-white/10 overflow-y-auto min-h-0 shrink-0 ${
             previewMode === 'preview' ? 'hidden' : previewMode === 'editor' ? 'w-full' : 'w-full lg:w-[480px] xl:w-[540px]'
           }`}
         >
           {/* Sub-tabs: Sections / Details / Theme / Hub Card */}
-          <div className="sticky top-0 z-10 flex border-b border-border bg-cream px-4 pt-2 gap-2 text-xs font-semibold shrink-0 overflow-x-auto whitespace-nowrap shadow-xs">
+          <div className="sticky top-0 z-10 flex border-b border-white/10 bg-[#161622] px-4 pt-2 gap-2 text-xs font-mono uppercase tracking-wider shrink-0 overflow-x-auto whitespace-nowrap shadow-md">
             <button
               onClick={() => setActiveTab('sections')}
-              className={`pb-2 px-3 border-b-2 transition-all flex items-center gap-1.5 shrink-0 ${
+              className={`pb-2.5 px-3 border-b-2 transition-all flex items-center gap-1.5 shrink-0 ${
                 activeTab === 'sections'
-                  ? 'border-navy text-navy font-bold'
-                  : 'border-transparent text-muted hover:text-navy'
+                  ? 'border-gold text-gold font-bold'
+                  : 'border-transparent text-[#8A8A85] hover:text-white'
               }`}
             >
               <Layers className="w-3.5 h-3.5" /> Sections ({sections.length})
             </button>
             <button
               onClick={() => setActiveTab('curriculum')}
-              className={`pb-2 px-3 border-b-2 transition-all flex items-center gap-1.5 shrink-0 ${
+              className={`pb-2.5 px-3 border-b-2 transition-all flex items-center gap-1.5 shrink-0 ${
                 activeTab === 'curriculum'
-                  ? 'border-navy text-navy font-bold'
-                  : 'border-transparent text-muted hover:text-navy'
+                  ? 'border-gold text-gold font-bold'
+                  : 'border-transparent text-[#8A8A85] hover:text-white'
               }`}
             >
               <BookOpen className="w-3.5 h-3.5" /> Curriculum & Extended
             </button>
             <button
               onClick={() => setActiveTab('details')}
-              className={`pb-2 px-3 border-b-2 transition-all flex items-center gap-1.5 shrink-0 ${
+              className={`pb-2.5 px-3 border-b-2 transition-all flex items-center gap-1.5 shrink-0 ${
                 activeTab === 'details'
-                  ? 'border-navy text-navy font-bold'
-                  : 'border-transparent text-muted hover:text-navy'
+                  ? 'border-gold text-gold font-bold'
+                  : 'border-transparent text-[#8A8A85] hover:text-white'
               }`}
             >
               <Settings className="w-3.5 h-3.5" /> General & SEO
             </button>
             <button
               onClick={() => setActiveTab('theme')}
-              className={`pb-2 px-3 border-b-2 transition-all flex items-center gap-1.5 shrink-0 ${
+              className={`pb-2.5 px-3 border-b-2 transition-all flex items-center gap-1.5 shrink-0 ${
                 activeTab === 'theme'
-                  ? 'border-navy text-navy font-bold'
-                  : 'border-transparent text-muted hover:text-navy'
+                  ? 'border-gold text-gold font-bold'
+                  : 'border-transparent text-[#8A8A85] hover:text-white'
               }`}
             >
               <Palette className="w-3.5 h-3.5" /> Theme & Animation
             </button>
             <button
               onClick={() => setActiveTab('cardPreview')}
-              className={`pb-2 px-3 border-b-2 transition-all flex items-center gap-1.5 shrink-0 ${
+              className={`pb-2.5 px-3 border-b-2 transition-all flex items-center gap-1.5 shrink-0 ${
                 activeTab === 'cardPreview'
-                  ? 'border-navy text-navy font-bold'
-                  : 'border-transparent text-muted hover:text-navy'
+                  ? 'border-gold text-gold font-bold'
+                  : 'border-transparent text-[#8A8A85] hover:text-white'
               }`}
             >
               <Sparkles className="w-3.5 h-3.5 text-gold" /> Hub Card

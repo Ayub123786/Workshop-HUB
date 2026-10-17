@@ -115,16 +115,20 @@ export default function AdminFormBuilderPage() {
         <div className="flex items-center gap-3">
           <Link
             to="/admin/workshops"
-            className="p-2 rounded-lg border border-border text-muted hover:text-navy hover:bg-cream"
+            className="p-2 rounded-xl border border-white/10 text-[#8A8A85] hover:text-white hover:bg-white/5 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
           </Link>
           <div>
-            <h1 className="text-xl font-bold text-navy">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-gold/10 border border-gold/30 text-gold font-mono text-[10px] uppercase tracking-wider mb-1">
+              <Sparkles className="w-3 h-3 text-gold" />
+              <span>Form Architect · Field Logic</span>
+            </div>
+            <h1 className="text-2xl font-display uppercase tracking-wider text-white">
               Registration Form Builder
             </h1>
-            <p className="text-xs text-muted">
-              For: <strong className="text-navy">{workshop?.title || 'Workshop'}</strong>
+            <p className="text-xs text-[#8A8A85] font-sans">
+              For: <strong className="text-gold font-mono tracking-tight">{workshop?.title || 'Workshop'}</strong>
             </p>
           </div>
         </div>
@@ -132,12 +136,12 @@ export default function AdminFormBuilderPage() {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="btn-primary text-xs py-2 px-5 flex items-center gap-2 self-start sm:self-auto"
+          className="btn-primary text-xs py-2 px-5 flex items-center gap-2 self-start sm:self-auto font-mono uppercase tracking-wider font-bold shadow-md shadow-gold/20"
         >
           {saving ? (
             <Loader2 className="w-3.5 h-3.5 animate-spin" />
           ) : saveSuccess ? (
-            <Check className="w-3.5 h-3.5 text-emerald-400" />
+            <Check className="w-3.5 h-3.5 text-black" />
           ) : (
             <Save className="w-3.5 h-3.5" />
           )}
@@ -349,13 +353,15 @@ export default function AdminFormBuilderPage() {
 
         {/* RIGHT COLUMN: Live Form Preview */}
         <div className="lg:col-span-5 sticky top-6">
-          <div className="bg-white rounded-2xl border border-border shadow-card overflow-hidden">
-            <div className="bg-cream-dark p-5 border-b border-border">
-              <span className="badge mb-2">LIVE MODAL PREVIEW</span>
-              <h3 className="text-lg font-bold text-navy">
+          <div className="bg-[#121218] rounded-3xl border border-white/10 shadow-2xl overflow-hidden">
+            <div className="bg-[#161622] p-5 border-b border-white/10">
+              <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-gold/10 border border-gold/30 text-gold font-mono text-[9px] uppercase tracking-wider mb-2">
+                LIVE MODAL PREVIEW
+              </div>
+              <h3 className="text-base font-display uppercase tracking-wider text-white truncate">
                 {workshop?.title || 'Workshop Title'}
               </h3>
-              <p className="text-xs text-muted mt-1">Live Registration Modal</p>
+              <p className="text-xs text-[#8A8A85] mt-1 font-sans">Live Registration Modal</p>
             </div>
 
             <div className="p-6 space-y-4">

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, Clock, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Calendar, Clock, ArrowRight, Eye, Users } from 'lucide-react';
 import { getWorkshopStatus, getStatusBadgeConfig } from '../../lib/workshopStatus';
 
 export default function WorkshopTimeline({ workshops = [], onQuickView }) {
@@ -8,7 +8,7 @@ export default function WorkshopTimeline({ workshops = [], onQuickView }) {
   const grouped = useMemo(() => {
     const map = {};
     workshops.forEach((w) => {
-      let groupKey = 'Undated Sessions';
+      let groupKey = 'Upcoming Cohorts';
       if (w.startDate) {
         const d = new Date(w.startDate);
         groupKey = d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
@@ -25,24 +25,24 @@ export default function WorkshopTimeline({ workshops = [], onQuickView }) {
   }
 
   return (
-    <div className="space-y-10 max-w-4xl mx-auto py-2">
+    <div className="space-y-12 max-w-4xl mx-auto py-4">
       {grouped.map(([monthTitle, items]) => (
         <div key={monthTitle} className="relative">
           {/* Month Marker Header */}
-          <div className="sticky top-20 z-10 flex items-center gap-3 mb-6 bg-[#FAF9F6]/90 backdrop-blur-xs py-1">
-            <span className="inline-flex items-center gap-1.5 bg-navy text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-2xs">
-              <Calendar size={12} className="text-gold" />
-              {monthTitle}
+          <div className="sticky top-20 z-10 flex items-center gap-3 mb-6 bg-[#0a0a0a]/90 backdrop-blur-md py-2">
+            <span className="inline-flex items-center gap-2 bg-[#16161a] border border-white/15 text-white text-xs font-mono font-bold px-3.5 py-1.5 rounded-full uppercase tracking-wider shadow-lg">
+              <Calendar size={13} className="text-gold" />
+              <span>{monthTitle}</span>
             </span>
-            <div className="flex-1 h-px bg-[#E8E8E8]" />
-            <span className="text-[11px] font-mono text-muted">
-              {items.length} {items.length === 1 ? 'session' : 'sessions'}
+            <div className="flex-1 h-px bg-white/10" />
+            <span className="text-[11px] font-mono text-white/40 uppercase tracking-widest">
+              {items.length} {items.length === 1 ? 'SESSION' : 'SESSIONS'}
             </span>
           </div>
 
           {/* Timeline Items with Connecting Line */}
-          <div className="relative border-l-2 border-[#E8E8E8] ml-4 sm:ml-6 space-y-6 pl-6 sm:pl-8">
-            {items.map((w) => {
+          <div className="relative border-l border-white/10 ml-4 sm:ml-6 space-y-6 pl-6 sm:pl-8">
+            {items.map((w, idx) => {
               const status = getWorkshopStatus(w);
               const badge = getStatusBadgeConfig(status);
               const isPast = status === 'completed';
@@ -60,102 +60,80 @@ export default function WorkshopTimeline({ workshops = [], onQuickView }) {
                 <div key={w._id || w.id} className="relative group">
                   {/* Timeline Node Dot */}
                   <div
-                    className={`absolute -left-[31px] sm:-left-[39px] top-4 w-4 h-4 rounded-full border-2 bg-white transition-all duration-200 group-hover:scale-125 ${
+                    className={`absolute -left-[31px] sm:-left-[39px] top-5 w-3.5 h-3.5 rounded-full border-2 transition-all duration-300 group-hover:scale-125 ${
                       status === 'live'
-                        ? 'border-red-500 bg-red-500 animate-ping'
+                        ? 'border-red-500 bg-red-500 shadow-[0_0_12px_rgba(239,68,68,0.8)]'
                         : isPast
-                        ? 'border-[#9CA3AF]'
-                        : 'border-gold group-hover:bg-gold'
-                    }`}
-                  />
-                  <div
-                    className={`absolute -left-[31px] sm:-left-[39px] top-4 w-4 h-4 rounded-full border-2 bg-white ${
-                      status === 'live'
-                        ? 'border-red-500'
-                        : isPast
-                        ? 'border-[#9CA3AF]'
-                        : 'border-gold'
+                        ? 'border-white/20 bg-black'
+                        : 'border-gold bg-[#0a0a0a] group-hover:bg-gold shadow-[0_0_12px_rgba(201,162,77,0.5)]'
                     }`}
                   />
 
                   {/* Timeline Card */}
-                  <div className="bg-white border border-[#E8E8E8] rounded-2xl p-5 hover:border-gold/60 transition-all shadow-2xs hover:shadow-xs">
-                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-2">
+                  <div className="glass-strong rounded-2xl p-5 sm:p-6 border border-white/10 hover:border-gold/40 transition-all duration-300 hover:shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
+                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className={`text-[10px] px-2 py-0.5 rounded-full ${badge.className}`}>
+                        <span className={`text-[10px] font-mono uppercase tracking-wider px-2.5 py-0.5 rounded-full ${badge.className}`}>
                           {badge.isLive && (
-                            <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse mr-1 inline-block" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse mr-1 inline-block" />
                           )}
                           {badge.label}
                         </span>
+
                         {w.category && (
-                          <span className="text-[10px] font-medium text-navy bg-cream border border-[#E8E8E8] px-2 py-0.5 rounded-full">
+                          <span className="text-[10px] font-mono text-white/70 bg-white/[0.05] border border-white/10 px-2.5 py-0.5 rounded-full uppercase">
                             {w.category}
                           </span>
                         )}
-                        <span className="text-xs font-semibold text-gold flex items-center gap-1 font-mono">
+
+                        <span className="text-xs font-mono font-bold text-gold flex items-center gap-1.5">
                           <Calendar size={12} />
                           {dateFormatted}
                         </span>
                       </div>
 
-                      {w.timezones?.length > 0 && (
-                        <div className="flex items-center gap-1 text-[11px] text-muted shrink-0">
-                          <Clock size={11} className="text-navy/60" />
-                          <span>{w.timezones.map((t) => `${t.city} ${t.time}`).join(' · ')}</span>
-                        </div>
+                      {w.duration && (
+                        <span className="text-[11px] font-mono text-white/40 flex items-center gap-1">
+                          <Clock size={12} />
+                          {w.duration}
+                        </span>
                       )}
                     </div>
 
-                    <Link to={`/w/${w.slug}`}>
-                      <h4 className="text-base font-bold text-navy leading-snug hover:text-gold transition-colors mb-2">
-                        {w.title}
-                      </h4>
-                    </Link>
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mt-2">
+                      <div className="flex-1">
+                        <Link
+                          to={`/w/${w.slug}`}
+                          className="font-bold text-base sm:text-lg text-white hover:text-gold transition-colors line-clamp-1"
+                        >
+                          {w.title}
+                        </Link>
+                        {w.shortDescription && (
+                          <p className="text-xs sm:text-sm text-white/50 line-clamp-2 mt-1 font-sans">
+                            {w.shortDescription}
+                          </p>
+                        )}
+                      </div>
 
-                    {w.shortDescription && (
-                      <p className="text-xs text-muted leading-relaxed mb-4 line-clamp-2">
-                        {w.shortDescription}
-                      </p>
-                    )}
-
-                    <div className="pt-3 border-t border-[#E8E8E8] flex items-center justify-between gap-2">
-                      <span className="text-xs text-muted">
-                        Trainer: <strong className="text-navy font-semibold">Ayub</strong> (Due Diligence Lab)
-                      </span>
-
-                      <div className="flex items-center gap-2">
+                      {/* Action buttons */}
+                      <div className="flex items-center gap-2 shrink-0">
                         {onQuickView && (
                           <button
                             onClick={() => onQuickView(w)}
-                            className="py-1.5 px-3 rounded-lg border border-[#E8E8E8] text-xs font-semibold text-navy hover:bg-cream transition-colors"
+                            className="p-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-white/60 hover:text-white border border-white/10 transition-colors cursor-pointer"
+                            title="Quick View"
                           >
-                            Quick View
+                            <Eye size={15} />
                           </button>
                         )}
-                        {isPast ? (
-                          <Link
-                            to={`/w/${w.slug}`}
-                            className="text-xs font-semibold text-navy hover:text-gold transition-colors"
-                          >
-                            Get Resources →
-                          </Link>
-                        ) : isSoldOut ? (
-                          <Link
-                            to={`/w/${w.slug}#waitlist`}
-                            className="py-1.5 px-3 rounded-lg bg-navy text-white text-xs font-semibold hover:bg-black transition-colors"
-                          >
-                            Join Waitlist
-                          </Link>
-                        ) : (
-                          <Link
-                            to={`/w/${w.slug}?reserve=true`}
-                            className="btn-primary text-xs py-1.5 px-3 font-semibold flex items-center gap-1"
-                          >
-                            <span>Reserve</span>
-                            <ArrowRight size={11} />
-                          </Link>
-                        )}
+
+                        <Link
+                          to={`/w/${w.slug}`}
+                          className="bg-gold hover:bg-gold-light text-black text-xs font-bold px-4 py-2 rounded-full inline-flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95 shadow-md shadow-gold/20"
+                        >
+                          <span>{isSoldOut ? 'Join Waitlist' : isPast ? 'Replay' : 'Reserve'}</span>
+                          <ArrowRight size={13} />
+                        </Link>
                       </div>
                     </div>
                   </div>

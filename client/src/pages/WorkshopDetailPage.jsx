@@ -66,10 +66,10 @@ function ShareBar({ title, url }) {
     <div className="flex items-center gap-1.5 flex-wrap">
       <button
         onClick={handleCopy}
-        className="p-2 rounded-lg border border-[#E8E8E8] text-navy hover:bg-cream transition-colors text-xs inline-flex items-center gap-1"
+        className="px-3 py-1.5 rounded-full border border-white/10 bg-white/[0.04] text-white/80 hover:text-white hover:bg-white/[0.08] transition-colors text-xs font-mono inline-flex items-center gap-1.5 cursor-pointer"
         title="Copy Link"
       >
-        {copied ? <Check size={13} className="text-emerald-600" /> : <Copy size={13} />}
+        {copied ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
         <span>{copied ? 'Copied' : 'Copy'}</span>
       </button>
 
@@ -77,7 +77,7 @@ function ShareBar({ title, url }) {
         href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="p-2 rounded-lg border border-[#E8E8E8] text-[#0077B5] hover:bg-cream transition-colors"
+        className="p-2 rounded-full border border-white/10 bg-white/[0.04] text-[#0077B5] hover:bg-white/[0.08] transition-colors inline-flex items-center justify-center"
         title="Share on LinkedIn"
       >
         <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
@@ -89,7 +89,7 @@ function ShareBar({ title, url }) {
         href={`https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="p-2 rounded-lg border border-[#E8E8E8] text-navy hover:bg-cream transition-colors"
+        className="p-2 rounded-full border border-white/10 bg-white/[0.04] text-white/80 hover:text-white hover:bg-white/[0.08] transition-colors inline-flex items-center justify-center"
         title="Share on X"
       >
         <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
@@ -101,7 +101,7 @@ function ShareBar({ title, url }) {
         href={`https://api.whatsapp.com/send?text=${encodedTitle}%20${encodedUrl}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="p-2 rounded-lg border border-[#E8E8E8] text-[#25D366] hover:bg-cream transition-colors"
+        className="p-2 rounded-full border border-white/10 bg-white/[0.04] text-[#25D366] hover:bg-white/[0.08] transition-colors inline-flex items-center justify-center"
         title="Share on WhatsApp"
       >
         <MessageCircle size={13} />
@@ -109,7 +109,7 @@ function ShareBar({ title, url }) {
 
       <a
         href={`mailto:?subject=${encodedTitle}&body=Check out this live executive masterclass: ${encodedUrl}`}
-        className="p-2 rounded-lg border border-[#E8E8E8] text-navy hover:bg-cream transition-colors"
+        className="p-2 rounded-full border border-white/10 bg-white/[0.04] text-white/80 hover:text-white hover:bg-white/[0.08] transition-colors inline-flex items-center justify-center"
         title="Share via Email"
       >
         <Mail size={13} />
@@ -308,7 +308,7 @@ export default function WorkshopDetailPage() {
 
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#0a0a0a] text-[#F5F5F0]">
       {/* ─── SEO Metadata & JSON-LD Event Schema ─── */}
       <Helmet>
         <title>{workshop.title} | Executive Master Class</title>
@@ -320,8 +320,6 @@ export default function WorkshopDetailPage() {
         <meta name="twitter:card" content="summary_large_image" />
         <script type="application/ld+json">{JSON.stringify(eventSchema)}</script>
       </Helmet>
-
-
 
       {/* ─── Full-Screen Main Content Flow (Original Mode) ─── */}
       <main className="w-full">
@@ -408,23 +406,23 @@ export default function WorkshopDetailPage() {
 
         {/* Dynamic Curriculum / Agenda Timetable (if configured on workshop) */}
         {workshop.agenda && workshop.agenda.length > 0 && !sortedSections.some((s) => s.type === 'stages') && (
-          <section id="agenda" className="py-20 bg-[#FAF9F6] border-y border-[#E8E8E8] scroll-mt-32">
+          <section id="agenda" className="py-20 bg-[#111115] border-y border-white/10 scroll-mt-32">
             <div className="max-w-4xl mx-auto px-4 sm:px-6">
               <span className="text-[10px] font-bold text-gold uppercase tracking-widest block mb-2 font-mono">
                 TIMETABLE & MODULE BREAKDOWN
               </span>
-              <h3 className="text-2xl sm:text-3xl font-bold text-navy mb-8">
+              <h3 className="text-2xl sm:text-3xl font-bold text-white mb-8">
                 Detailed Curriculum Schedule
               </h3>
-              <div className="divide-y divide-[#E8E8E8] bg-white border border-[#E8E8E8] rounded-2xl p-6 sm:p-8 shadow-2xs">
+              <div className="divide-y divide-white/10 bg-[#16161a] border border-white/10 rounded-3xl p-6 sm:p-8 shadow-2xl">
                 {workshop.agenda.map((item, idx) => (
                   <div key={idx} className="py-4 first:pt-0 last:pb-0 flex flex-col sm:flex-row sm:items-start gap-4">
-                    <span className="bg-[#FAF9F6] border border-[#E8E8E8] text-navy font-mono text-xs font-bold px-3 py-1.5 rounded-lg shrink-0 sm:w-36 text-center">
+                    <span className="bg-[#111115] border border-white/10 text-gold font-mono text-xs font-bold px-3 py-1.5 rounded-xl shrink-0 sm:w-36 text-center">
                       {item.time || `Module ${idx + 1}`}
                     </span>
                     <div className="flex-1 min-w-0">
-                      <h4 className="text-sm font-bold text-navy mb-1">{item.title}</h4>
-                      <p className="text-xs text-muted leading-relaxed">{item.description}</p>
+                      <h4 className="text-sm font-bold text-white mb-1">{item.title}</h4>
+                      <p className="text-xs text-white/50 leading-relaxed">{item.description}</p>
                     </div>
                   </div>
                 ))}
@@ -435,17 +433,17 @@ export default function WorkshopDetailPage() {
 
         {/* Dynamic Learning Outcomes Checklist */}
         {workshop.learningOutcomes && workshop.learningOutcomes.length > 0 && (
-          <section className="py-20 bg-white border-b border-[#E8E8E8]">
+          <section className="py-20 bg-[#0a0a0a] border-b border-white/10">
             <div className="max-w-4xl mx-auto px-4 sm:px-6">
               <span className="text-[10px] font-bold text-gold uppercase tracking-widest block mb-2 font-mono">
                 WHAT YOU WILL MASTER
               </span>
-              <h3 className="text-2xl sm:text-3xl font-bold text-navy mb-8">
+              <h3 className="text-2xl sm:text-3xl font-bold text-white mb-8">
                 Core Learning Outcomes
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {workshop.learningOutcomes.map((outcome, idx) => (
-                  <div key={idx} className="flex items-start gap-3 p-4 rounded-xl bg-[#FAF9F6] border border-[#E8E8E8] text-sm text-navy font-medium shadow-2xs">
+                  <div key={idx} className="flex items-start gap-3 p-4 rounded-2xl bg-[#141418] border border-white/10 text-sm text-white font-medium shadow-sm">
                     <CheckCircle2 size={18} className="text-gold shrink-0 mt-0.5" />
                     <span>{outcome}</span>
                   </div>
@@ -457,25 +455,25 @@ export default function WorkshopDetailPage() {
 
         {/* Prerequisites & Requirements */}
         {workshop.prerequisites && (workshop.prerequisites.whoItsFor || workshop.whoItsFor) && (
-          <section className="py-16 bg-[#FAF9F6] border-b border-[#E8E8E8]">
+          <section className="py-16 bg-[#111115] border-b border-white/10">
             <div className="max-w-4xl mx-auto px-4 sm:px-6">
               <span className="text-[10px] font-bold text-gold uppercase tracking-widest block mb-2 font-mono">
                 EXECUTIVE LAB PREREQUISITES
               </span>
-              <h3 className="text-2xl font-bold text-navy mb-6">
+              <h3 className="text-2xl font-bold text-white mb-6">
                 Who Should Attend & Requirements
               </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs text-muted">
-                <div className="bg-white border border-[#E8E8E8] rounded-xl p-5 shadow-2xs">
-                  <strong className="text-navy block mb-1 text-sm font-bold">Who It's For</strong>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs text-white/60">
+                <div className="bg-[#16161a] border border-white/10 rounded-2xl p-5 shadow-sm">
+                  <strong className="text-white block mb-1 text-sm font-bold">Who It's For</strong>
                   <span>{workshop.prerequisites?.whoItsFor || workshop.whoItsFor}</span>
                 </div>
-                <div className="bg-white border border-[#E8E8E8] rounded-xl p-5 shadow-2xs">
-                  <strong className="text-navy block mb-1 text-sm font-bold">Technical Level</strong>
+                <div className="bg-[#16161a] border border-white/10 rounded-2xl p-5 shadow-sm">
+                  <strong className="text-white block mb-1 text-sm font-bold">Technical Level</strong>
                   <span>{workshop.prerequisites?.technicalLevel || workshop.technicalLevel || 'No deep engineering background required.'}</span>
                 </div>
-                <div className="bg-white border border-[#E8E8E8] rounded-xl p-5 shadow-2xs">
-                  <strong className="text-navy block mb-1 text-sm font-bold">Take-Home Deliverables</strong>
+                <div className="bg-[#16161a] border border-white/10 rounded-2xl p-5 shadow-sm">
+                  <strong className="text-white block mb-1 text-sm font-bold">Take-Home Deliverables</strong>
                   <span>{workshop.prerequisites?.deliverables || workshop.deliverables || 'Production agent blueprints & code templates.'}</span>
                 </div>
               </div>
@@ -485,7 +483,7 @@ export default function WorkshopDetailPage() {
 
         {/* Video Player for Past Cohorts / Preview Reel */}
         {(workshop.videoUrl || workshop.recordingUrl) && (
-          <section className="py-20 bg-white border-b border-[#E8E8E8]">
+          <section className="py-20 bg-[#0a0a0a] border-b border-white/10">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-4">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-gold animate-pulse" />
@@ -493,10 +491,10 @@ export default function WorkshopDetailPage() {
                   {isPast ? 'FULL SESSION RECORDING' : 'EXECUTIVE PREVIEW REEL'}
                 </span>
               </div>
-              <h3 className="text-2xl sm:text-3xl font-bold text-navy">
+              <h3 className="text-2xl sm:text-3xl font-bold text-white">
                 {isPast ? 'Watch On-Demand Lab Recording' : 'Executive Master Class Walkthrough'}
               </h3>
-              <div className="aspect-video bg-black rounded-2xl overflow-hidden shadow-card border border-[#E8E8E8]">
+              <div className="aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl border border-white/15">
                 <video
                   src={workshop.videoUrl || workshop.recordingUrl}
                   poster={workshop.bannerImage}
@@ -518,20 +516,20 @@ export default function WorkshopDetailPage() {
 
         {/* Completed Workshop State: Priority Rerun Notification */}
         {isPast && (
-          <section className="py-20 bg-[#FAF9F6] border-b border-[#E8E8E8]">
+          <section className="py-20 bg-[#0a0a0a] border-b border-white/10">
             <div className="max-w-xl mx-auto px-4 sm:px-6 text-center space-y-4">
               <span className="text-[10px] font-bold text-gold uppercase tracking-widest block font-mono">
                 ARCHIVED MASTER CLASS
               </span>
-              <h3 className="text-2xl font-bold text-navy">
+              <h3 className="text-2xl sm:text-3xl font-display uppercase tracking-tight text-white">
                 Looking to catch the next run of this session?
               </h3>
-              <p className="text-xs text-muted leading-relaxed">
+              <p className="text-xs sm:text-sm text-white/50 leading-relaxed font-sans">
                 Enter your email below. Our team notifies alumni and verified sponsors as soon as a new cohort date is scheduled.
               </p>
 
               {notifySuccess ? (
-                <div className="bg-emerald-50 border border-emerald-200/80 rounded-xl p-3 text-xs text-emerald-800 font-semibold max-w-sm mx-auto">
+                <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-3.5 text-xs text-emerald-400 font-semibold max-w-sm mx-auto font-mono">
                   ✓ You're on the priority notify list!
                 </div>
               ) : (
@@ -542,12 +540,12 @@ export default function WorkshopDetailPage() {
                     onChange={(e) => setNotifyEmail(e.target.value)}
                     placeholder="your@firm.com"
                     required
-                    className="flex-1 px-3 py-2 rounded-xl border border-[#E8E8E8] bg-white text-xs text-navy focus:outline-none focus:border-gold"
+                    className="flex-1 px-4 py-2.5 rounded-full border border-white/10 bg-[#181822] text-xs text-white placeholder:text-white/30 focus:outline-none focus:border-gold"
                   />
                   <button
                     type="submit"
                     disabled={notifySubmitting}
-                    className="btn-primary text-xs py-2 px-4 font-semibold shrink-0"
+                    className="bg-gold hover:bg-gold-light text-black text-xs py-2.5 px-5 font-bold rounded-full shrink-0 transition-transform hover:scale-105 active:scale-95 shadow-md shadow-gold/20"
                   >
                     {notifySubmitting ? 'Submitting...' : 'Notify Me'}
                   </button>
@@ -560,16 +558,16 @@ export default function WorkshopDetailPage() {
       </main>
 
       {/* ─── Mobile Sticky Bottom CTA Bar ─── */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-[#E8E8E8] p-3 shadow-card-hover flex items-center justify-between gap-3">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0a0a0a]/90 backdrop-blur-xl border-t border-white/10 p-3 shadow-2xl flex items-center justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-xs font-bold text-navy truncate leading-tight">{workshop.title}</p>
-          <p className="text-[10px] text-muted font-mono">
+          <p className="text-xs font-bold text-white truncate leading-tight">{workshop.title}</p>
+          <p className="text-[10px] text-white/40 font-mono">
             {isPast ? 'Completed' : isSoldOut ? 'Capacity reached' : `${seatsLeft} spots left`}
           </p>
         </div>
         <button
           onClick={() => setIsRegisterOpen(true)}
-          className="btn-primary text-xs py-2 px-4 shrink-0 font-semibold"
+          className="bg-gold hover:bg-gold-light text-black text-xs py-2 px-4 rounded-full shrink-0 font-bold shadow-md shadow-gold/20"
         >
           {isPast ? 'Resources' : isSoldOut ? 'Waitlist' : 'Reserve Spot'}
         </button>

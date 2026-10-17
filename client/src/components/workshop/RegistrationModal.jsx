@@ -5,15 +5,12 @@ import {
   CheckCircle2,
   AlertCircle,
   Calendar,
-  Clock,
   Loader2,
   ArrowRight,
   ArrowLeft,
   Share2,
   Check,
   ShieldCheck,
-  User,
-  Building,
 } from 'lucide-react';
 import api from '../../lib/api';
 import AddToCalendarMenu from '../calendar/AddToCalendarMenu';
@@ -21,7 +18,7 @@ import { getWorkshopStatus } from '../../lib/workshopStatus';
 import { formatInTimezone, getSavedTimezone } from '../../lib/calendarExport';
 
 export default function RegistrationModal({ isOpen, onClose, workshop, form, onRegistered }) {
-  const [step, setStep] = useState(1); // 1 = Details, 2 = Confirm
+  const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -126,7 +123,7 @@ export default function RegistrationModal({ isOpen, onClose, workshop, form, onR
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="fixed inset-0 bg-navy/60 backdrop-blur-xs"
+          className="fixed inset-0 bg-black/85 backdrop-blur-md"
         />
 
         {/* Modal Window */}
@@ -135,49 +132,49 @@ export default function RegistrationModal({ isOpen, onClose, workshop, form, onR
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: 16 }}
           transition={{ duration: 0.2, ease: 'easeOut' }}
-          className="relative bg-white rounded-2xl shadow-card-hover border border-[#E8E8E8] w-full max-w-lg overflow-hidden z-10 my-8"
+          className="relative bg-[#111115] rounded-3xl shadow-[0_0_80px_rgba(0,0,0,0.95)] border border-white/15 w-full max-w-lg overflow-hidden z-10 my-8"
         >
           {/* Header */}
-          <div className="bg-[#FAF9F6] p-5 sm:p-6 border-b border-[#E8E8E8] relative">
+          <div className="bg-[#141418] p-5 sm:p-6 border-b border-white/10 relative">
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 p-1.5 rounded-lg text-muted hover:text-navy hover:bg-white transition-colors"
+              className="absolute top-4 right-4 p-2 rounded-full text-white/50 hover:text-white hover:bg-white/[0.08] transition-colors cursor-pointer"
               aria-label="Close modal"
             >
               <X size={16} />
             </button>
 
-            <span className="text-[10px] font-bold text-gold uppercase tracking-widest block mb-1">
+            <span className="text-[10px] font-mono font-bold text-gold uppercase tracking-widest block mb-1">
               {isSoldOut ? 'VERIFIED WAITLIST' : 'EXECUTIVE REGISTRATION'}
             </span>
-            <h3 className="text-lg sm:text-xl font-bold text-navy leading-snug pr-6">
+            <h3 className="text-lg sm:text-xl font-bold text-white leading-snug pr-6">
               {workshop.title}
             </h3>
 
             {workshop.startDate && (
-              <div className="flex items-center gap-2 mt-2 text-xs text-muted">
-                <Calendar size={12} className="text-navy/70 shrink-0" />
+              <div className="flex items-center gap-1.5 mt-2 text-xs font-mono text-white/50">
+                <Calendar size={12} className="text-gold shrink-0" />
                 <span className="truncate">{dateFormatted}</span>
               </div>
             )}
 
-            {/* Multi-step progress indicator (Only when not finished) */}
+            {/* Multi-step progress indicator */}
             {!success && (
-              <div className="mt-4 pt-3 border-t border-[#E8E8E8] flex items-center gap-3">
+              <div className="mt-4 pt-3 border-t border-white/10 flex items-center gap-3">
                 <div className="flex-1 flex items-center gap-2">
                   <div
-                    className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
-                      step >= 1 ? 'bg-gold' : 'bg-[#E8E8E8]'
+                    className={`h-1 flex-1 rounded-full transition-all duration-300 ${
+                      step >= 1 ? 'bg-gold' : 'bg-white/10'
                     }`}
                   />
                   <div
-                    className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
-                      step >= 2 ? 'bg-gold' : 'bg-[#E8E8E8]'
+                    className={`h-1 flex-1 rounded-full transition-all duration-300 ${
+                      step >= 2 ? 'bg-gold' : 'bg-white/10'
                     }`}
                   />
                 </div>
-                <span className="text-[11px] font-mono text-muted">
-                  Step {step} of 2: {step === 1 ? 'Details' : 'Confirm'}
+                <span className="text-[10px] font-mono text-white/40 uppercase tracking-widest">
+                  STEP {step} OF 2: {step === 1 ? 'DETAILS' : 'CONFIRM'}
                 </span>
               </div>
             )}
@@ -186,35 +183,35 @@ export default function RegistrationModal({ isOpen, onClose, workshop, form, onR
           {/* Modal Body */}
           <div className="p-6">
             {success ? (
-              /* Success Screen (Confetti-free calm checkmark) */
+              /* Success Screen */
               <div className="text-center py-4 space-y-4">
-                <div className="w-14 h-14 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-700 flex items-center justify-center mx-auto shadow-2xs">
-                  <CheckCircle2 size={28} className="text-emerald-600" />
+                <div className="w-14 h-14 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/10">
+                  <CheckCircle2 size={28} />
                 </div>
 
                 <div>
-                  <h4 className="text-xl font-bold text-navy mb-1">
+                  <h4 className="text-xl font-bold text-white mb-1">
                     {isSoldOut ? "You're on the Waitlist!" : 'Seat Reserved Successfully'}
                   </h4>
-                  <p className="text-xs sm:text-sm text-muted leading-relaxed max-w-md mx-auto">
+                  <p className="text-xs sm:text-sm text-white/60 leading-relaxed max-w-md mx-auto font-sans">
                     {isSoldOut
                       ? `We have recorded your details. If an opening becomes available, we will notify ${formData.email} immediately in priority order.`
-                      : `A confirmation receipt and calendar invitation have been sent to ${formData.email}.`}
+                      : `A confirmation receipt and calendar invitation have been dispatched to ${formData.email}.`}
                   </p>
                 </div>
 
-                <div className="bg-[#FAF9F6] border border-[#E8E8E8] rounded-xl p-4 text-left space-y-2 text-xs">
-                  <div className="flex items-center justify-between text-muted border-b border-[#E8E8E8] pb-2">
+                <div className="bg-[#141418] border border-white/10 rounded-2xl p-4 text-left space-y-2 text-xs font-mono">
+                  <div className="flex items-center justify-between text-white/50 border-b border-white/10 pb-2">
                     <span>Attendee:</span>
-                    <strong className="text-navy">{formData.name}</strong>
+                    <strong className="text-white">{formData.name}</strong>
                   </div>
-                  <div className="flex items-center justify-between text-muted border-b border-[#E8E8E8] pb-2">
+                  <div className="flex items-center justify-between text-white/50 border-b border-white/10 pb-2">
                     <span>Firm:</span>
-                    <strong className="text-navy">{formData.company}</strong>
+                    <strong className="text-white">{formData.company}</strong>
                   </div>
-                  <div className="flex items-center justify-between text-muted">
+                  <div className="flex items-center justify-between text-white/50">
                     <span>Format:</span>
-                    <strong className="text-navy">Live Interactive Stream & Lab</strong>
+                    <strong className="text-gold">Live 4K Stream & Interactive Lab</strong>
                   </div>
                 </div>
 
@@ -224,24 +221,24 @@ export default function RegistrationModal({ isOpen, onClose, workshop, form, onR
 
                   <button
                     onClick={handleShare}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border border-[#E8E8E8] text-xs font-semibold text-navy hover:bg-cream transition-colors"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-white/10 text-xs font-mono font-bold text-white/70 hover:text-white hover:bg-white/[0.08] transition-colors cursor-pointer"
                   >
                     {copiedShare ? (
                       <>
-                        <Check size={13} className="text-emerald-600" />
+                        <Check size={13} className="text-emerald-400" />
                         <span>Link Copied</span>
                       </>
                     ) : (
                       <>
                         <Share2 size={13} />
-                        <span>Share Master Class</span>
+                        <span>Share</span>
                       </>
                     )}
                   </button>
 
                   <button
                     onClick={onClose}
-                    className="btn-primary text-xs py-1.5 px-5 font-semibold"
+                    className="bg-gold hover:bg-gold-light text-black text-xs font-bold py-2 px-6 rounded-full transition-transform hover:scale-105 active:scale-95 shadow-md shadow-gold/20 cursor-pointer"
                   >
                     Done
                   </button>
@@ -251,13 +248,13 @@ export default function RegistrationModal({ isOpen, onClose, workshop, form, onR
               /* Step 1: Details */
               <form onSubmit={handleNext} className="space-y-4">
                 {isSoldOut && (
-                  <div className="p-3 bg-amber-50 border border-amber-200/80 rounded-xl text-xs text-amber-900 leading-relaxed">
-                    <strong>Capacity Reached:</strong> This cohort has reached maximum seats. You are submitting for the verified waitlist.
+                  <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl text-xs text-amber-300 leading-relaxed font-mono">
+                    <strong>Capacity Reached:</strong> Maximum cohort seats booked. You are securing a priority spot on the verified waitlist.
                   </div>
                 )}
 
                 <div>
-                  <label className="block text-xs font-semibold text-navy uppercase tracking-wider mb-1">
+                  <label className="block text-[10px] font-mono font-bold text-white/50 uppercase tracking-wider mb-1.5">
                     Full Name *
                   </label>
                   <input
@@ -268,17 +265,17 @@ export default function RegistrationModal({ isOpen, onClose, workshop, form, onR
                       if (fieldErrors.name) setFieldErrors({ ...fieldErrors, name: null });
                     }}
                     placeholder="e.g. Sarah Jenkins"
-                    className={`w-full px-3 py-2 rounded-xl border bg-white text-xs sm:text-sm text-navy focus:outline-none focus:border-gold ${
-                      fieldErrors.name ? 'border-red-400 bg-red-50/20' : 'border-[#E8E8E8]'
+                    className={`w-full px-3.5 py-2.5 rounded-xl border bg-[#181822] text-xs sm:text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-gold ${
+                      fieldErrors.name ? 'border-red-500 bg-red-500/10' : 'border-white/10'
                     }`}
                   />
                   {fieldErrors.name && (
-                    <p className="text-[10px] text-red-600 mt-1">{fieldErrors.name}</p>
+                    <p className="text-[10px] text-red-400 font-mono mt-1">{fieldErrors.name}</p>
                   )}
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-navy uppercase tracking-wider mb-1">
+                  <label className="block text-[10px] font-mono font-bold text-white/50 uppercase tracking-wider mb-1.5">
                     Work Email *
                   </label>
                   <input
@@ -288,19 +285,19 @@ export default function RegistrationModal({ isOpen, onClose, workshop, form, onR
                       setFormData({ ...formData, email: e.target.value });
                       if (fieldErrors.email) setFieldErrors({ ...fieldErrors, email: null });
                     }}
-                    placeholder="sarah@firm.com"
-                    className={`w-full px-3 py-2 rounded-xl border bg-white text-xs sm:text-sm text-navy focus:outline-none focus:border-gold ${
-                      fieldErrors.email ? 'border-red-400 bg-red-50/20' : 'border-[#E8E8E8]'
+                    placeholder="sarah@fund.com"
+                    className={`w-full px-3.5 py-2.5 rounded-xl border bg-[#181822] text-xs sm:text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-gold ${
+                      fieldErrors.email ? 'border-red-500 bg-red-500/10' : 'border-white/10'
                     }`}
                   />
                   {fieldErrors.email && (
-                    <p className="text-[10px] text-red-600 mt-1">{fieldErrors.email}</p>
+                    <p className="text-[10px] text-red-400 font-mono mt-1">{fieldErrors.email}</p>
                   )}
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-navy uppercase tracking-wider mb-1">
+                    <label className="block text-[10px] font-mono font-bold text-white/50 uppercase tracking-wider mb-1.5">
                       Company / Fund *
                     </label>
                     <input
@@ -311,25 +308,25 @@ export default function RegistrationModal({ isOpen, onClose, workshop, form, onR
                         if (fieldErrors.company) setFieldErrors({ ...fieldErrors, company: null });
                       }}
                       placeholder="e.g. Blackstone"
-                      className={`w-full px-3 py-2 rounded-xl border bg-white text-xs sm:text-sm text-navy focus:outline-none focus:border-gold ${
-                        fieldErrors.company ? 'border-red-400 bg-red-50/20' : 'border-[#E8E8E8]'
+                      className={`w-full px-3.5 py-2.5 rounded-xl border bg-[#181822] text-xs sm:text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-gold ${
+                        fieldErrors.company ? 'border-red-500 bg-red-500/10' : 'border-white/10'
                       }`}
                     />
                     {fieldErrors.company && (
-                      <p className="text-[10px] text-red-600 mt-1">{fieldErrors.company}</p>
+                      <p className="text-[10px] text-red-400 font-mono mt-1">{fieldErrors.company}</p>
                     )}
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-navy uppercase tracking-wider mb-1">
+                    <label className="block text-[10px] font-mono font-bold text-white/50 uppercase tracking-wider mb-1.5">
                       Role / Title
                     </label>
                     <input
                       type="text"
                       value={formData.role}
                       onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                      placeholder="e.g. Partner, Principal"
-                      className="w-full px-3 py-2 rounded-xl border border-[#E8E8E8] bg-white text-xs sm:text-sm text-navy focus:outline-none focus:border-gold"
+                      placeholder="e.g. Principal, Associate"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-white/10 bg-[#181822] text-xs sm:text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-gold"
                     />
                   </div>
                 </div>
@@ -348,47 +345,47 @@ export default function RegistrationModal({ isOpen, onClose, workshop, form, onR
                 <div className="pt-2">
                   <button
                     type="submit"
-                    className="btn-primary w-full justify-center py-2.5 text-xs sm:text-sm font-semibold flex items-center gap-1.5"
+                    className="w-full bg-gold hover:bg-gold-light text-black py-3 rounded-full text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-gold/20 cursor-pointer"
                   >
                     <span>Continue to Confirmation</span>
                     <ArrowRight size={14} />
                   </button>
-                  <p className="text-[10px] text-muted text-center mt-2">
-                    Step 1 of 2 · No credit card required
+                  <p className="text-[10px] font-mono text-white/40 text-center mt-2">
+                    Step 1 of 2 ✦ Institutional verification
                   </p>
                 </div>
               </form>
             ) : (
               /* Step 2: Confirm */
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="bg-[#FAF9F6] border border-[#E8E8E8] rounded-xl p-4 text-xs space-y-2">
-                  <div className="flex items-center justify-between text-muted pb-1.5 border-b border-[#E8E8E8]">
+                <div className="bg-[#141418] border border-white/10 rounded-2xl p-4 text-xs font-mono space-y-2">
+                  <div className="flex items-center justify-between text-white/50 pb-2 border-b border-white/10">
                     <span>Attendee:</span>
-                    <strong className="text-navy">{formData.name}</strong>
+                    <strong className="text-white">{formData.name}</strong>
                   </div>
-                  <div className="flex items-center justify-between text-muted pb-1.5 border-b border-[#E8E8E8]">
+                  <div className="flex items-center justify-between text-white/50 pb-2 border-b border-white/10">
                     <span>Email:</span>
-                    <strong className="text-navy">{formData.email}</strong>
+                    <strong className="text-white">{formData.email}</strong>
                   </div>
-                  <div className="flex items-center justify-between text-muted pb-1.5 border-b border-[#E8E8E8]">
+                  <div className="flex items-center justify-between text-white/50 pb-2 border-b border-white/10">
                     <span>Organization:</span>
-                    <strong className="text-navy">{formData.company}</strong>
+                    <strong className="text-white">{formData.company}</strong>
                   </div>
                   {formData.role && (
-                    <div className="flex items-center justify-between text-muted pb-1.5 border-b border-[#E8E8E8]">
+                    <div className="flex items-center justify-between text-white/50 pb-2 border-b border-white/10">
                       <span>Role:</span>
-                      <strong className="text-navy">{formData.role}</strong>
+                      <strong className="text-white">{formData.role}</strong>
                     </div>
                   )}
-                  <div className="flex items-center justify-between text-muted pt-1">
+                  <div className="flex items-center justify-between text-white/50 pt-1">
                     <span>Session:</span>
-                    <strong className="text-gold font-mono">{dateFormatted}</strong>
+                    <strong className="text-gold">{dateFormatted}</strong>
                   </div>
                 </div>
 
                 {error && (
-                  <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-xl text-xs flex items-start gap-2">
-                    <AlertCircle size={14} className="shrink-0 mt-0.5" />
+                  <div className="p-3 bg-red-500/10 border border-red-500/30 text-red-300 rounded-xl text-xs flex items-start gap-2">
+                    <AlertCircle size={14} className="shrink-0 mt-0.5 text-red-400" />
                     <span>{error}</span>
                   </div>
                 )}
@@ -398,7 +395,7 @@ export default function RegistrationModal({ isOpen, onClose, workshop, form, onR
                     type="button"
                     onClick={() => setStep(1)}
                     disabled={loading}
-                    className="px-4 py-2.5 rounded-xl border border-[#E8E8E8] text-xs font-semibold text-navy hover:bg-cream transition-colors flex items-center gap-1"
+                    className="px-4 py-2.5 rounded-full border border-white/10 text-xs font-mono font-bold text-white/70 hover:text-white hover:bg-white/[0.08] transition-colors flex items-center gap-1 cursor-pointer"
                   >
                     <ArrowLeft size={13} />
                     <span>Back</span>
@@ -406,7 +403,7 @@ export default function RegistrationModal({ isOpen, onClose, workshop, form, onR
                   <button
                     type="submit"
                     disabled={loading}
-                    className="flex-1 btn-primary py-2.5 text-xs sm:text-sm font-semibold justify-center flex items-center gap-2"
+                    className="flex-1 bg-gold hover:bg-gold-light text-black py-2.5 text-xs sm:text-sm font-bold rounded-full justify-center flex items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-gold/20 cursor-pointer disabled:opacity-50"
                   >
                     {loading ? (
                       <>

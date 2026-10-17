@@ -39,18 +39,18 @@ export default function AdminWorkshopsCalendar({ workshops = [], onReschedule, o
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-border shadow-xs overflow-hidden">
+    <div className="bg-[#121218] rounded-2xl border border-white/10 shadow-xl overflow-hidden">
       {/* Calendar Header */}
-      <div className="p-4 sm:p-5 border-b border-border flex items-center justify-between flex-wrap gap-3 bg-[#FAFAFA]">
+      <div className="p-4 sm:p-5 border-b border-white/10 flex items-center justify-between flex-wrap gap-3 bg-[#161622]">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-cream border border-border flex items-center justify-center text-gold">
+          <div className="w-10 h-10 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center text-gold shadow-sm">
             <CalendarIcon size={18} />
           </div>
           <div>
-            <h2 className="text-base font-bold text-navy">
+            <h2 className="text-base font-display uppercase tracking-wider text-white">
               {format(currentMonth, 'MMMM yyyy')}
             </h2>
-            <p className="text-[11px] text-muted">
+            <p className="text-[11px] font-mono text-[#8A8A85]">
               {workshops.filter((w) => w.startDate).length} master classes scheduled
             </p>
           </div>
@@ -59,22 +59,22 @@ export default function AdminWorkshopsCalendar({ workshops = [], onReschedule, o
         <div className="flex items-center gap-2">
           <button
             onClick={() => setCurrentMonth(new Date())}
-            className="px-3 py-1.5 rounded-lg border border-border bg-white text-xs font-semibold text-navy hover:bg-cream transition-colors"
+            className="px-3 py-1.5 rounded-lg border border-white/10 bg-[#1e1e2c] text-xs font-mono uppercase tracking-wider text-white hover:border-gold hover:text-gold transition-colors"
           >
             Today
           </button>
-          <div className="flex items-center border border-border rounded-lg bg-white overflow-hidden">
+          <div className="flex items-center border border-white/10 rounded-lg bg-[#1e1e2c] overflow-hidden">
             <button
               onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
-              className="p-1.5 hover:bg-cream text-navy transition-colors"
+              className="p-1.5 hover:bg-white/10 text-[#8A8A85] hover:text-white transition-colors"
               title="Previous Month"
             >
               <ChevronLeft size={16} />
             </button>
-            <div className="w-[1px] h-4 bg-border" />
+            <div className="w-[1px] h-4 bg-white/10" />
             <button
               onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
-              className="p-1.5 hover:bg-cream text-navy transition-colors"
+              className="p-1.5 hover:bg-white/10 text-[#8A8A85] hover:text-white transition-colors"
               title="Next Month"
             >
               <ChevronRight size={16} />
@@ -84,7 +84,7 @@ export default function AdminWorkshopsCalendar({ workshops = [], onReschedule, o
       </div>
 
       {/* Days of Week Header */}
-      <div className="grid grid-cols-7 border-b border-border bg-[#FBFBFA] text-center text-[11px] font-bold text-muted uppercase tracking-wider py-2.5">
+      <div className="grid grid-cols-7 border-b border-white/10 bg-[#101016] text-center text-[10px] font-mono font-bold text-[#8A8A85] uppercase tracking-wider py-2.5">
         <span>Sun</span>
         <span>Mon</span>
         <span>Tue</span>
@@ -95,7 +95,7 @@ export default function AdminWorkshopsCalendar({ workshops = [], onReschedule, o
       </div>
 
       {/* Calendar Grid */}
-      <div className="grid grid-cols-7 auto-rows-fr divide-x divide-y divide-border/60 bg-white">
+      <div className="grid grid-cols-7 auto-rows-fr divide-x divide-y divide-white/5 bg-[#121218]">
         {days.map((day) => {
           const isCurrentMonth = isSameMonth(day, currentMonth);
           const isToday = isSameDay(day, new Date());
@@ -105,24 +105,24 @@ export default function AdminWorkshopsCalendar({ workshops = [], onReschedule, o
             <div
               key={day.toISOString()}
               className={`min-h-[110px] p-2 flex flex-col transition-colors ${
-                !isCurrentMonth ? 'bg-[#FAF9F6]/40 text-muted/50' : 'bg-white text-navy'
-              } hover:bg-cream/30`}
+                !isCurrentMonth ? 'bg-black/40 text-white/20' : 'bg-[#121218] text-white'
+              } hover:bg-white/[0.02]`}
             >
               {/* Day header */}
               <div className="flex items-center justify-between mb-1.5">
                 <span
-                  className={`text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full ${
+                  className={`text-xs font-mono font-bold w-6 h-6 flex items-center justify-center rounded-full ${
                     isToday
-                      ? 'bg-navy text-white font-extrabold shadow-2xs'
+                      ? 'bg-gold text-black font-extrabold shadow-md shadow-gold/20'
                       : isCurrentMonth
-                      ? 'text-navy'
-                      : 'text-muted/60'
+                      ? 'text-white'
+                      : 'text-white/25'
                   }`}
                 >
                   {format(day, 'd')}
                 </span>
                 {dayWorkshops.length > 0 && (
-                  <span className="text-[10px] font-mono text-muted">
+                  <span className="text-[10px] font-mono text-gold">
                     {dayWorkshops.length} {dayWorkshops.length === 1 ? 'event' : 'events'}
                   </span>
                 )}
@@ -138,41 +138,41 @@ export default function AdminWorkshopsCalendar({ workshops = [], onReschedule, o
                     <div
                       key={w._id || w.id}
                       onClick={() => onReschedule && onReschedule(w)}
-                      className={`group p-2 rounded-lg border text-left cursor-pointer transition-all ${
+                      className={`group p-2 rounded-xl border text-left cursor-pointer transition-all ${
                         isPublished
-                          ? 'bg-white border-[#E8E8E8] hover:border-gold hover:shadow-xs'
-                          : 'bg-[#F9F9F9] border-[#E8E8E8] opacity-80 hover:opacity-100'
+                          ? 'bg-[#181824] border-white/10 hover:border-gold hover:shadow-lg hover:shadow-black'
+                          : 'bg-[#14141c] border-white/5 opacity-70 hover:opacity-100'
                       }`}
                       title="Click to reschedule or adjust status"
                     >
-                      <div className="flex items-center justify-between gap-1 mb-0.5">
+                      <div className="flex items-center justify-between gap-1 mb-1">
                         <span
-                          className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.2 rounded ${
+                          className={`text-[9px] font-mono font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${
                             isPublished
                               ? 'bg-gold/15 text-gold border border-gold/30'
-                              : 'bg-gray-100 text-gray-600'
+                              : 'bg-white/10 text-white/60'
                           }`}
                         >
                           {w.status}
                         </span>
                         {startTime && (
-                          <span className="text-[10px] font-mono text-muted flex items-center gap-0.5">
+                          <span className="text-[10px] font-mono text-[#8A8A85] flex items-center gap-0.5">
                             <Clock size={9} />
                             <span>{startTime}</span>
                           </span>
                         )}
                       </div>
 
-                      <p className="text-xs font-semibold text-navy truncate group-hover:text-gold transition-colors">
+                      <p className="text-xs font-semibold text-white truncate group-hover:text-gold transition-colors">
                         {w.title}
                       </p>
 
-                      <div className="flex items-center justify-between text-[10px] text-muted font-mono mt-1 pt-1 border-t border-[#E8E8E8]/60">
+                      <div className="flex items-center justify-between text-[10px] text-[#8A8A85] font-mono mt-1.5 pt-1.5 border-t border-white/5">
                         <span className="flex items-center gap-1">
-                          <Users size={10} />
+                          <Users size={10} className="text-gold" />
                           <span>{w.seatsBooked || 0}/{w.seatsTotal || 100}</span>
                         </span>
-                        <span className="text-gold group-hover:underline text-[9px] font-sans">
+                        <span className="text-gold group-hover:underline text-[9px] font-mono">
                           Reschedule →
                         </span>
                       </div>
@@ -186,22 +186,22 @@ export default function AdminWorkshopsCalendar({ workshops = [], onReschedule, o
       </div>
 
       {/* Footer Legend */}
-      <div className="p-3 border-t border-border bg-[#FAFAFA] flex items-center justify-between text-xs text-muted">
+      <div className="p-3 border-t border-white/10 bg-[#161622] flex items-center justify-between text-xs text-[#8A8A85] flex-wrap gap-2">
         <div className="flex items-center gap-4">
           <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-gold inline-block" />
-            <span>Published</span>
+            <span className="w-2 h-2 rounded-full bg-gold inline-block" />
+            <span className="text-white/80 font-mono text-[11px]">Published</span>
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-gray-400 inline-block" />
-            <span>Draft</span>
+            <span className="w-2 h-2 rounded-full bg-white/30 inline-block" />
+            <span className="text-white/60 font-mono text-[11px]">Draft</span>
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-red-400 inline-block" />
-            <span>Archived</span>
+            <span className="w-2 h-2 rounded-full bg-red-400 inline-block" />
+            <span className="text-red-400 font-mono text-[11px]">Archived</span>
           </span>
         </div>
-        <span className="text-[11px] font-mono">
+        <span className="text-[11px] font-mono text-[#8A8A85]">
           Click any workshop to change scheduled date/time or status
         </span>
       </div>

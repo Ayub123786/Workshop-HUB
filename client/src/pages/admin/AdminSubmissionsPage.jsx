@@ -158,8 +158,12 @@ export default function AdminSubmissionsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-navy">Registrations & Waitlist</h1>
-          <p className="text-xs text-muted mt-1">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-gold/10 border border-gold/30 text-gold font-mono text-[10px] uppercase tracking-wider mb-2">
+            <Sparkles className="w-3 h-3 text-gold" />
+            <span>Audience Pipeline · Attendance Data</span>
+          </div>
+          <h1 className="text-2xl font-display uppercase tracking-wider text-white">Registrations & Waitlist</h1>
+          <p className="text-xs text-[#8A8A85] mt-1 font-sans">
             Review confirmed attendees, manage cohort waitlists, broadcast announcements, and monitor newsletter subscribers.
           </p>
         </div>
@@ -168,7 +172,7 @@ export default function AdminSubmissionsPage() {
           {workshops.length > 0 && (
             <button
               onClick={() => setBroadcastWorkshop(targetEmailWorkshop)}
-              className="px-3.5 py-2 rounded-xl border border-border bg-white text-navy font-semibold text-xs hover:border-gold hover:bg-cream transition-colors flex items-center gap-2"
+              className="px-3.5 py-2 rounded-xl border border-white/10 bg-[#161622] text-white font-mono uppercase text-xs hover:border-gold hover:text-gold transition-colors flex items-center gap-2"
               title="Broadcast email to registrants"
             >
               <Mail className="w-3.5 h-3.5 text-gold" />
@@ -178,7 +182,7 @@ export default function AdminSubmissionsPage() {
 
           <button
             onClick={handleExportCSV}
-            className="btn-primary text-xs py-2 px-4 flex items-center gap-2"
+            className="btn-primary text-xs py-2 px-4 flex items-center gap-2 uppercase font-mono tracking-wider font-bold shadow-md shadow-gold/20"
           >
             <FileSpreadsheet className="w-4 h-4" />
             <span>Export {activeTab === 'subscribers' ? 'Subscribers' : 'Registrations'} CSV</span>
@@ -187,73 +191,73 @@ export default function AdminSubmissionsPage() {
       </div>
 
       {/* Tab Navigation */}
-      <div className="flex items-center gap-2 border-b border-border pb-px overflow-x-auto">
+      <div className="flex items-center gap-2 border-b border-white/10 pb-px overflow-x-auto">
         <button
           onClick={() => setActiveTab('all')}
-          className={`pb-2.5 px-3.5 text-xs font-semibold border-b-2 transition-all flex items-center gap-1.5 shrink-0 ${
+          className={`pb-2.5 px-3.5 text-xs font-mono uppercase tracking-wider transition-all flex items-center gap-1.5 shrink-0 ${
             activeTab === 'all'
-              ? 'border-navy text-navy font-bold'
-              : 'border-transparent text-muted hover:text-navy'
+              ? 'border-b-2 border-gold text-gold font-bold'
+              : 'text-[#8A8A85] hover:text-white'
           }`}
         >
           <Users className="w-3.5 h-3.5" />
           <span>All Registrations</span>
-          <span className="ml-1 text-[10px] px-1.5 py-0.5 rounded-full bg-cream border border-border text-navy">
+          <span className="ml-1 text-[10px] px-1.5 py-0.5 rounded-full bg-[#181824] border border-white/10 text-white font-mono">
             {submissions.length}
           </span>
         </button>
 
         <button
           onClick={() => setActiveTab('confirmed')}
-          className={`pb-2.5 px-3.5 text-xs font-semibold border-b-2 transition-all flex items-center gap-1.5 shrink-0 ${
+          className={`pb-2.5 px-3.5 text-xs font-mono uppercase tracking-wider transition-all flex items-center gap-1.5 shrink-0 ${
             activeTab === 'confirmed'
-              ? 'border-navy text-navy font-bold'
-              : 'border-transparent text-muted hover:text-navy'
+              ? 'border-b-2 border-gold text-gold font-bold'
+              : 'text-[#8A8A85] hover:text-white'
           }`}
         >
-          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
           <span>Confirmed Attendees</span>
-          <span className="ml-1 text-[10px] px-1.5 py-0.5 rounded-full bg-cream border border-border text-navy">
+          <span className="ml-1 text-[10px] px-1.5 py-0.5 rounded-full bg-[#181824] border border-white/10 text-emerald-400 font-mono">
             {confirmedSubmissions.length}
           </span>
         </button>
 
         <button
           onClick={() => setActiveTab('waitlist')}
-          className={`pb-2.5 px-3.5 text-xs font-semibold border-b-2 transition-all flex items-center gap-1.5 shrink-0 ${
+          className={`pb-2.5 px-3.5 text-xs font-mono uppercase tracking-wider transition-all flex items-center gap-1.5 shrink-0 ${
             activeTab === 'waitlist'
-              ? 'border-navy text-navy font-bold'
-              : 'border-transparent text-muted hover:text-navy'
+              ? 'border-b-2 border-gold text-gold font-bold'
+              : 'text-[#8A8A85] hover:text-white'
           }`}
         >
-          <Clock className="w-3.5 h-3.5 text-amber-500" />
+          <Clock className="w-3.5 h-3.5 text-amber-400" />
           <span>Waitlist</span>
-          <span className="ml-1 text-[10px] px-1.5 py-0.5 rounded-full bg-amber-50 border border-amber-200 text-amber-800 font-bold">
+          <span className="ml-1 text-[10px] px-1.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono font-bold">
             {waitlistSubmissions.length}
           </span>
         </button>
 
         <button
           onClick={() => setActiveTab('subscribers')}
-          className={`pb-2.5 px-3.5 text-xs font-semibold border-b-2 transition-all flex items-center gap-1.5 shrink-0 ${
+          className={`pb-2.5 px-3.5 text-xs font-mono uppercase tracking-wider transition-all flex items-center gap-1.5 shrink-0 ${
             activeTab === 'subscribers'
-              ? 'border-navy text-navy font-bold'
-              : 'border-transparent text-muted hover:text-navy'
+              ? 'border-b-2 border-gold text-gold font-bold'
+              : 'text-[#8A8A85] hover:text-white'
           }`}
         >
-          <Mail className="w-3.5 h-3.5 text-gold" />
+          <Mail className="w-3.5 h-3.5 text-violet-400" />
           <span>Newsletter Subscribers</span>
-          <span className="ml-1 text-[10px] px-1.5 py-0.5 rounded-full bg-cream border border-border text-navy">
+          <span className="ml-1 text-[10px] px-1.5 py-0.5 rounded-full bg-[#181824] border border-white/10 text-violet-400 font-mono">
             {subscribers.length}
           </span>
         </button>
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="bg-white rounded-2xl border border-border p-4 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="bg-[#121218] rounded-2xl border border-white/10 p-4 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4">
         {/* Search Input */}
         <div className="relative w-full sm:w-80">
-          <Search className="w-4 h-4 text-muted absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-[#8A8A85] absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchTerm}
@@ -263,18 +267,18 @@ export default function AdminSubmissionsPage() {
                 ? 'Search subscriber emails or source...'
                 : 'Search by name, email, or company...'
             }
-            className="w-full pl-9 pr-3 py-2 rounded-xl border border-border bg-cream text-navy text-xs focus:outline-none focus:border-gold"
+            className="w-full pl-9 pr-3 py-2 rounded-xl border border-white/10 bg-[#161622] text-white text-xs placeholder:text-white/30 focus:outline-none focus:border-gold"
           />
         </div>
 
         {/* Workshop Filter Dropdown (Hidden for Subscribers tab) */}
         {activeTab !== 'subscribers' && (
           <div className="flex items-center gap-2 w-full sm:w-auto">
-            <span className="text-xs text-muted shrink-0 font-medium">Workshop:</span>
+            <span className="text-xs font-mono uppercase tracking-wider text-[#8A8A85] shrink-0 font-medium">Workshop:</span>
             <select
               value={selectedWorkshop}
               onChange={(e) => setSelectedWorkshop(e.target.value)}
-              className="w-full sm:w-auto px-3 py-2 rounded-xl border border-border bg-cream text-navy text-xs font-semibold focus:outline-none focus:border-gold"
+              className="w-full sm:w-auto px-3 py-2 rounded-xl border border-white/10 bg-[#161622] text-white text-xs font-mono uppercase tracking-wider font-semibold focus:outline-none focus:border-gold"
             >
               <option value="all">All Workshops ({workshops.length})</option>
               {workshops.map((w) => (

@@ -2,13 +2,13 @@ export default function WorkshopFooter({ content }) {
   const { companyName, copyright } = content || {};
 
   return (
-    <footer className="bg-cream-dark border-t border-border py-10">
-      <div className="container text-center">
+    <footer className="bg-[#0a0a0a] border-t border-white/[0.08] py-12">
+      <div className="max-w-6xl mx-auto px-4 text-center">
         {companyName && (
-          <p className="font-semibold text-navy mb-1">{companyName}</p>
+          <p className="font-mono font-bold text-white text-xs uppercase tracking-widest mb-1.5">{companyName}</p>
         )}
         {copyright && (
-          <p className="text-sm text-muted">{copyright}</p>
+          <p className="text-xs text-white/40 font-mono">{copyright}</p>
         )}
       </div>
     </footer>

@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { motion, useSpring } from 'framer-motion';
 
 /**
- * CustomCursor - Desktop-only luxury cursor with trailing spring ring and media labels
+ * CustomCursor - Desktop-only high-energy gold dot + trailing ring
+ * Shows dynamic interactive labels ("VIEW", "PLAY", "DRAG", "FOCUS") on hover targets.
  */
 export default function CustomCursor() {
   const [enabled, setEnabled] = useState(false);
@@ -14,12 +15,12 @@ export default function CustomCursor() {
   const cursorX = useSpring(-100, { stiffness: 600, damping: 35 });
   const cursorY = useSpring(-100, { stiffness: 600, damping: 35 });
 
-  // Fast direct springs for center dot
+  // Direct fast springs for center dot
   const dotX = useSpring(-100, { stiffness: 1200, damping: 45 });
   const dotY = useSpring(-100, { stiffness: 1200, damping: 45 });
 
   useEffect(() => {
-    // Check if device supports hover/fine pointer (desktop only)
+    // Check if device supports fine pointer / mouse (desktop only)
     const isTouchDevice =
       !window.matchMedia('(pointer: fine)').matches ||
       'ontouchstart' in window ||
@@ -40,7 +41,7 @@ export default function CustomCursor() {
       if (!target) return;
 
       const cursorTarget = target.closest('[data-cursor]');
-      const clickableTarget = target.closest('button, a, input, select, textarea, [role="button"]');
+      const clickableTarget = target.closest('button, a, input, select, textarea, [role="button"], .cursor-pointer');
 
       if (cursorTarget) {
         const text = cursorTarget.getAttribute('data-cursor');
@@ -80,7 +81,7 @@ export default function CustomCursor() {
   const hasText = Boolean(cursorText);
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-50 overflow-hidden select-none">
+    <div className="pointer-events-none fixed inset-0 z-[9999] overflow-hidden select-none">
       {/* Center Gold Dot */}
       <motion.div
         style={{
@@ -89,7 +90,7 @@ export default function CustomCursor() {
           translateX: '-50%',
           translateY: '-50%',
         }}
-        className={`fixed w-2 h-2 rounded-full bg-gold transition-opacity duration-200 ${
+        className={`fixed w-2 h-2 rounded-full bg-gold transition-opacity duration-200 shadow-[0_0_10px_rgba(201,162,77,0.8)] ${
           hasText ? 'opacity-0' : 'opacity-100'
         }`}
       />
@@ -103,28 +104,33 @@ export default function CustomCursor() {
           translateY: '-50%',
         }}
         animate={{
-          width: hasText ? 64 : isHovered ? 44 : 26,
-          height: hasText ? 64 : isHovered ? 44 : 26,
+          width: hasText ? 68 : isHovered ? 48 : 28,
+          height: hasText ? 68 : isHovered ? 48 : 28,
           backgroundColor: hasText
-            ? 'rgba(201, 162, 77, 0.92)'
+            ? '#C9A24D'
             : isHovered
             ? 'rgba(201, 162, 77, 0.18)'
-            : 'rgba(201, 162, 77, 0.08)',
+            : 'rgba(255, 255, 255, 0.04)',
           borderColor: hasText
-            ? 'rgba(201, 162, 77, 1)'
+            ? '#DFBE74'
             : isHovered
-            ? 'rgba(201, 162, 77, 0.85)'
-            : 'rgba(201, 162, 77, 0.45)',
+            ? 'rgba(201, 162, 77, 0.9)'
+            : 'rgba(255, 255, 255, 0.25)',
+          boxShadow: hasText
+            ? '0 0 25px rgba(201, 162, 77, 0.6)'
+            : isHovered
+            ? '0 0 16px rgba(201, 162, 77, 0.35)'
+            : 'none',
         }}
-        transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-        className="fixed rounded-full border border-gold flex items-center justify-center backdrop-blur-[1px] pointer-events-none"
+        transition={{ type: 'spring', stiffness: 380, damping: 26 }}
+        className="fixed rounded-full border flex items-center justify-center backdrop-blur-[2px] pointer-events-none"
       >
         {hasText && (
           <motion.span
             initial={{ opacity: 0, scale: 0.6 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.6 }}
-            className="text-[10px] font-mono font-bold tracking-widest text-white uppercase text-center leading-none"
+            className="text-[10px] font-mono font-extrabold tracking-widest text-[#0a0a0a] uppercase text-center leading-none"
           >
             {cursorText}
           </motion.span>

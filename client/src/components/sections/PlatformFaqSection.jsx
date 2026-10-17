@@ -1,135 +1,183 @@
 import { useState } from 'react';
-import { ChevronDown, HelpCircle, Video, Layers, Receipt, Clock, Users } from 'lucide-react';
+import { Plus, Sparkles, Check, FileCode, Receipt, Video, HelpCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Reveal from '../animations/Reveal';
-import { useSettings } from '../../contexts/SettingsContext';
 
-const DEFAULT_ICONS = [Users, Video, Layers, Receipt, Clock, HelpCircle];
-
-const FAQS = [
+const GENZ_FAQS = [
   {
-    q: 'Who are these master classes designed for?',
-    a: 'Engineered for private equity deal leads, VC partners, and financial analysts deploying AI into due diligence and memo generation.',
+    num: '01',
+    q: 'Who is in the room with me?',
+    a: 'Senior PE deal leads, VC partners, and CIOs managing real fund capital.',
+    chips: ['PE & VC Principals', 'Institutional Only'],
   },
   {
-    q: 'Are the sessions live or pre-recorded?',
-    a: 'Every workshop is 100% live and interactive with model stress-testing, real datasets, and real-time Q&A.',
+    num: '02',
+    q: 'Is this live or pre-recorded video?',
+    a: '100% live and interactive. Live financial stress-testing, actual data rooms, and open Q&A.',
+    chips: ['Live Cohorts', 'Real-time Q&A'],
   },
   {
-    q: 'What models and toolkits do attendees receive?',
-    a: 'You get full production prompt architectures, orchestration code blueprints, financial models, and lifetime cohort access.',
+    num: '03',
+    q: 'What deliverables do I walk away with?',
+    a: 'Production prompt architectures, Python agent blueprints, and audited financial models.',
+    chips: ['Code Templates', 'Lifetime Updates'],
   },
   {
-    q: 'Can my fund receive a corporate invoice?',
-    a: 'Yes. Tax invoices and fund reimbursement receipts are generated immediately upon checkout.',
+    num: '04',
+    q: 'Can my firm get an invoice for reimbursement?',
+    a: 'Yes. Automated corporate receipts with tax identification are issued instantly at checkout.',
+    chips: ['Fund Reimbursable', 'Instant Invoices'],
   },
   {
-    q: 'What happens if I miss the live schedule?',
-    a: 'All enrolled participants receive 4K recordings, key takeaways, and workbook files within 24 hours.',
+    num: '05',
+    q: 'What if an emergency deal blocks my attendance?',
+    a: 'Full 4K session recording, transcript, and code repository sent within 24 hours.',
+    chips: ['4K Recordings', 'Archive Access'],
   },
   {
-    q: 'How does the sold-out cohort waitlist work?',
-    a: 'Waitlist enrollment is free. If a registered seat becomes available, waitlisted members are offered priority access.',
+    num: '06',
+    q: 'How does the waitlist work for sold-out cohorts?',
+    a: 'Free priority queue. If an executive reschedules, the next in line claims the open seat.',
+    chips: ['Zero Deposit Queue', 'Priority Notification'],
   },
 ];
 
-export default function PlatformFaqSection({ faqs: propFaqs }) {
-  const { settings } = useSettings();
+export default function PlatformFaqSection() {
   const [openIndex, setOpenIndex] = useState(0);
-
-  const displayFaqs = propFaqs || (settings?.faqs && settings.faqs.length > 0 ? settings.faqs : FAQS);
 
   const toggle = (idx) => {
     setOpenIndex(openIndex === idx ? -1 : idx);
   };
 
   return (
-    <section id="faq" className="bg-white py-16 sm:py-20 border-b border-[#E8E8E8] relative">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <Reveal>
-          <div className="text-center mb-10">
-            <span className="inline-block text-[11px] font-mono font-bold text-gold uppercase tracking-widest px-3 py-1 rounded-full bg-[#FAF9F6] border border-[#E8E8E8] shadow-2xs mb-2">
-              FREQUENT INQUIRIES
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-navy tracking-tight uppercase">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-muted text-xs sm:text-sm mt-1 max-w-md mx-auto">
-              Key details regarding syllabus access, live sessions, and fund receipts.
-            </p>
-          </div>
-        </Reveal>
+    <section
+      id="faq"
+      className="bg-[#0a0a0a] py-24 sm:py-32 border-b border-white/[0.08] relative overflow-hidden select-none"
+    >
+      {/* Background Watermark */}
+      <div
+        aria-hidden="true"
+        className="absolute top-10 left-0 right-0 flex items-center justify-center pointer-events-none select-none z-0"
+      >
+        <span
+          className="font-bebas font-extrabold uppercase tracking-tight text-white/[0.025] leading-none whitespace-nowrap"
+          style={{ fontSize: 'clamp(5rem, 18vw, 18rem)' }}
+        >
+          QUESTIONS
+        </span>
+      </div>
 
-        <div className="space-y-3">
-          {displayFaqs.map((faq, idx) => {
+      <div className="max-w-4xl mx-auto px-4 sm:px-8 relative z-10">
+        {/* Section Header */}
+        <div className="text-center mb-14 sm:mb-18">
+          <div className="inline-flex items-center gap-2 mb-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_8px_rgba(201,162,77,0.8)]" />
+            <span className="font-mono text-xs uppercase tracking-widest text-gold font-bold">
+              05 / CLARITY
+            </span>
+          </div>
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white font-bebas uppercase tracking-tight">
+            FREQUENTLY ASKED QUESTIONS
+          </h2>
+          <p className="font-mono text-xs text-white/40 uppercase tracking-widest mt-2">
+            Direct answers. Zero corporate filler.
+          </p>
+        </div>
+
+        {/* Big Numbered Accordion List */}
+        <div className="space-y-4">
+          {GENZ_FAQS.map((faq, idx) => {
             const isOpen = openIndex === idx;
-            const Icon = DEFAULT_ICONS[idx % DEFAULT_ICONS.length] || HelpCircle;
 
             return (
-              <Reveal key={idx} delay={idx * 0.04}>
-                <div
-                  className={`relative rounded-2xl border transition-all duration-300 overflow-hidden ${
-                    isOpen
-                      ? 'border-gold/60 shadow-[0_4px_16px_rgba(201,162,77,0.08)] bg-white'
-                      : 'border-[#E8E8E8] bg-white hover:border-[#D0D0D0]'
-                  }`}
+              <div
+                key={faq.num}
+                className={`rounded-3xl border transition-all duration-300 overflow-hidden ${
+                  isOpen
+                    ? 'bg-[#141418] border-gold/50 shadow-[0_15px_40px_rgba(0,0,0,0.8),0_0_20px_rgba(201,162,77,0.12)]'
+                    : 'bg-white/[0.02] border-white/[0.08] hover:border-white/20'
+                }`}
+              >
+                <button
+                  type="button"
+                  onClick={() => toggle(idx)}
+                  className="w-full text-left p-6 sm:p-7 flex items-center justify-between gap-4 cursor-pointer focus:outline-none"
+                  aria-expanded={isOpen}
                 >
-                  {/* Expanding Left Gold Accent Border */}
-                  <motion.div
-                    initial={false}
-                    animate={{ scaleY: isOpen ? 1 : 0 }}
-                    transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                    className="absolute left-0 top-0 bottom-0 w-1 bg-gold origin-top z-10"
-                  />
-
-                  <button
-                    type="button"
-                    onClick={() => toggle(idx)}
-                    className="w-full text-left px-5 sm:px-6 py-4 flex items-center justify-between gap-3.5 transition-colors"
-                    aria-expanded={isOpen}
-                  >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <span
-                        className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
-                          isOpen ? 'bg-gold/15 text-gold' : 'bg-[#FAF9F6] text-muted'
-                        }`}
-                      >
-                        <Icon size={14} />
-                      </span>
-                      <span className="font-bold text-navy text-xs sm:text-sm leading-snug">
-                        {faq.q}
-                      </span>
-                    </div>
-
-                    <motion.div
-                      animate={{ rotate: isOpen ? 180 : 0 }}
-                      transition={{ duration: 0.24, ease: 'easeOut' }}
-                      className="shrink-0"
+                  <div className="flex items-center gap-4 sm:gap-6 min-w-0">
+                    {/* Big Mono Number (01, 02...) */}
+                    <span
+                      className={`font-mono text-base sm:text-xl font-extrabold transition-colors shrink-0 ${
+                        isOpen ? 'text-gold' : 'text-white/30'
+                      }`}
                     >
-                      <ChevronDown
-                        size={15}
-                        className={isOpen ? 'text-gold' : 'text-muted'}
-                      />
-                    </motion.div>
-                  </button>
+                      {faq.num}
+                    </span>
 
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
+                    {/* Question */}
+                    <h3
+                      className={`font-sans font-extrabold text-base sm:text-xl leading-snug tracking-tight transition-colors ${
+                        isOpen ? 'text-white' : 'text-white/80'
+                      }`}
+                    >
+                      {faq.q}
+                    </h3>
+                  </div>
+
+                  {/* Rotating Plus -> Times (+) to (x) with Gold Glow */}
+                  <motion.div
+                    animate={{ rotate: isOpen ? 45 : 0 }}
+                    transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                    className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 border transition-all ${
+                      isOpen
+                        ? 'border-gold bg-gold text-[#0a0a0a] shadow-gold-glow'
+                        : 'border-white/15 bg-white/[0.04] text-white/60 hover:text-white'
+                    }`}
+                  >
+                    <Plus size={16} strokeWidth={2.5} />
+                  </motion.div>
+                </button>
+
+                {/* Smooth Animated Height & Drawing Gold Line */}
+                <AnimatePresence>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                      {/* Animated Drawing Gold Line */}
                       <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-                        className="overflow-hidden"
-                      >
-                        <div className="px-5 sm:px-6 pb-4 pt-1 text-xs sm:text-sm text-muted leading-relaxed border-t border-[#F0F0F0] bg-[#FAF9F6]/50 pl-14">
+                        initial={{ scaleX: 0 }}
+                        animate={{ scaleX: 1 }}
+                        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                        className="h-px bg-gradient-to-r from-gold/60 via-gold/30 to-transparent mx-6 sm:mx-7 origin-left"
+                      />
+
+                      <div className="p-6 sm:p-7 pt-5 sm:pt-5 space-y-4">
+                        <p className="text-sm sm:text-base text-white/70 font-sans leading-relaxed">
                           {faq.a}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </Reveal>
+                        </p>
+
+                        {/* Interactive Icon Chips */}
+                        {faq.chips && (
+                          <div className="flex flex-wrap items-center gap-2 pt-2">
+                            {faq.chips.map((chip, i) => (
+                              <span
+                                key={i}
+                                className="sticker sticker-gold text-[10px]"
+                              >
+                                <Check size={10} className="text-gold" />
+                                <span>{chip}</span>
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             );
           })}
         </div>

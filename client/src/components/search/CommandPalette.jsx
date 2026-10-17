@@ -5,12 +5,10 @@ import {
   Search,
   X,
   Calendar,
-  Clock,
-  ArrowRight,
-  BookOpen,
-  Layers,
   ChevronRight,
   Sparkles,
+  BookOpen,
+  Layers,
 } from 'lucide-react';
 import api from '../../lib/api';
 import { getWorkshopStatus, getStatusBadgeConfig } from '../../lib/workshopStatus';
@@ -59,8 +57,7 @@ export default function CommandPalette({ isOpen, onClose, workshops: initialWork
           w.title?.toLowerCase().includes(q) ||
           w.shortDescription?.toLowerCase().includes(q) ||
           w.category?.toLowerCase().includes(q) ||
-          (Array.isArray(w.tags) && w.tags.some((t) => t.toLowerCase().includes(q))) ||
-          'ayub due diligence'.includes(q)
+          (Array.isArray(w.tags) && w.tags.some((t) => t.toLowerCase().includes(q)))
         );
       }).slice(0, 8)
     : safeWorkshops.slice(0, 4);
@@ -91,22 +88,22 @@ export default function CommandPalette({ isOpen, onClose, workshops: initialWork
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, filtered, selectedIndex]);
 
-  const handleSelect = (workshop) => {
+  const handleSelect = (w) => {
     onClose();
-    navigate(`/w/${workshop.slug}`);
+    navigate(`/w/${w.slug}`);
   };
 
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4">
+        <div className="fixed inset-0 z-[999] flex items-start justify-center pt-20 sm:pt-28 px-4 overflow-y-auto">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-[#0A0A0A]/40 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/80 backdrop-blur-md"
           />
 
           {/* Palette Dialog */}
@@ -114,12 +111,12 @@ export default function CommandPalette({ isOpen, onClose, workshops: initialWork
             initial={{ opacity: 0, scale: 0.96, y: -10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: -10 }}
-            transition={{ duration: 0.15 }}
-            className="relative w-full max-w-2xl bg-white border border-[#E8E8E8] rounded-2xl shadow-2xl overflow-hidden z-10 flex flex-col max-h-[80vh]"
+            transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+            className="relative w-full max-w-2xl bg-[#111116] border border-white/15 rounded-3xl shadow-[0_25px_70px_rgba(0,0,0,0.95)] overflow-hidden z-10 flex flex-col max-h-[80vh]"
           >
             {/* Search Input Bar */}
-            <div className="flex items-center gap-3 px-4 py-3.5 border-b border-[#E8E8E8]">
-              <Search size={18} className="text-gold shrink-0" />
+            <div className="flex items-center gap-3 px-5 py-4 border-b border-white/10 bg-white/[0.02]">
+              <Search size={18} className="text-gold shrink-0 animate-pulse" />
               <input
                 ref={inputRef}
                 type="text"
@@ -128,37 +125,37 @@ export default function CommandPalette({ isOpen, onClose, workshops: initialWork
                   setQuery(e.target.value);
                   setSelectedIndex(0);
                 }}
-                placeholder="Search masterclasses, topics, or categories..."
-                className="w-full bg-transparent text-sm text-navy placeholder:text-muted focus:outline-none"
+                placeholder="Search master classes, topics, PE / VC..."
+                className="w-full bg-transparent text-sm font-sans text-white placeholder:text-white/40 focus:outline-none"
               />
               {query && (
                 <button
                   onClick={() => setQuery('')}
-                  className="p-1 rounded text-muted hover:text-navy transition-colors text-xs"
+                  className="p-1 rounded-full text-white/40 hover:text-white transition-colors"
                 >
-                  <X size={14} />
+                  <X size={15} />
                 </button>
               )}
-              <kbd className="hidden sm:inline-block text-[10px] font-mono text-muted bg-[#F5F5F5] border border-[#E8E8E8] px-1.5 py-0.5 rounded">
+              <kbd className="hidden sm:inline-block text-[10px] font-mono text-white/50 bg-white/[0.06] border border-white/10 px-2 py-0.5 rounded-full">
                 ESC
               </kbd>
             </div>
 
             {/* Results Section */}
-            <div className="overflow-y-auto p-2 divide-y divide-[#E8E8E8]/50">
+            <div className="overflow-y-auto p-3 divide-y divide-white/[0.06]">
               {filtered.length > 0 ? (
                 <div>
-                  <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-muted flex items-center justify-between">
-                    <span>{query.trim() ? `Search Results (${filtered.length})` : 'Featured & Upcoming Masterclasses'}</span>
+                  <div className="px-3 py-1.5 text-[10px] font-mono uppercase tracking-widest text-white/40 flex items-center justify-between">
+                    <span>{query.trim() ? `Search Results (${filtered.length})` : 'Featured Cohorts'}</span>
                     {!query.trim() && (
-                      <span className="flex items-center gap-1 text-gold">
+                      <span className="flex items-center gap-1 text-gold font-mono text-[10px]">
                         <Sparkles size={10} />
-                        <span>Recommended</span>
+                        <span>VERIFIED ✦ LIVE</span>
                       </span>
                     )}
                   </div>
 
-                  <div className="space-y-1 mt-1">
+                  <div className="space-y-1.5 mt-2">
                     {filtered.map((w, index) => {
                       const isSelected = index === selectedIndex;
                       const status = getWorkshopStatus(w);
@@ -169,47 +166,49 @@ export default function CommandPalette({ isOpen, onClose, workshops: initialWork
                           key={w._id || w.id || w.slug}
                           onClick={() => handleSelect(w)}
                           onMouseEnter={() => setSelectedIndex(index)}
-                          className={`flex items-center justify-between gap-3 p-3 rounded-xl cursor-pointer transition-colors ${
-                            isSelected ? 'bg-cream border border-[#E8E8E8]' : 'hover:bg-[#FAFAFA] border border-transparent'
+                          className={`flex items-center justify-between gap-3 p-3 rounded-2xl cursor-pointer transition-all duration-200 ${
+                            isSelected
+                              ? 'bg-white/[0.08] border border-gold/40 shadow-[0_0_20px_rgba(201,162,77,0.15)]'
+                              : 'hover:bg-white/[0.04] border border-transparent'
                           }`}
                         >
-                          <div className="flex items-center gap-3 min-w-0">
+                          <div className="flex items-center gap-3.5 min-w-0">
                             {w.bannerImage ? (
                               <img
                                 src={w.bannerImage}
                                 alt={w.title}
-                                className="w-10 h-10 rounded-lg object-cover border border-[#E8E8E8] shrink-0"
+                                className="w-12 h-12 rounded-xl object-cover border border-white/10 shrink-0"
                               />
                             ) : (
-                              <div className="w-10 h-10 rounded-lg bg-cream border border-[#E8E8E8] flex items-center justify-center shrink-0">
-                                <BookOpen size={16} className="text-gold" />
+                              <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-center shrink-0">
+                                <BookOpen size={18} className="text-gold" />
                               </div>
                             )}
 
                             <div className="min-w-0">
-                              <div className="flex items-center gap-2 mb-0.5">
-                                <span className="text-[10px] uppercase font-bold text-gold tracking-wider truncate">
-                                  {w.category || 'Masterclass'}
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="text-[10px] font-mono uppercase font-bold text-gold tracking-wider truncate">
+                                  {w.category || 'Executive Lab'}
                                 </span>
-                                <span className={`text-[9px] px-1.5 py-0.2 rounded-full ${badge.className}`}>
+                                <span className="sticker sticker-gold text-[9px] py-0.2 px-2">
                                   {badge.label}
                                 </span>
                               </div>
-                              <p className="text-xs font-semibold text-navy truncate">
+                              <p className="text-xs font-bold text-white tracking-tight truncate">
                                 {w.title}
                               </p>
                               {w.startDate && (
-                                <p className="text-[11px] text-muted flex items-center gap-1 mt-0.5 font-mono">
-                                  <Calendar size={10} />
+                                <p className="text-[11px] text-white/40 flex items-center gap-1.5 mt-0.5 font-mono">
+                                  <Calendar size={11} className="text-gold/70" />
                                   <span>{new Date(w.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                                 </p>
                               )}
                             </div>
                           </div>
 
-                          <div className="flex items-center gap-1 shrink-0 text-muted">
-                            <span className="text-[11px] font-medium hidden sm:inline">View Curriculum</span>
-                            <ChevronRight size={14} className={isSelected ? 'text-gold' : 'text-muted'} />
+                          <div className="flex items-center gap-1 shrink-0 text-white/50">
+                            <span className="text-[11px] font-mono hidden sm:inline">VIEW</span>
+                            <ChevronRight size={14} className={isSelected ? 'text-gold' : 'text-white/30'} />
                           </div>
                         </div>
                       );
@@ -218,39 +217,39 @@ export default function CommandPalette({ isOpen, onClose, workshops: initialWork
                 </div>
               ) : (
                 <div className="py-12 px-4 text-center">
-                  <Search size={24} className="text-muted mx-auto mb-2 opacity-50" />
-                  <p className="text-xs font-semibold text-navy">No masterclasses found</p>
-                  <p className="text-[11px] text-muted mt-1">
-                    Try searching for terms like "Due Diligence", "Family Office", or "LBO".
+                  <Search size={28} className="text-white/20 mx-auto mb-2" />
+                  <p className="text-xs font-bold text-white uppercase tracking-wider font-mono">No master classes found</p>
+                  <p className="text-[11px] text-white/40 mt-1 font-mono">
+                    Try searching "Due Diligence", "LBO", or "Venture Capital".
                   </p>
                 </div>
               )}
 
               {/* Quick Navigation Shortcuts */}
               {!query.trim() && (
-                <div className="pt-2 mt-2 px-2">
-                  <span className="px-2 text-[10px] font-bold uppercase tracking-wider text-muted block mb-1">
-                    Quick Navigation
+                <div className="pt-3 mt-2 px-2">
+                  <span className="px-2 text-[10px] font-mono uppercase tracking-widest text-white/40 block mb-2 font-bold">
+                    Quick Jump
                   </span>
-                  <div className="grid grid-cols-2 gap-1.5 text-xs">
+                  <div className="grid grid-cols-2 gap-2 text-xs font-mono">
                     <button
                       onClick={() => {
                         onClose();
                         navigate('/workshops?view=calendar');
                       }}
-                      className="flex items-center gap-2 p-2 rounded-lg text-left text-navy hover:bg-cream transition-colors border border-[#E8E8E8]/60"
+                      className="flex items-center gap-2 p-2.5 rounded-xl text-left text-white/80 hover:text-white hover:bg-white/[0.06] transition-colors border border-white/10"
                     >
-                      <Calendar size={13} className="text-gold" />
-                      <span>Calendar View</span>
+                      <Calendar size={14} className="text-gold" />
+                      <span>Calendar Matrix</span>
                     </button>
                     <button
                       onClick={() => {
                         onClose();
                         navigate('/workshops?view=timeline');
                       }}
-                      className="flex items-center gap-2 p-2 rounded-lg text-left text-navy hover:bg-cream transition-colors border border-[#E8E8E8]/60"
+                      className="flex items-center gap-2 p-2.5 rounded-xl text-left text-white/80 hover:text-white hover:bg-white/[0.06] transition-colors border border-white/10"
                     >
-                      <Layers size={13} className="text-gold" />
+                      <Layers size={14} className="text-gold" />
                       <span>Timeline View</span>
                     </button>
                   </div>
@@ -259,23 +258,22 @@ export default function CommandPalette({ isOpen, onClose, workshops: initialWork
             </div>
 
             {/* Keyboard Footer */}
-            <div className="bg-[#FAFAFA] border-t border-[#E8E8E8] px-4 py-2 flex items-center justify-between text-[11px] text-muted">
+            <div className="bg-black/60 border-t border-white/10 px-5 py-2.5 flex items-center justify-between text-[11px] text-white/40 font-mono">
               <div className="flex items-center gap-3">
                 <span className="flex items-center gap-1">
-                  <kbd className="font-mono bg-white border border-[#E8E8E8] px-1 rounded text-[10px]">↑</kbd>
-                  <kbd className="font-mono bg-white border border-[#E8E8E8] px-1 rounded text-[10px]">↓</kbd>
+                  <kbd className="bg-white/10 border border-white/15 px-1.5 py-0.5 rounded text-[10px] text-white/70">↑↓</kbd>
                   <span>navigate</span>
                 </span>
                 <span className="flex items-center gap-1">
-                  <kbd className="font-mono bg-white border border-[#E8E8E8] px-1 rounded text-[10px]">↵</kbd>
-                  <span>select</span>
+                  <kbd className="bg-white/10 border border-white/15 px-1.5 py-0.5 rounded text-[10px] text-white/70">↵</kbd>
+                  <span>open</span>
                 </span>
                 <span className="flex items-center gap-1">
-                  <kbd className="font-mono bg-white border border-[#E8E8E8] px-1 rounded text-[10px]">esc</kbd>
+                  <kbd className="bg-white/10 border border-white/15 px-1.5 py-0.5 rounded text-[10px] text-white/70">esc</kbd>
                   <span>close</span>
                 </span>
               </div>
-              <span className="font-mono text-[10px] text-navy/70">Workshop Hub OS</span>
+              <span className="text-[10px] text-gold font-bold">WORKSHOP HUB OS</span>
             </div>
           </motion.div>
         </div>

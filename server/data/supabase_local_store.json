@@ -528,7 +528,7 @@
       "content": {
         "label": "YOUR TRAINER",
         "name": "Ayub.",
-        "portrait": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=800&fit=crop&face",
+        "portrait": "/ayub-founder-full.png",
         "portraitCaption": "The future isn't firm versus firm. It's firm versus agent stack.",
         "bio": [
           "Fifteen years in finance, now building multi model agentic systems for private equity and venture capital firms focused on due diligence.",
@@ -563,7 +563,7 @@
       },
       "id": "0512c169-3618-4d6c-8cdf-5b857a678e0a",
       "created_at": "2026-10-14T08:46:38.281Z",
-      "updated_at": "2026-10-14T08:46:38.281Z"
+      "updated_at": "2026-10-17T09:42:32.482Z"
     },
     {
       "workshop_id": "dadb10de-1c78-4f0a-9f43-4a69d91f08e6",
@@ -769,27 +769,29 @@
       "content": {
         "label": "YOUR TRAINER",
         "name": "Ayub.",
-        "portrait": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=800&fit=crop",
+        "portrait": "/ayub-founder-full.png",
+        "portraitCaption": "The future isn't firm versus firm. It's firm versus agent stack.",
         "bio": [
-          "Fifteen years in finance, now building multi model agentic systems for private equity and venture capital firms.",
-          "Built portfolio monitoring systems for funds managing over $2B in assets."
+          "Fifteen years in finance, now building multi model agentic systems for private equity and venture capital firms focused on due diligence.",
+          "Trained in audit and advisory at KPMG and BDO Binder International, then founded and sold a technology company. That mix is the point. Most AI training for investment teams is run by people who have never signed off on a set of numbers, and most valuation training is run by people who have never built an agent. This session sits in the middle.",
+          "Runs a due diligence lab for PE and VC firms, where every engine is stress tested against real deal documents before it reaches a client."
         ],
         "keyValues": [
           {
-            "label": "BACKGROUND",
+            "label": "AUDIT",
             "value": "Ex KPMG, ex BDO Binder International"
           },
           {
-            "label": "BUILT",
-            "value": "Portfolio systems for 20+ VC funds"
+            "label": "FOUNDER",
+            "value": "Built and exited a technology company"
           },
           {
             "label": "NOW",
-            "value": "Due diligence and portfolio lab"
+            "value": "Due diligence lab for PE and VC firms"
           },
           {
             "label": "FOCUS",
-            "value": "Agentic systems for investment teams"
+            "value": "Multi model agentic orchestration for deal teams"
           }
         ]
       },
@@ -802,7 +804,7 @@
       },
       "id": "62fc1d9e-c85c-42c4-9b82-0d68f92a5b4d",
       "created_at": "2026-10-14T08:46:38.289Z",
-      "updated_at": "2026-10-14T08:46:38.289Z"
+      "updated_at": "2026-10-17T09:42:32.491Z"
     },
     {
       "workshop_id": "c36a3efe-fc85-4448-9309-297c8eeb13b1",
@@ -950,6 +952,48 @@
       "id": "4c1c1da7-8d55-4f18-82db-acc61f9ad986",
       "created_at": "2026-10-14T08:46:38.298Z",
       "updated_at": "2026-10-14T08:46:38.298Z"
+    },
+    {
+      "workshop_id": "44e4fc58-9e41-4efa-b083-1428cd857132",
+      "type": "trainer",
+      "order": 4,
+      "visible": true,
+      "content": {
+        "label": "YOUR TRAINER",
+        "name": "Ayub.",
+        "portrait": "/ayub-founder-full.png",
+        "portraitCaption": "The future isn't firm versus firm. It's firm versus agent stack.",
+        "bio": [
+          "Fifteen years in finance, now building multi model agentic systems for private equity and venture capital firms focused on due diligence.",
+          "Trained in audit and advisory at KPMG and BDO Binder International, then founded and sold a technology company. That mix is the point. Most AI training for investment teams is run by people who have never signed off on a set of numbers, and most valuation training is run by people who have never built an agent. This session sits in the middle.",
+          "Runs a due diligence lab for PE and VC firms, where every engine is stress tested against real deal documents before it reaches a client."
+        ],
+        "keyValues": [
+          {
+            "label": "AUDIT",
+            "value": "Ex KPMG, ex BDO Binder International"
+          },
+          {
+            "label": "FOUNDER",
+            "value": "Built and exited a technology company"
+          },
+          {
+            "label": "NOW",
+            "value": "Due diligence lab for PE and VC firms"
+          },
+          {
+            "label": "FOCUS",
+            "value": "Multi model agentic orchestration for deal teams"
+          }
+        ]
+      },
+      "animation": {
+        "entrance": "slide-right",
+        "speed": "normal"
+      },
+      "id": "c3364fe2-4128-44fd-a70f-d72e9953672e",
+      "created_at": "2026-10-17T09:42:32.502Z",
+      "updated_at": "2026-10-17T09:42:32.502Z"
     }
   ],
   "forms": [
